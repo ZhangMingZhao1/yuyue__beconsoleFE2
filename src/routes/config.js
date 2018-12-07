@@ -4,6 +4,8 @@ export default {
         {
             key: '/app/ui', title: 'UI', icon: 'scan',
             subs: [
+                { key: '/app/ui/themeControl', title: '专题管理', component: 'ThemeControl'},
+                { key: '/app/ui/bannerControl', title: 'banner管理', component: 'BannerControl'},
                 { key: '/app/ui/buttons', title: '按钮', component: 'Buttons'},
                 { key: '/app/ui/icons', title: '图标', component: 'Icons'},
                 { key: '/app/ui/spins', title: '加载中', component: 'Spins'},

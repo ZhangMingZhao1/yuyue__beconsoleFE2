@@ -10,6 +10,8 @@ import AdvancedTable from './tables/AdvancedTables';
 import AsynchronousTable from './tables/AsynchronousTable';
 import Echarts from './charts/Echarts';
 import Recharts from './charts/Recharts';
+import ThemeControl from './ui/webcontrol/ThemeControl.js'
+import BannerControl from './ui/webcontrol/BannerControl.js';
 import Icons from './ui/Icons';
 import Buttons from './ui/Buttons';
 import Spins from './ui/Spins';
@@ -33,6 +35,7 @@ const WysiwygBundle = Loadable({ // 按需加载富文本配置
 });
 
 export default {
+    ThemeControl,BannerControl,
     BasicForm, BasicTable, AdvancedTable, AsynchronousTable,
     Echarts, Recharts, Icons, Buttons, Spins, Modals, Notifications,
     Tabs, Banners, Drags, Dashboard, Gallery, BasicAnimations,
