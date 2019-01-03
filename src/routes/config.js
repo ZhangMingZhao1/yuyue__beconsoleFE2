@@ -20,6 +20,17 @@ export default {
             ],
         },
         {
+            key: '/app/memberM', title: '会员管理', icon: 'rocket',
+            subs: [
+                { key: '/app/memberM/xinxiguanli', title: '信息管理', component: 'ThemeControl'},
+                { key: '/app/memberM/zhifudingdan', title: '支付订单', component: 'BannerControl'},
+                { key: '/app/memberM/yaoqingma', title: '邀请码', component: 'BannerControl'},
+                { key: '/app/memberM/jifenguanli', title: '积分管理', component: 'BannerControl'},
+                { key: '/app/memberM/jifenguize', title: '积分规则设置', component: 'BannerControl'},
+                { key: '/app/memberM/huiyuandengji', title: '会员等级设置', component: 'BannerControl'},           
+            ],
+        },
+        {
             key: '/app/animation', title: '动画', icon: 'rocket',
             subs: [
                 { key: '/app/animation/basicAnimations', title: '基础动画', component: 'BasicAnimations'},
