@@ -22,7 +22,7 @@ export default {
         {
             key: '/app/memberM', title: '会员管理', icon: 'rocket',
             subs: [
-                { key: '/app/memberM/xinxiguanli', title: '信息管理', component: 'ThemeControl'},
+                { key: '/app/memberM/xinxiguanli', title: '信息管理', component: 'InfoC'},
                 { key: '/app/memberM/zhifudingdan', title: '支付订单', component: 'BannerControl'},
                 { key: '/app/memberM/yaoqingma', title: '邀请码', component: 'BannerControl'},
                 { key: '/app/memberM/jifenguanli', title: '积分管理', component: 'BannerControl'},
