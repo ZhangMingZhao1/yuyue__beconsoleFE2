@@ -30,6 +30,11 @@ import Cssmodule from './cssmodule';
 import MapUi from './ui/map';
 
 import InfoC from './memberM/infoC/index.js';
+import PayO from './memberM/payO.js';
+import PointC from './memberM/pointC.js';
+import PointRule from './memberM/pointRule.js';
+import MemberLevel from './memberM/memberLevel.js';
+import InfoDetail from './memberM/infodetail';
 
 const WysiwygBundle = Loadable({ // 按需加载富文本配置
     loader: () => import('./ui/Wysiwyg'),
@@ -43,5 +48,6 @@ export default {
     Tabs, Banners, Drags, Dashboard, Gallery, BasicAnimations,
     ExampleAnimations, AuthBasic, RouterEnter, WysiwygBundle,
     Cssmodule, MapUi,
-    InfoC
+    InfoC,PayO,PointC,PointRule,MemberLevel,
+    InfoDetail
 }
