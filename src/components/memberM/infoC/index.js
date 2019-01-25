@@ -3,6 +3,12 @@ import React from 'react';
 import { Form, Select, Input, Button, Card, DatePicker, Table, Divider, Pagination } from 'antd';
 import './index.less';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
+import {
+    Link
+  } from 'react-router-dom'
+import {
+    Route,
+  } from 'react-router-dom';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -11,26 +17,31 @@ const MemberSearchForm = Form.create()(
     (props) => {
         const { getFieldDecorator } = props.form;
         const selectData = [{
+            key: 1,
             label: "类型",
             placeholder: "全部",
             name: "type",
             value: ['1', '2']
         }, {
+            key: 2,
             label: "状态",
             placeholder: "全部",
             name: "state",
             value: ['1', '2']
         }, {
+            key: 3,
             label: "大客户",
             placeholder: "全部",
             name: "customer",
             value: ['1', '2']
         }, {
+            key:4,
             label: "加盟商",
             placeholder: "全部",
             name: "company",
             value: ['1', '2']
         }, {
+            key:5,
             label: "城市",
             placeholder: "全部",
             name: "city",
@@ -68,6 +79,7 @@ const MemberSearchForm = Form.create()(
 class InfoC extends React.Component {
 
     render() {
+        let id = 0;
         const columns = [{
             title: '会员ID',
             dataIndex: 'memberId',
@@ -98,9 +110,9 @@ class InfoC extends React.Component {
         }, {
             title: '操作',
             dataIndex: 'action',
-            render: (text) => (
+            render: (text,record) => (
                 <span>
-                    <a href="javascript:;">查看</a>
+                    <Link to={`${this.props.match.url}/infodetail/${record.memberId}`}>查看</Link>
                     <Divider type="vertical" />
                     <a href="javascript:;">删除</a>
                 </span>
@@ -108,6 +120,7 @@ class InfoC extends React.Component {
         }];
 
         const data = [{
+            key: id++,
             memberId: '4455665445',
             phone: '13545263365',
             nickName: '啦啦啦',
@@ -118,6 +131,7 @@ class InfoC extends React.Component {
             company: '',
             registerTime: '2017-05-11 15:11:00'
         }, {
+            key: id++,
             memberId: '2115545666',
             phone: '13544789587',
             nickName: '小宇宙',
@@ -149,6 +163,7 @@ class InfoC extends React.Component {
                     />
                 </Card>
             </div>
+          
         )
     }
 }
