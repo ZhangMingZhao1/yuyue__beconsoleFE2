@@ -76,7 +76,7 @@ class BookLib extends React.Component {
             dataIndex: 'action',
             render: (text, record) => (
                 <span>
-                    <Link to={`${this.props.match.url}/infodetail/${record.memberId}`}>修改</Link>
+                    <Link to={`${this.props.match.url}/modifyBookLib/${record.bibliographyId}`}>修改</Link>
                     <Divider type="vertical" />
                     <a href="javascript:;">删除</a>
                 </span>
@@ -102,7 +102,10 @@ class BookLib extends React.Component {
                     title="书目库"
                 >
                     <BookSearchForm /><br />
-                    <div style={{ marginBottom: '10px' }}><Button type="primary">新增</Button><Button type="primary">导入</Button></div>
+                    <div style={{ marginBottom: '10px' }}>
+                        <Button type="primary"><Link to={`${this.props.match.url}/addBookLib`}>新增</Link></Button>
+                        <Button type="primary">导入</Button>
+                    </div>
                     <Table className="infoC-table"
                         columns={columns}
                         dataSource={data}

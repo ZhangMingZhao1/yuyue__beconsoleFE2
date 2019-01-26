@@ -36,6 +36,10 @@ import PointRule from './memberM/pointRule.js';
 import MemberLevel from './memberM/memberLevel.js';
 import InfoDetail from './memberM/infodetail';
 import BookLib from './bookM/bookLib/index.js';
+import AddBookLib from './bookM/bookLib/addBookLib.js';
+import ModifyBookLib from './bookM/bookLib/modifyBookLib.js';
+import PublisherM from './bookM/publisherM/index.js';
+import GoodsM from './bookM/goodsM/index.js';
 import CommentM from './fishM/commentM/index.js';
 import SensitiveWordsM from './fishM/sensitiveWordsM/index.js';
 
@@ -53,6 +57,6 @@ export default {
     Cssmodule, MapUi,
     InfoC,PayO,PointC,PointRule,MemberLevel,
     InfoDetail,
-    BookLib,
+    BookLib,AddBookLib,ModifyBookLib,PublisherM,GoodsM,
     CommentM,SensitiveWordsM
 }
