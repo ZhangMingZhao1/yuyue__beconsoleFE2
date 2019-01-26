@@ -22,10 +22,10 @@ const OrderSearchForm = Form.create()(
         return (
             <Form layout="inline">
                 {selectData.map(i => (
-                    <Form.Item label={i.label}>
+                    <Form.Item key={i.name} label={i.label}>
                         {getFieldDecorator(i.name)(
                             <Select placeholder={i.placeholder} style={{ width: 120 }}>
-                                {i.value.map(v => (<Option value={v}>{v}</Option>))}
+                                {i.value.map(v => (<Option key={v} value={v}>{v}</Option>))}
                             </Select>
                         )}
                     </Form.Item>

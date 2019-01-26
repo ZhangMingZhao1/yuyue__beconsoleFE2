@@ -34,7 +34,7 @@ class PointRule extends React.Component {
                     {str}
                 </Checkbox>
             );
-            content.push(<br />);
+            content.push(<br key={rules.length+i}/>);
         }
         return (
             <div className="pointRule">
