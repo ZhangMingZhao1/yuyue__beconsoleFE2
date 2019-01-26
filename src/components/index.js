@@ -36,6 +36,8 @@ import PointRule from './memberM/pointRule.js';
 import MemberLevel from './memberM/memberLevel.js';
 import InfoDetail from './memberM/infodetail';
 import BookLib from './bookM/bookLib/index.js';
+import CommentM from './fishM/commentM/index.js';
+import SensitiveWordsM from './fishM/sensitiveWordsM/index.js';
 
 const WysiwygBundle = Loadable({ // 按需加载富文本配置
     loader: () => import('./ui/Wysiwyg'),
@@ -52,4 +54,5 @@ export default {
     InfoC,PayO,PointC,PointRule,MemberLevel,
     InfoDetail,
     BookLib,
+    CommentM,SensitiveWordsM
 }
