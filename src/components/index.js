@@ -35,6 +35,7 @@ import PointC from './memberM/pointC.js';
 import PointRule from './memberM/pointRule.js';
 import MemberLevel from './memberM/memberLevel.js';
 import InfoDetail from './memberM/infodetail';
+import BookLib from './bookM/bookLib/index.js';
 
 const WysiwygBundle = Loadable({ // 按需加载富文本配置
     loader: () => import('./ui/Wysiwyg'),
@@ -49,5 +50,6 @@ export default {
     ExampleAnimations, AuthBasic, RouterEnter, WysiwygBundle,
     Cssmodule, MapUi,
     InfoC,PayO,PointC,PointRule,MemberLevel,
-    InfoDetail
+    InfoDetail,
+    BookLib,
 }

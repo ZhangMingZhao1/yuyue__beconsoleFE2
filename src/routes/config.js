@@ -32,6 +32,14 @@ export default {
             ],
         },
         {
+            key: '/app/bookM', title: '书籍管理', icon: 'rocket',
+            subs: [
+                { key: '/app/bookM/bookLib', title: '书目库', component: 'BookLib'},
+                { key: '/app/bookM/publisherM', title: '出版社维护', component: 'InfoDetail'},
+                { key: '/app/bookM/goodsM', title: '商品管理', component: 'PayO'}, 
+            ],
+        },
+        {
             key: '/app/animation', title: '动画', icon: 'rocket',
             subs: [
                 { key: '/app/animation/basicAnimations', title: '基础动画', component: 'BasicAnimations'},
