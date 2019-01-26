@@ -23,7 +23,6 @@ export default {
       key: '/app/memberM', title: '会员管理', icon: 'rocket',
       subs: [
         { key: '/app/memberM/xinxiguanli', title: '信息管理', component: 'InfoC' },
-        { key: '/app/memberM/xinxiguanli/infodetail/:memberId', title: '查看', component: 'InfoDetail' },
         { key: '/app/memberM/zhifudingdan', title: '支付订单', component: 'PayO' },
         { key: '/app/memberM/yaoqingma', title: '邀请码', component: 'BannerControl' },
         { key: '/app/memberM/jifenguanli', title: '积分管理', component: 'PointC' },
@@ -77,5 +76,7 @@ export default {
       key: '/app/cssModule', title: 'cssModule', icon: 'star', component: 'Cssmodule'
     },
   ],
-  others: [] // 非菜单相关路由
+  others: [
+    { key: '/app/memberM/xinxiguanli/infodetail/:memberId', title: '查看', component: 'InfoDetail' },
+  ] // 非菜单相关路由
 }
