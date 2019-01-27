@@ -38,6 +38,14 @@ export default {
       ],
     },
     {
+        key: '/app/bookM', title: '书籍管理', icon: 'rocket',
+        subs: [
+            { key: '/app/bookM/bookLib', title: '书目库', component: 'BookLib'},
+            { key: '/app/bookM/publisherM', title: '出版社维护', component: 'PublisherM'},
+            { key: '/app/bookM/goodsM', title: '商品管理', component: 'GoodsM'}, 
+        ],
+    },
+    {
       key: '/app/table', title: '表格', icon: 'copy',
       subs: [
         { key: '/app/table/basicTable', title: '基础表格', component: 'BasicTable' },
@@ -78,5 +86,7 @@ export default {
   ],
   others: [
     { key: '/app/memberM/xinxiguanli/infodetail/:memberId', title: '查看', component: 'InfoDetail' },
+    { key: '/app/bookM/bookLib/addBookLib', title: '添加书目', component: 'AddBookLib' },
+    { key: '/app/bookM/bookLib/modifyBookLib/:id', title: '修改书目', component: 'ModifyBookLib' },
   ] // 非菜单相关路由
 }

@@ -43,11 +43,11 @@ class MemberLevel extends React.Component {
                 }
             }
             content.push(
-                <span style={{marginRight:5}}><Checkbox key={i} {...this.state.checkbox[i]}
+                <span key={i} style={{marginRight:5}}><Checkbox {...this.state.checkbox[i]}
                     onChange={(e) => { this.state.checkbox[i].checked = !this.state.checkbox[i].checked; this.forceUpdate(); }}
                 /></span>);
             content.push(str);
-            content.push(<br/>);
+            content.push(<br key={rules.length+i}/>);
         }
         return (
             <div className="memberLevel">
