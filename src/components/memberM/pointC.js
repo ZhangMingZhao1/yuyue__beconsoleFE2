@@ -96,7 +96,7 @@ const PointAlterForm = Form.create({ name: 'point_alter_form' })(
                             {getFieldDecorator(selectData.name)(
                                 <Select style={{ width: 120 }} >
                                     {selectData.value.map(i => (
-                                        <Option key={i.value} value={i.v}>{i.t}</Option>
+                                        <Option key={i.v} value={i.v}>{i.t}</Option>
                                     ))}
                                 </Select>
                             )}
@@ -135,7 +135,7 @@ const PointSearchForm = Form.create()(
         return (
             <Form layout="inline">
                 {selectData.map(i => (
-                    <Form.Item label={i.label}>
+                    <Form.Item key={i.name} label={i.label}>
                         {getFieldDecorator(i.name)(
                             <Select placeholder={i.placeholder} style={{ width: 120 }}>
                                 {i.value.map(v => (<Option key={v} value={v}>{v}</Option>))}
