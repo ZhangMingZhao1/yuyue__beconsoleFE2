@@ -43,20 +43,25 @@ import GoodsM from './bookM/goodsM/index.js';
 import CommentM from './fishM/commentM/index.js';
 import SensitiveWordsM from './fishM/sensitiveWordsM/index.js';
 
+import OrganizationM from './systemM/organizationM/index.js';
+import CabinetM from './systemM/cabinetM/index.js';
+import WarehouseM from './systemM/warehouseM/index.js';
+
 const WysiwygBundle = Loadable({ // 按需加载富文本配置
     loader: () => import('./ui/Wysiwyg'),
     loading: Loading,
 });
 
 export default {
-    ThemeControl,BannerControl,
+    ThemeControl, BannerControl,
     BasicForm, BasicTable, AdvancedTable, AsynchronousTable,
     Echarts, Recharts, Icons, Buttons, Spins, Modals, Notifications,
     Tabs, Banners, Drags, Dashboard, Gallery, BasicAnimations,
     ExampleAnimations, AuthBasic, RouterEnter, WysiwygBundle,
     Cssmodule, MapUi,
-    InfoC,PayO,PointC,PointRule,MemberLevel,
+    InfoC, PayO, PointC, PointRule, MemberLevel,
     InfoDetail,
-    BookLib,AddBookLib,ModifyBookLib,PublisherM,GoodsM,
-    CommentM,SensitiveWordsM
+    BookLib, AddBookLib, ModifyBookLib, PublisherM, GoodsM,
+    CommentM, SensitiveWordsM,
+    OrganizationM, CabinetM, WarehouseM,
 }
