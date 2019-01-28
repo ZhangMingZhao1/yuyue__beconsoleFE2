@@ -10,7 +10,7 @@ class CommentM extends React.Component {
   state = {
     selectedRowKeys: [], // Check here to configure the default column
     commentData: [{
-      key: 1,
+      // key: 1,
       number: 1,
       bookname: '钢铁是怎样炼成的',
       comment: '吉利李书福占戴勒姆近10%股份',
@@ -18,12 +18,20 @@ class CommentM extends React.Component {
       time: '2018-02-26 15:25:00'
     },
     {
-      key: 2,
+      // key: 2,
       number: 2,
       bookname: '我的好妈妈',
       comment: '两会代表就房产税提议：2019年北京开始试点',
       commentpeople: '胡晓雪',
       time: '2018-02-26 13:54:00'
+    },
+    {
+      // key: 3,
+      number: 3,
+      bookname: 'dasda',
+      comment: 'asdasd',
+      commentpeople: 'adsad',
+      time: 'asdasd'
     }
   ]
   };
@@ -53,15 +61,16 @@ class CommentM extends React.Component {
       content: `是否确定删除第${this.state.selectedRowKeys}条评论？`,
       onOk: ()=>{
         let tmp = this.state.selectedRowKeys;
+        // console.log('onok之前的',tmp)
         let len = tmp.length;
-        let cnt = 1;
+        let cnt = 0;
         let data = this.state.commentData;
         for(let i = 0; i < len; i++) {
           tmp[i]-=cnt;
           data.splice(tmp[i],1);
           cnt++;
         }
-        this.setState({commentData:data})
+        this.setState({selectedRowKeys:[],commentData:data})
         console.log(data);
       },
       onCancel: ()=>{
