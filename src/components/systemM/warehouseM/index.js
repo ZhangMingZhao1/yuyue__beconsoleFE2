@@ -100,7 +100,7 @@ class WarehouseM extends React.Component {
         confirm({
             okText: '删除',
             cancelText: '取消',
-            content: `是否确定删除这 ${this.state.selectedRowKeys.length} 条仓库信息`,
+            content: `是否确定删除序号为 ${this.state.selectedRowKeys} 的仓库信息`,
             onOk: () => {
                 let tmp = this.state.selectedRowKeys;
                 let data = this.state.warehouseData;
@@ -133,7 +133,6 @@ class WarehouseM extends React.Component {
             // onSelection: this.onSelection,
         };
         const hasSelected = selectedRowKeys.length > 0;
-        const hasData = warehouseData.length > 0;
         const columns = [{
             title: '序号',
             dataIndex: 'number',
@@ -193,47 +192,45 @@ class WarehouseM extends React.Component {
                     </Button>
                 </div>
                 <div>
-                    <div>
-                        <Row gutter={16}>
-                            <Col className="gutter-row" md={24}>
-                                <div className="gutter-box">
-                                    <Card bordered={false}>
-                                        <div>
-                                            <Button
-                                                type="primary"
-                                                style={{ marginTop: '10px' }}
-                                                onClick={this.addBtnClick}
-                                            >
-                                                新建
+                    <Row gutter={16}>
+                        <Col className="gutter-row" md={24}>
+                            <div className="gutter-box">
+                                <Card bordered={false}>
+                                    <div>
+                                        <Button
+                                            type="primary"
+                                            style={{ marginTop: '10px' }}
+                                            onClick={this.addBtnClick}
+                                        >
+                                            新建
                                             </Button>
-                                            <Button
-                                                type="primary"
-                                                style={{ marginTop: '10px' }}
-                                                disabled={!hasSelected || !hasData}
-                                                onClick={this.editBtnClick}
-                                            >
-                                                修改
+                                        <Button
+                                            type="primary"
+                                            style={{ marginTop: '10px' }}
+                                            disabled={!hasSelected}
+                                            onClick={this.editBtnClick}
+                                        >
+                                            修改
                                             </Button>
-                                            <Button
-                                                type="primary"
-                                                style={{ marginTop: '10px' }}
-                                                disabled={!hasSelected || !hasData}
-                                                onClick={this.deleteBtnClick}
-                                            >
-                                                删除
+                                        <Button
+                                            type="primary"
+                                            style={{ marginTop: '10px' }}
+                                            disabled={!hasSelected}
+                                            onClick={this.deleteBtnClick}
+                                        >
+                                            删除
                                             </Button>
-                                        </div>
-                                        <Table
-                                            rowSelection={rowSelection}
-                                            columns={columns}
-                                            dataSource={this.state.warehouseData}
-                                            style={{ marginTop: '24px' }}
-                                        />
-                                    </Card>
-                                </div>
-                            </Col>
-                        </Row>
-                    </div>
+                                    </div>
+                                    <Table
+                                        rowSelection={rowSelection}
+                                        columns={columns}
+                                        dataSource={this.state.warehouseData}
+                                        style={{ marginTop: '24px' }}
+                                    />
+                                </Card>
+                            </div>
+                        </Col>
+                    </Row>
                 </div>
             </React.Fragment>
         );
