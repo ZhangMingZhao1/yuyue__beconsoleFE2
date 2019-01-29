@@ -58,9 +58,10 @@ class CommentM extends React.Component {
     confirm({
       okText: '删除',
       cancelText: '取消',
-      content: `是否确定删除第${this.state.selectedRowKeys}条评论？`,
+      content: `是否确定删除这${this.state.selectedRowKeys}条评论？`,
       onOk: ()=>{
-        let tmp = this.state.selectedRowKeys;
+        let tmp = this.state.selectedRowKeys.sort();
+        console.log('删除前tmp',tmp);
         // console.log('onok之前的',tmp)
         let len = tmp.length;
         let cnt = 0;
