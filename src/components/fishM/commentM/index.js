@@ -54,6 +54,11 @@ class CommentM extends React.Component {
       content: `是否确定删除这 ${this.state.selectedRowKeys.length} 条评论？`,
       onOk: () => {
         let tmp = this.state.selectedRowKeys;
+
+        // console.log('onok之前的',tmp)
+        let len = tmp.length;
+        let cnt = 0;
+
         let data = this.state.commentData;
         while (tmp.length !== 0) {
           for (let i = 0; i < data.length; i++) {
@@ -66,7 +71,9 @@ class CommentM extends React.Component {
           console.log(data);
           console.log('selectedRowKeys changed: ', tmp);
         }
+
         this.setState({ selectedRowKeys: [], commentData: data })
+
       },
       onCancel: () => {
         console.log('Cancel');
