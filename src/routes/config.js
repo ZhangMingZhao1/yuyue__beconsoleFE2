@@ -2,7 +2,7 @@ export default {
   menus: [ // 菜单相关路由
     { key: '/app/dashboard/index', title: '首页', icon: 'mobile', component: 'Dashboard' },
     {
-      key: '/app/ui', title: 'UI', icon: 'scan',
+      key: '/app/ui', title: '网站管理', icon: 'scan',
       subs: [
         { key: '/app/ui/themeControl', title: '专题管理', component: 'ThemeControl' },
         { key: '/app/ui/bannerControl', title: 'banner管理', component: 'BannerControl' },
@@ -23,6 +23,7 @@ export default {
       key: '/app/memberM', title: '会员管理', icon: 'rocket',
       subs: [
         { key: '/app/memberM/xinxiguanli', title: '信息管理', component: 'InfoC' },
+        { key: '/app/memberM/xinxiguanli/infodetail/:memberId', title: '查看', component: 'InfoDetail' },
         { key: '/app/memberM/zhifudingdan', title: '支付订单', component: 'PayO' },
         { key: '/app/memberM/yaoqingma', title: '邀请码', component: 'BannerControl' },
         { key: '/app/memberM/jifenguanli', title: '积分管理', component: 'PointC' },
@@ -38,20 +39,34 @@ export default {
       ],
     },
     {
-        key: '/app/bookM', title: '书籍管理', icon: 'rocket',
-        subs: [
-            { key: '/app/bookM/bookLib', title: '书目库', component: 'BookLib'},
-            { key: '/app/bookM/publisherM', title: '出版社维护', component: 'PublisherM'},
-            { key: '/app/bookM/goodsM', title: '商品管理', component: 'GoodsM'}, 
-        ],
+      key: '/app/bookM', title: '书籍管理', icon: 'rocket',
+      subs: [
+        { key: '/app/bookM/bookLib', title: '书目库', component: 'BookLib' },
+        { key: '/app/bookM/publisherM', title: '出版社维护', component: 'PublisherM' },
+        { key: '/app/bookM/goodsM', title: '商品管理', component: 'GoodsM' },
+      ],
     },
     {
       key: '/app/orderM', title: '订单管理', icon: 'rocket',
       subs: [
-          { key: '/app/orderM/borrowO', title: '借阅订单', component: 'BorrowO'},
-          { key: '/app/orderM/donateO', title: '捐书订单', component: 'PublisherM'},
-          { key: '/app/orderM/checkO', title: '还捐审单', component: 'GoodsM'}, 
-          { key: '/app/orderM/borrowH', title: '历史借阅', component: 'GoodsM'}, 
+        { key: '/app/orderM/borrowO', title: '借阅订单', component: 'BorrowO' },
+        { key: '/app/orderM/donateO', title: '捐书订单', component: 'PublisherM' },
+        { key: '/app/orderM/checkO', title: '还捐审单', component: 'GoodsM' },
+        { key: '/app/orderM/borrowH', title: '历史借阅', component: 'GoodsM' },
+      ]
+    }, {
+      key: '/app/systemM', title: '系统管理', icon: 'rocket',
+      subs: [
+        { key: '/app/systemM/organizationM', title: '机构管理', component: 'OrganizationM' },
+        { key: '/app/systemM/warehouseM', title: '仓库维护', component: 'WarehouseM' },
+        { key: '/app/systemM/cabinetM', title: '机柜管理', component: 'CabinetM' },
+        {
+          key: '/app/systemM/staffM', title: '员工管理',
+          subs: [
+            { key: '/app/systemM/staffM/addStaff', title: '新增', component: 'AddStaff' },
+            { key: '/app/systemM/staffM/editStaff', title: '修改', component: 'EditStaff' },
+          ]
+        }
       ],
     },
     {
