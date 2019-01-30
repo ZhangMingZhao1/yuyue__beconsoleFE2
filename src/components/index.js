@@ -42,6 +42,9 @@ import PublisherM from './bookM/publisherM/index.js';
 import GoodsM from './bookM/goodsM/index.js';
 import CommentM from './fishM/commentM/index.js';
 import SensitiveWordsM from './fishM/sensitiveWordsM/index.js';
+import OrganizationM from './systemM/organizationM/index.js';
+import CabinetM from './systemM/cabinetM/index.js';
+import WarehouseM from './systemM/warehouseM/index.js';
 
 const WysiwygBundle = Loadable({ // 按需加载富文本配置
     loader: () => import('./ui/Wysiwyg'),
@@ -58,5 +61,6 @@ export default {
     InfoC,PayO,PointC,PointRule,MemberLevel,
     InfoDetail,
     BookLib,AddBookLib,ModifyBookLib,PublisherM,GoodsM,
-    CommentM,SensitiveWordsM
+    CommentM,SensitiveWordsM,
+    OrganizationM, CabinetM, WarehouseM,
 }
