@@ -3,6 +3,7 @@ import { Form, Select, Input, Button, Card, DatePicker, Table, Divider, Paginati
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import './index.less';
 import OrderDet from './orderDet';
+import DeliveryModal from './deliveryModal';
 
 const { Option } = Select;
 const InputGroup = Input.Group;
@@ -109,6 +110,8 @@ class BorrowO extends React.Component {
             modal1: false,//快递待收书时关闭订单
             modal1Loading: false,
             modal2: false,//详情
+            modal3: false,//发快递
+            modal3: false,//发书柜
         }
     }
     handleSave(row) {
@@ -154,20 +157,26 @@ class BorrowO extends React.Component {
             }
         });
     }
+    postDelivery() {
+        this.showModal('modal3');
+    }
+    caseDelivery() {
+        this.showModal('modal3');
+    }
     handleMadal1Ok() {
         let value = this.closeForm_ref.props.form.getFieldValue('handle');
-        if(value==='storage'){
-            this.setState({modal1Loading: true});
+        if (value === 'storage') {
+            this.setState({ modal1Loading: true });
             setTimeout(() => {
                 console.log('仓库人员确认书籍已回到仓库');
-                this.setState({modal1: false, modal1Loading: false,});
-              }, 2000);
-        }else{
-            this.setState({modal1Loading: true});
+                this.setState({ modal1: false, modal1Loading: false, });
+            }, 2000);
+        } else {
+            this.setState({ modal1Loading: true });
             setTimeout(() => {
                 console.log('系统自动生成一张类型为报损的出库单');
-                this.setState({modal1: false, modal1Loading: false,});
-              }, 2000);
+                this.setState({ modal1: false, modal1Loading: false, });
+            }, 2000);
         }
     }
     showModal(key) {
@@ -185,11 +194,11 @@ class BorrowO extends React.Component {
         for (let i = 0; i < style.length; i++) {
             action[i] = new Array();
             for (let j = 0; j < state.length; j++) {
-                action[i][j] = [{ label: '详情', onClick: ()=>{this.orderDetail()}}];
+                action[i][j] = [{ label: '详情', onClick: () => { this.orderDetail() } }];
             }
         }
-        action[0][0].push({ label: '发快递', onClick: () => { console.log('发快递') } });
-        action[1][0].push({ label: '发书柜', onClick: () => { } }, { label: '关闭订单', onClick: (record) => { this.closeOrder(record) } });
+        action[0][0].push({ label: '发快递', onClick: () => { this.postDelivery() } });
+        action[1][0].push({ label: '发书柜', onClick: () => { this.caseDelivery() } }, { label: '关闭订单', onClick: (record) => { this.closeOrder(record) } });
         action[1][1].push({ label: '接单', onClick: (record) => { this.acceptOrder(record) } }, { label: '关闭订单', onClick: (record) => { this.closeOrder(record) } });
         action[1][2].push({ label: '上柜', onClick: (record) => { this.intoCase(record) } });
         action[0][3].push({ label: '关闭订单', onClick: (record) => { this.closeOrder(record) } });
@@ -254,6 +263,22 @@ class BorrowO extends React.Component {
                 <OrderDet
                     visible={this.state.modal2}
                     onCancel={() => { this.closeModal('modal2') }}
+                    borrowWay='case'
+                    returnWay='case'
+                />
+                <DeliveryModal
+                    type='post'
+                    visible={this.state.modal3}
+                    onCancel={() => { this.closeModal('modal3') }}
+                    onSave={() => { }}
+                    onConfirm={() => { }}
+                />
+                <DeliveryModal
+                    type='case'
+                    visible={this.state.modal4}
+                    onCancel={() => { this.closeModal('modal4') }}
+                    onSave={() => { }}
+                    onConfirm={() => { }}
                 />
             </div>
         )

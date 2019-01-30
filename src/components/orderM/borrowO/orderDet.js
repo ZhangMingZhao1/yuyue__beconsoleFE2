@@ -63,23 +63,68 @@ const caseReturn = [
     { span: 12, label: '创建时间', name: 'r_create_time' },
     { span: 12, label: '书柜名称', name: 'r_case_name' },
     { span: 12, label: '书柜编号', name: 'r_case_code' },
-    { span: 12, label: '书柜地址', name: 'r_case_addr' },
+    { span: 24, label: '书柜地址', name: 'r_case_addr' },
     { span: 12, label: '运维员', name: 'r_operator' },
     { span: 12, label: '用户取书', name: 'r_take_time' },
     { span: 12, label: '仓库管理员', name: 'r_warehouse_man' },
-    { span: 24, label: '入库时间', name: 'r_in_stock_time' },
+    { span: 12, label: '入库时间', name: 'r_in_stock_time' },
     { span: 12, label: '审核结果', name: 'r_check_result' },
     { span: 12, label: '扣罚金额', name: 'r_fine' },
-    { span: 12, label: '审核原因', name: 'r_check_reason' },
+    { span: 24, label: '审核原因', name: 'r_check_reason' },
     { span: 12, label: '支付方式', name: 'r_pay_method' },
     { span: 12, label: '支付金额', name: 'r_pay_fee' },
     { span: 12, label: '流水号', name: 'r_serial_number' },
     { span: 12, label: '支付状态', name: 'r_pay_state' },
 ];
 class OrderDet extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: {
+                order_id: '4575893275834957',
+                book_name: '《钢铁之城》',
+                tag: '54236788976',
+                create_time: '2018-06-17  14:12:02',
+                account: '132****3456',
+                validity_time: '2019-06-16  14:12:02',
+                borrow_way: '线上',
+                b_delivery: '书柜',
+                b_progress: '待归还',
+                b_create_time: '2018-06-17  14:12:02',
+                b_case_name: '万科社区1柜',
+                b_case_code: '457',
+                b_cell_code: '22元',
+                b_take_time: '2019-06-16  14:12:02',
+                b_warehouse_man: '王五',
+                b_out_stock_time: '2019-06-16  14:12:02',
+                b_operator: '李三',
+                b_into_case_time: '2019-06-16  14:12:02',
+                b_case_addr: '东方红卡的说法叫快递收发开始发动机卡是否',
+                return_way: '线上',
+                r_delivery: '书柜',
+                r_progress: '待归还',
+                r_create_time: '2018-06-17  14:12:02',
+                r_case_name: '万科社区1柜',
+                r_case_code: '457',
+                r_case_addr: '东方红卡的说法叫快递收发开始发动机卡是否',
+                r_operator: '李三',
+                r_take_time: '2019-06-16  14:12:02',
+                r_warehouse_man: '王五',
+                r_in_stock_time: '2019-06-16  14:12:02',
+                r_check_result: '不通过',
+                r_fine: '134元',
+                r_check_reason: '东方红卡的说法叫快递收发开始发动机卡是否',
+                r_pay_method: '微信',
+                r_pay_fee: '134元',
+                r_serial_number: '4754975324974908',
+                r_pay_state: '已支付'
+            }
+        }
+    }
 
     render() {
-        const { visible, onCancel } = this.props;
+        const { visible, onCancel, borrowWay, returnWay } = this.props;
+        const { data } = this.state;
         return (
             <div className="">
                 <Modal
@@ -90,24 +135,47 @@ class OrderDet extends React.Component {
                     <Row>
                         {
                             orderBase.map(i => (
-                                <Col style={{ lineHeight: '30px' }} span={i.span}><span style={{ fontWeight: "bold" }}>{i.label}:</span><span style={{ paddingLeft: 8 }}>订单ID</span></Col>
+                                <Col key={i.name} style={{ lineHeight: '30px' }} span={i.span}>
+                                    <span style={{ fontWeight: "bold" }}>{i.label}:</span>
+                                    <span style={{ paddingLeft: 8 }}>{data[i.name]}</span>
+                                </Col>
                             ))
                         }
                     </Row>
                     <Divider />
                     <Row>
                         {
-                            orderBase.map(i => (
-                                <Col style={{ lineHeight: '30px' }} span={i.span}><span style={{ fontWeight: "bold" }}>{i.label}:</span><span style={{ paddingLeft: 8 }}>订单ID</span></Col>
-                            ))
+                            borrowWay === 'case' ?
+                                caseBorrow.map(i => (
+                                    <Col key={i.name} style={{ lineHeight: '30px' }} span={i.span}>
+                                        <span style={{ fontWeight: "bold" }}>{i.label}:</span>
+                                        <span style={{ paddingLeft: 8 }}>{data[i.name]}</span>
+                                    </Col>
+                                )) :
+                                postBorrow.map(i => (
+                                    <Col key={i.name} style={{ lineHeight: '30px' }} span={i.span}>
+                                        <span style={{ fontWeight: "bold" }}>{i.label}:</span>
+                                        <span style={{ paddingLeft: 8 }}>{data[i.name]}</span>
+                                    </Col>
+                                ))
                         }
                     </Row>
                     <Divider />
                     <Row>
                         {
-                            orderBase.map(i => (
-                                <Col style={{ lineHeight: '30px' }} span={i.span}><span style={{ fontWeight: "bold" }}>{i.label}:</span><span style={{ paddingLeft: 8 }}>订单ID</span></Col>
-                            ))
+                            returnWay === 'case' ?
+                                caseReturn.map(i => (
+                                    <Col key={i.name} style={{ lineHeight: '30px' }} span={i.span}>
+                                        <span style={{ fontWeight: "bold" }}>{i.label}:</span>
+                                        <span style={{ paddingLeft: 8 }}>{data[i.name]}</span>
+                                    </Col>
+                                )) :
+                                postReturn.map(i => (
+                                    <Col key={i.name} style={{ lineHeight: '30px' }} span={i.span}>
+                                        <span style={{ fontWeight: "bold" }}>{i.label}:</span>
+                                        <span style={{ paddingLeft: 8 }}>{data[i.name]}</span>
+                                    </Col>
+                                ))
                         }
                     </Row>
                 </Modal>
