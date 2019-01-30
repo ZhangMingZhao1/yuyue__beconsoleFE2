@@ -46,6 +46,15 @@ export default {
         ],
     },
     {
+      key: '/app/orderM', title: '订单管理', icon: 'rocket',
+      subs: [
+          { key: '/app/orderM/borrowO', title: '借阅订单', component: 'BorrowO'},
+          { key: '/app/orderM/donateO', title: '捐书订单', component: 'PublisherM'},
+          { key: '/app/orderM/checkO', title: '还捐审单', component: 'GoodsM'}, 
+          { key: '/app/orderM/borrowH', title: '历史借阅', component: 'GoodsM'}, 
+      ],
+    },
+    {
       key: '/app/table', title: '表格', icon: 'copy',
       subs: [
         { key: '/app/table/basicTable', title: '基础表格', component: 'BasicTable' },

@@ -41,6 +41,7 @@ import ModifyBookLib from './bookM/bookLib/modifyBookLib.js';
 import PublisherM from './bookM/publisherM/index.js';
 import GoodsM from './bookM/goodsM/index.js';
 import CommentM from './fishM/commentM/index.js';
+import BorrowO from './orderM/borrowO/index.js';
 import SensitiveWordsM from './fishM/sensitiveWordsM/index.js';
 
 const WysiwygBundle = Loadable({ // 按需加载富文本配置
@@ -58,5 +59,6 @@ export default {
     InfoC,PayO,PointC,PointRule,MemberLevel,
     InfoDetail,
     BookLib,AddBookLib,ModifyBookLib,PublisherM,GoodsM,
+    BorrowO,
     CommentM,SensitiveWordsM
 }
