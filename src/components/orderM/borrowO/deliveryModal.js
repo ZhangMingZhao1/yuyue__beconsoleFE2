@@ -1,5 +1,5 @@
 import React from 'react';
-import { Divider, Modal, Row, Col, Card, Select, Form, Input, Button } from 'antd';
+import { Modal, Row, Col, Card, Select, Form, Input, Button } from 'antd';
 const { Option } = Select;
 
 const layout1 = { labelCol: { span: 8 }, wrapperCol: { span: 14 } };
@@ -15,8 +15,8 @@ const postFormItem = [
     { type: 1, label: '电子标签', name: 'tag', formItemLayout: layout2, span: 24 },
 ];
 const caseFormItem = [
-    { type: 1, label: '书柜名称', name: 'case_name', disabled: true,formItemLayout: layout1, span: 12 },
-    { type: 1, label: '书柜编号', name: 'case_code',disabled: true, formItemLayout: layout1, span: 12 },
+    { type: 1, label: '书柜名称', name: 'case_name', disabled: true, formItemLayout: layout1, span: 12 },
+    { type: 1, label: '书柜编号', name: 'case_code', disabled: true, formItemLayout: layout1, span: 12 },
     { type: 2, label: '格子编号', name: 'cell_code', formItemLayout: layout1, span: 12, value: [] },
     { type: 2, label: '运维人 ', name: 'operator', formItemLayout: layout1, span: 12, value: ['王五'] },
     { type: 1, label: '电子标签', name: 'tag', formItemLayout: layout2, span: 24 },
@@ -58,8 +58,8 @@ const DeliveryForm = Form.create()(
                         </Col>))}
                 </Row>
                     <div style={{ textAlign: "center" }}>
-                        <Button type="primary" htmlType='submit'>保存</Button>
-                        <Button onClick={() => { }}>确定发货</Button>
+                        <Button type="primary" htmlType='submit' onClick={() => { this.props.onSave() }}>保存</Button>
+                        <Button onClick={() => { this.props.onConfirm() }}>确定发货</Button>
                     </div>
                 </Form>
             );
@@ -93,7 +93,7 @@ class DeliveryModal extends React.Component {
         return (
             <div className="">
                 <Modal
-                    title='发快递'
+                    title={type === 'post' ? '发快递' : '发书柜'}
                     visible={visible}
                     onCancel={() => { onCancel() }}
                     footer={null}
@@ -106,7 +106,11 @@ class DeliveryModal extends React.Component {
                             </Col>)
                         )}
                     </Row></Card>
-                    <DeliveryForm delivery={type}/>
+                    <DeliveryForm
+                        delivery={type}
+                        onSave={onSave}
+                        onConfirm={onConfirm}
+                    />
                 </Modal>
             </div>
 

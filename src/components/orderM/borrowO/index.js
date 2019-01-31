@@ -161,7 +161,7 @@ class BorrowO extends React.Component {
         this.showModal('modal3');
     }
     caseDelivery() {
-        this.showModal('modal3');
+        this.showModal('modal4');
     }
     handleMadal1Ok() {
         let value = this.closeForm_ref.props.form.getFieldValue('handle');
@@ -270,15 +270,15 @@ class BorrowO extends React.Component {
                     type='post'
                     visible={this.state.modal3}
                     onCancel={() => { this.closeModal('modal3') }}
-                    onSave={() => { }}
-                    onConfirm={() => { }}
+                    onSave={() => { console.log('保存') }}
+                    onConfirm={() => { console.log('确定发货') }}
                 />
                 <DeliveryModal
                     type='case'
                     visible={this.state.modal4}
                     onCancel={() => { this.closeModal('modal4') }}
-                    onSave={() => { }}
-                    onConfirm={() => { }}
+                    onSave={() => { console.log('保存') }}
+                    onConfirm={() => { console.log('确定发货') }}
                 />
             </div>
         )
