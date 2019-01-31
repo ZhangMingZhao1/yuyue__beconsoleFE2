@@ -42,6 +42,7 @@ import PublisherM from './bookM/publisherM/index.js';
 import GoodsM from './bookM/goodsM/index.js';
 import CommentM from './fishM/commentM/index.js';
 import BorrowO from './orderM/borrowO/index.js';
+import DonateO from './orderM/donateO/index.js';
 import SensitiveWordsM from './fishM/sensitiveWordsM/index.js';
 import OrganizationM from './systemM/organizationM/index.js';
 import CabinetM from './systemM/cabinetM/index.js';
@@ -62,7 +63,7 @@ export default {
     InfoC,PayO,PointC,PointRule,MemberLevel,
     InfoDetail,
     BookLib,AddBookLib,ModifyBookLib,PublisherM,GoodsM,
-    BorrowO,
+    BorrowO,DonateO,
     CommentM,SensitiveWordsM,
     OrganizationM, CabinetM, WarehouseM,
 }
