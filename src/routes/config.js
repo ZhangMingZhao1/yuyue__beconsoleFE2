@@ -51,7 +51,7 @@ export default {
       subs: [
         { key: '/app/orderM/borrowO', title: '借阅订单', component: 'BorrowO' },
         { key: '/app/orderM/donateO', title: '捐书订单', component: 'DonateO' },
-        { key: '/app/orderM/checkO', title: '还捐审单', component: 'GoodsM' },
+        { key: '/app/orderM/checkO', title: '还捐审单', component: 'CheckO' },
         { key: '/app/orderM/borrowH', title: '历史借阅', component: 'BorrowH' },
       ]
     }, {
