@@ -39,14 +39,22 @@ export default {
       ],
     },
     {
-        key: '/app/bookM', title: '书籍管理', icon: 'rocket',
-        subs: [
-            { key: '/app/bookM/bookLib', title: '书目库', component: 'BookLib'},
-            { key: '/app/bookM/publisherM', title: '出版社维护', component: 'PublisherM'},
-            { key: '/app/bookM/goodsM', title: '商品管理', component: 'GoodsM'}, 
-        ],
+      key: '/app/bookM', title: '书籍管理', icon: 'rocket',
+      subs: [
+        { key: '/app/bookM/bookLib', title: '书目库', component: 'BookLib' },
+        { key: '/app/bookM/publisherM', title: '出版社维护', component: 'PublisherM' },
+        { key: '/app/bookM/goodsM', title: '商品管理', component: 'GoodsM' },
+      ],
     },
     {
+      key: '/app/orderM', title: '订单管理', icon: 'rocket',
+      subs: [
+        { key: '/app/orderM/borrowO', title: '借阅订单', component: 'BorrowO' },
+        { key: '/app/orderM/donateO', title: '捐书订单', component: 'DonateO' },
+        { key: '/app/orderM/checkO', title: '还捐审单', component: 'CheckO' },
+        { key: '/app/orderM/borrowH', title: '历史借阅', component: 'BorrowH' },
+      ]
+    }, {
       key: '/app/systemM', title: '系统管理', icon: 'rocket',
       subs: [
         { key: '/app/systemM/organizationM', title: '机构管理', component: 'OrganizationM' },
