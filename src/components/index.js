@@ -41,8 +41,11 @@ import ModifyBookLib from './bookM/bookLib/modifyBookLib.js';
 import PublisherM from './bookM/publisherM/index.js';
 import GoodsM from './bookM/goodsM/index.js';
 import CommentM from './fishM/commentM/index.js';
+import BorrowO from './orderM/borrowO/index.js';
+import DonateO from './orderM/donateO/index.js';
+import CheckO from './orderM/checkO/index.js';
+import BorrowH from './orderM/borrowH/index.js';
 import SensitiveWordsM from './fishM/sensitiveWordsM/index.js';
-
 import OrganizationM from './systemM/organizationM/index.js';
 import CabinetM from './systemM/cabinetM/index.js';
 import WarehouseM from './systemM/warehouseM/index.js';
@@ -54,15 +57,17 @@ const WysiwygBundle = Loadable({ // 按需加载富文本配置
 });
 
 export default {
-    ThemeControl, BannerControl,
+    ThemeControl,BannerControl,
     BasicForm, BasicTable, AdvancedTable, AsynchronousTable,
     Echarts, Recharts, Icons, Buttons, Spins, Modals, Notifications,
     Tabs, Banners, Drags, Dashboard, Gallery, BasicAnimations,
     ExampleAnimations, AuthBasic, RouterEnter, WysiwygBundle,
     Cssmodule, MapUi,
-    InfoC, PayO, PointC, PointRule, MemberLevel,
+    InfoC,PayO,PointC,PointRule,MemberLevel,
     InfoDetail,
-    BookLib, AddBookLib, ModifyBookLib, PublisherM, GoodsM,
-    CommentM, SensitiveWordsM,
-    OrganizationM, CabinetM, WarehouseM, StaffM
+    BookLib,AddBookLib,ModifyBookLib,PublisherM,GoodsM,
+    BorrowO,DonateO,CheckO,BorrowH,
+    CommentM,SensitiveWordsM,
+    OrganizationM, CabinetM, WarehouseM,
+
 }

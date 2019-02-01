@@ -1,6 +1,5 @@
-/* eslint-disable react/sort-comp */
 import React from 'react';
-import { Card, Input, DatePicker, Button, Row, Col, Modal, Select, Table } from 'antd';
+import { Card, Input, DatePicker, Button, Row, Col, Modal, Select,Table } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import 'antd/dist/antd.css';
 
@@ -8,9 +7,37 @@ const { RangePicker } = DatePicker;
 const confirm = Modal.confirm;
 const Option = Select.Option;
 class CommentM extends React.Component {
-
+  state = {
+    selectedRowKeys: [], // Check here to configure the default column
+    commentData: [{
+      // key: 1,
+      number: 1,
+      bookname: '钢铁是怎样炼成的',
+      comment: '吉利李书福占戴勒姆近10%股份',
+      commentpeople: '胡晓雪',
+      time: '2018-02-26 15:25:00'
+    },
+    {
+      // key: 2,
+      number: 2,
+      bookname: '我的好妈妈',
+      comment: '两会代表就房产税提议：2019年北京开始试点',
+      commentpeople: '胡晓雪',
+      time: '2018-02-26 13:54:00'
+    },
+    {
+      // key: 3,
+      number: 3,
+      bookname: 'dasda',
+      comment: 'asdasd',
+      commentpeople: 'adsad',
+      time: 'asdasd'
+    }
+  ]
+  };
   constructor(props) {
     super(props);
+
     this.state = {
       selectedRowKeys: [], // Check here to configure the default column
       commentData: [{
@@ -32,6 +59,7 @@ class CommentM extends React.Component {
     this.dateRangeChange = this.dateRangeChange.bind(this);
     this.findBtnClick = this.findBtnClick.bind(this);
     this.deleteCommentBtnClick = this.deleteCommentBtnClick.bind(this);
+
     this.handleChange = this.handleChange.bind(this);
   }
   onSelectChange = (selectedRowKeys) => {
@@ -62,9 +90,10 @@ class CommentM extends React.Component {
           cnt++;
         }
         this.setState({ selectedRowKeys: [], commentData: data })
+
         console.log(data);
       },
-      onCancel: () => {
+      onCancel: ()=>{
         console.log('Cancel');
       },
     });
@@ -98,6 +127,7 @@ class CommentM extends React.Component {
       title: '评论时间',
       dataIndex: 'time'
     }];
+    
 
     return (
       <React.Fragment>
@@ -151,11 +181,7 @@ class CommentM extends React.Component {
                 <Col className="gutter-row" md={24}>
                   <div className="gutter-box">
                     <Card bordered={false}>
-                      <Table
-                        rowSelection={rowSelection}
-                        columns={columns}
-                        dataSource={this.state.commentData}
-                      />
+                      <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.commentData} />
                     </Card>
                   </div>
                 </Col>
@@ -169,3 +195,4 @@ class CommentM extends React.Component {
 }
 
 export default CommentM;
+
