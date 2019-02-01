@@ -46,6 +46,7 @@ import SensitiveWordsM from './fishM/sensitiveWordsM/index.js';
 import OrganizationM from './systemM/organizationM/index.js';
 import CabinetM from './systemM/cabinetM/index.js';
 import WarehouseM from './systemM/warehouseM/index.js';
+import StaffM from './systemM/staffM/index.js';
 
 const WysiwygBundle = Loadable({ // 按需加载富文本配置
     loader: () => import('./ui/Wysiwyg'),
@@ -63,5 +64,5 @@ export default {
     InfoDetail,
     BookLib, AddBookLib, ModifyBookLib, PublisherM, GoodsM,
     CommentM, SensitiveWordsM,
-    OrganizationM, CabinetM, WarehouseM,
+    OrganizationM, CabinetM, WarehouseM, StaffM
 }

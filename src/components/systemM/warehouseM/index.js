@@ -11,12 +11,13 @@ class WarehouseM extends React.Component {
         super(props);
         this.state = {
             count: 3,
+            editing: false,
             editable: true,
             departmentData: [],
             searchInputValue: '',
             selectedRowKeys: [], // Check here to configure the default column
             warehouseData: [{
-                key: 1,
+                // key: 1,
                 number: 1,
                 warehouseNumber: 1,
                 warehouseName: '北京分公司XX区XX仓库',
@@ -29,7 +30,7 @@ class WarehouseM extends React.Component {
                 changeDate: '2018-02-26'
             },
             {
-                key: 2,
+                // key: 2,
                 number: 2,
                 warehouseNumber: 2,
                 warehouseName: '北京分公司XX区XX仓库',
@@ -48,6 +49,7 @@ class WarehouseM extends React.Component {
         this.searchBtnClick = this.searchBtnClick.bind(this);
         this.addBtnClick = this.addBtnClick.bind(this);
         this.editBtnClick = this.editBtnClick.bind(this);
+        this.saveBtnClick = this.saveBtnClick.bind(this);
         this.deleteBtnClick = this.deleteBtnClick.bind(this);
     }
 
@@ -74,7 +76,6 @@ class WarehouseM extends React.Component {
     addBtnClick() {
         const { count, warehouseData } = this.state;
         const newData = {
-            key: count,
             number: count,
             warehouseNumber: count,
             warehouseName: '北京分公司XX区XX仓库',
@@ -93,27 +94,38 @@ class WarehouseM extends React.Component {
     }
 
     editBtnClick() {
+        this.setState(() => ({
+            editing: true
+        }));
+    }
 
+    saveBtnClick() {
+        confirm({
+            okText: '确定',
+            cancelText: '放弃',
+            content: '是否确定保存修改？',
+            onOk: () => { },
+            onCancel: () => { },
+        });
+        this.setState(() => ({
+            editing: false
+        }));
     }
 
     deleteBtnClick() {
         confirm({
             okText: '删除',
             cancelText: '取消',
-            content: `是否确定删除序号为 ${this.state.selectedRowKeys} 的仓库信息`,
+            content: `是否确定删除这 ${this.state.selectedRowKeys.length} 条仓库信息`,
             onOk: () => {
-                let tmp = this.state.selectedRowKeys;
+                let tmp = this.state.selectedRowKeys.sort();
+                let len = tmp.length;
+                let cnt = 0;
                 let data = this.state.warehouseData;
-                while (tmp.length !== 0) {
-                    for (let i = 0; i < data.length; i++) {
-                        if (data[i].key === tmp[0]) {
-                            data.splice(i, 1);
-                            tmp.splice(0, 1);
-                            break;
-                        }
-                        console.log(data);
-                        console.log('selectedRowKeys changed: ', tmp);
-                    }
+                for (let i = 0; i < len; i++) {
+                    tmp[i] -= cnt;
+                    data.splice(tmp[i], 1);
+                    cnt++;
                 }
                 this.setState({ selectedRowKeys: [], warehouseData: data })
                 console.log(data);
@@ -126,7 +138,7 @@ class WarehouseM extends React.Component {
 
     render() {
 
-        const { selectedRowKeys, warehouseData } = this.state;
+        const { selectedRowKeys, editing } = this.state;
         const rowSelection = {
             selectedRowKeys,
             onChange: this.onSelectChange,
@@ -203,15 +215,26 @@ class WarehouseM extends React.Component {
                                             onClick={this.addBtnClick}
                                         >
                                             新建
-                                            </Button>
-                                        <Button
-                                            type="primary"
-                                            style={{ marginTop: '10px' }}
-                                            disabled={!hasSelected}
-                                            onClick={this.editBtnClick}
-                                        >
-                                            修改
-                                            </Button>
+                                        </Button>
+                                        {
+                                            editing ?
+                                                <Button
+                                                    type="primary"
+                                                    style={{ marginTop: '10px' }}
+                                                    onClick={this.saveBtnClick}
+                                                >
+                                                    保存
+                                                </Button>
+                                                :
+                                                <Button
+                                                    type="primary"
+                                                    style={{ marginTop: '10px' }}
+                                                    disabled={!hasSelected}
+                                                    onClick={this.editBtnClick}
+                                                >
+                                                    修改
+                                                </Button>
+                                        }
                                         <Button
                                             type="primary"
                                             style={{ marginTop: '10px' }}
@@ -219,7 +242,7 @@ class WarehouseM extends React.Component {
                                             onClick={this.deleteBtnClick}
                                         >
                                             删除
-                                            </Button>
+                                        </Button>
                                     </div>
                                     <Table
                                         rowSelection={rowSelection}

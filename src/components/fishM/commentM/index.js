@@ -14,7 +14,6 @@ class CommentM extends React.Component {
     this.state = {
       selectedRowKeys: [], // Check here to configure the default column
       commentData: [{
-        key: 1,
         number: 1,
         bookname: '钢铁是怎样炼成的',
         comment: '吉利李书福占戴勒姆近10%股份',
@@ -22,7 +21,6 @@ class CommentM extends React.Component {
         time: '2018-02-26 15:25:00'
       },
       {
-        key: 2,
         number: 2,
         bookname: '我的好妈妈',
         comment: '两会代表就房产税提议：2019年北京开始试点',
@@ -33,6 +31,7 @@ class CommentM extends React.Component {
     };
     this.dateRangeChange = this.dateRangeChange.bind(this);
     this.findBtnClick = this.findBtnClick.bind(this);
+    this.deleteCommentBtnClick = this.deleteCommentBtnClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
   onSelectChange = (selectedRowKeys) => {
@@ -47,33 +46,23 @@ class CommentM extends React.Component {
     console.log('Find');
   }
 
-  deleteCommentBtnClick = () => {
+  deleteCommentBtnClick() {
     confirm({
       okText: '删除',
       cancelText: '取消',
-      content: `是否确定删除这 ${this.state.selectedRowKeys.length} 条评论？`,
+      content: `是否确定删除这 ${this.state.selectedRowKeys.length} 条评论`,
       onOk: () => {
-        let tmp = this.state.selectedRowKeys;
-
-        // console.log('onok之前的',tmp)
+        let tmp = this.state.selectedRowKeys.sort();
         let len = tmp.length;
         let cnt = 0;
-
         let data = this.state.commentData;
-        while (tmp.length !== 0) {
-          for (let i = 0; i < data.length; i++) {
-            if (data[i].key === tmp[0]) {
-              data.splice(i, 1);
-              tmp.splice(0, 1);
-              break;
-            }
-          }
-          console.log(data);
-          console.log('selectedRowKeys changed: ', tmp);
+        for (let i = 0; i < len; i++) {
+          tmp[i] -= cnt;
+          data.splice(tmp[i], 1);
+          cnt++;
         }
-
         this.setState({ selectedRowKeys: [], commentData: data })
-
+        console.log(data);
       },
       onCancel: () => {
         console.log('Cancel');
@@ -86,14 +75,13 @@ class CommentM extends React.Component {
   }
 
   render() {
-    const { selectedRowKeys, commentData } = this.state;
+    const { selectedRowKeys } = this.state;
     const rowSelection = {
-      selectedRowKeys,
+      selectedRowKeys:selectedRowKeys.sort(),
       onChange: this.onSelectChange,
       // onSelection: this.onSelection,
     };
     const hasSelected = selectedRowKeys.length > 0;
-    const hasData = commentData.length > 0;
     const columns = [{
       title: '序号',
       dataIndex: 'number',
@@ -142,11 +130,11 @@ class CommentM extends React.Component {
                 type="primary"
                 onClick={this.deleteCommentBtnClick}
                 style={{ marginLeft: '24px', marginTop: '24px', marginRight: '10px' }}
-                disabled={!hasSelected || !hasData}
+                disabled={!hasSelected}
               >
                 删除评论
               </Button>
-              第 1 条到第 2 条，共 2 条  每页显示
+              第 {isNaN(selectedRowKeys[0]) ? 0 : selectedRowKeys[0] + 1} 条到第 {isNaN(selectedRowKeys[selectedRowKeys.length - 1]) ? 0 : selectedRowKeys[selectedRowKeys.length - 1] + 1} 条，共 {selectedRowKeys.length} 条  每页显示
               <Select
                 defaultValue="10"
                 onChange={this.handleChange}

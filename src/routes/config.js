@@ -39,12 +39,12 @@ export default {
       ],
     },
     {
-        key: '/app/bookM', title: '书籍管理', icon: 'rocket',
-        subs: [
-            { key: '/app/bookM/bookLib', title: '书目库', component: 'BookLib'},
-            { key: '/app/bookM/publisherM', title: '出版社维护', component: 'PublisherM'},
-            { key: '/app/bookM/goodsM', title: '商品管理', component: 'GoodsM'}, 
-        ],
+      key: '/app/bookM', title: '书籍管理', icon: 'rocket',
+      subs: [
+        { key: '/app/bookM/bookLib', title: '书目库', component: 'BookLib' },
+        { key: '/app/bookM/publisherM', title: '出版社维护', component: 'PublisherM' },
+        { key: '/app/bookM/goodsM', title: '商品管理', component: 'GoodsM' },
+      ],
     },
     {
       key: '/app/systemM', title: '系统管理', icon: 'rocket',
@@ -52,13 +52,7 @@ export default {
         { key: '/app/systemM/organizationM', title: '机构管理', component: 'OrganizationM' },
         { key: '/app/systemM/warehouseM', title: '仓库维护', component: 'WarehouseM' },
         { key: '/app/systemM/cabinetM', title: '机柜管理', component: 'CabinetM' },
-        {
-          key: '/app/systemM/staffM', title: '员工管理',
-          subs: [
-            { key: '/app/systemM/staffM/addStaff', title: '新增', component: 'AddStaff' },
-            { key: '/app/systemM/staffM/editStaff', title: '修改', component: 'EditStaff' },
-          ]
-        }
+        { key: '/app/systemM/staffM', title: '员工管理', component: 'StaffM' },
       ],
     },
     {
