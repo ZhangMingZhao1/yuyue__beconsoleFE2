@@ -57,17 +57,16 @@ const WysiwygBundle = Loadable({ // 按需加载富文本配置
 });
 
 export default {
-    ThemeControl,BannerControl,
+    ThemeControl, BannerControl,
     BasicForm, BasicTable, AdvancedTable, AsynchronousTable,
     Echarts, Recharts, Icons, Buttons, Spins, Modals, Notifications,
     Tabs, Banners, Drags, Dashboard, Gallery, BasicAnimations,
     ExampleAnimations, AuthBasic, RouterEnter, WysiwygBundle,
     Cssmodule, MapUi,
-    InfoC,PayO,PointC,PointRule,MemberLevel,
+    InfoC, PayO, PointC, PointRule, MemberLevel,
     InfoDetail,
-    BookLib,AddBookLib,ModifyBookLib,PublisherM,GoodsM,
-    BorrowO,DonateO,CheckO,BorrowH,
-    CommentM,SensitiveWordsM,
-    OrganizationM, CabinetM, WarehouseM,
-
+    BookLib, AddBookLib, ModifyBookLib, PublisherM, GoodsM,
+    BorrowO, DonateO, CheckO, BorrowH,
+    CommentM, SensitiveWordsM,
+    OrganizationM, CabinetM, WarehouseM, StaffM
 }

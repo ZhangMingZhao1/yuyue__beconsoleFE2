@@ -1,40 +1,12 @@
 import React from 'react';
-import { Card, Input, DatePicker, Button, Row, Col, Modal, Select,Table } from 'antd';
+import { Card, Input, DatePicker, Button, Row, Col, Modal, Table } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import 'antd/dist/antd.css';
 
 const { RangePicker } = DatePicker;
 const confirm = Modal.confirm;
-const Option = Select.Option;
 class CommentM extends React.Component {
-  state = {
-    selectedRowKeys: [], // Check here to configure the default column
-    commentData: [{
-      // key: 1,
-      number: 1,
-      bookname: '钢铁是怎样炼成的',
-      comment: '吉利李书福占戴勒姆近10%股份',
-      commentpeople: '胡晓雪',
-      time: '2018-02-26 15:25:00'
-    },
-    {
-      // key: 2,
-      number: 2,
-      bookname: '我的好妈妈',
-      comment: '两会代表就房产税提议：2019年北京开始试点',
-      commentpeople: '胡晓雪',
-      time: '2018-02-26 13:54:00'
-    },
-    {
-      // key: 3,
-      number: 3,
-      bookname: 'dasda',
-      comment: 'asdasd',
-      commentpeople: 'adsad',
-      time: 'asdasd'
-    }
-  ]
-  };
+
   constructor(props) {
     super(props);
 
@@ -54,13 +26,11 @@ class CommentM extends React.Component {
         commentpeople: '胡晓雪',
         time: '2018-02-26 13:54:00'
       }
-      ]
+      ],
     };
     this.dateRangeChange = this.dateRangeChange.bind(this);
     this.findBtnClick = this.findBtnClick.bind(this);
     this.deleteCommentBtnClick = this.deleteCommentBtnClick.bind(this);
-
-    this.handleChange = this.handleChange.bind(this);
   }
   onSelectChange = (selectedRowKeys) => {
     console.log('selectedRowKeys changed: ', selectedRowKeys);
@@ -93,20 +63,16 @@ class CommentM extends React.Component {
 
         console.log(data);
       },
-      onCancel: ()=>{
+      onCancel: () => {
         console.log('Cancel');
       },
     });
   }
 
-  handleChange(value) {
-    console.log(value);
-  }
-
   render() {
     const { selectedRowKeys } = this.state;
     const rowSelection = {
-      selectedRowKeys:selectedRowKeys.sort(),
+      selectedRowKeys: selectedRowKeys.sort(),
       onChange: this.onSelectChange,
       // onSelection: this.onSelection,
     };
@@ -127,7 +93,7 @@ class CommentM extends React.Component {
       title: '评论时间',
       dataIndex: 'time'
     }];
-    
+
 
     return (
       <React.Fragment>
@@ -164,24 +130,23 @@ class CommentM extends React.Component {
               >
                 删除评论
               </Button>
-              第 {isNaN(selectedRowKeys[0]) ? 0 : selectedRowKeys[0] + 1} 条到第 {isNaN(selectedRowKeys[selectedRowKeys.length - 1]) ? 0 : selectedRowKeys[selectedRowKeys.length - 1] + 1} 条，共 {selectedRowKeys.length} 条  每页显示
-              <Select
-                defaultValue="10"
-                onChange={this.handleChange}
-                style={{ width: '65px', marginLeft: '10px', marginRight: '10px' }}
-              >
-                <Option value="10">10</Option>
-                <Option value="20">20</Option>
-                <Option value="50">50</Option>
-              </Select>
-              条
             </div>
             <div>
               <Row gutter={16}>
                 <Col className="gutter-row" md={24}>
                   <div className="gutter-box">
                     <Card bordered={false}>
-                      <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.commentData} />
+                      <Table
+                        bordered
+                        rowSelection={rowSelection}
+                        columns={columns}
+                        dataSource={this.state.commentData}
+                        pagination={{
+                          showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
+                          showSizeChanger: true,
+                          pageSizeOptions: ['10', '20', '50']
+                        }}
+                      />
                     </Card>
                   </div>
                 </Col>

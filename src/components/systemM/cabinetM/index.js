@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Select, Input, Button, Table, Icon, Popconfirm } from 'antd';
+import { Card, Select, Input, Button, Table, Popconfirm, Divider } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 
 const Option = Select.Option;
@@ -48,17 +48,20 @@ class CabinetM extends React.Component {
                                     <a onClick={() => this.edit(index)}>修改</a>
                                 </span>
                         }
+                        <Divider type="vertical" />
                         {
                             this.state.data.length > 0 ?
                                 (
-                                    <Popconfirm
-                                        okText="确定"
-                                        cancelText="取消"
-                                        title="确定删除？"
-                                        onConfirm={() => this.onDelete(index)}
-                                    >
-                                        <a href="#">删除</a>
-                                    </Popconfirm>
+                                    <span>
+                                        <Popconfirm
+                                            okText="确定"
+                                            cancelText="取消"
+                                            title="确定删除？"
+                                            onConfirm={() => this.onDelete(index)}
+                                        >
+                                            <a href="javascript:;">删除</a>
+                                        </Popconfirm>
+                                    </span>
                                 ) : null
                         }
                     </div>
@@ -248,6 +251,11 @@ class CabinetM extends React.Component {
                                     dataSource={dataSource}
                                     columns={columns}
                                     style={{ marginTop: '24px' }}
+                                    pagination={{
+                                        showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
+                                        showSizeChanger: true,
+                                        pageSizeOptions: ['10', '20', '50']
+                                    }}
                                 />
                             </div>
                         </Card>
