@@ -50,7 +50,7 @@ import OrganizationM from './systemM/organizationM/index.js';
 import CabinetM from './systemM/cabinetM/index.js';
 import WarehouseM from './systemM/warehouseM/index.js';
 import StoreQuery from './storehouseM/storequery/storequery.js';
-
+import InStoreData from './storehouseM/instoredata/instoredata.js';
 const WysiwygBundle = Loadable({ // 按需加载富文本配置
     loader: () => import('./ui/Wysiwyg'),
     loading: Loading,
@@ -69,5 +69,5 @@ export default {
     BorrowO,DonateO,CheckO,BorrowH,
     CommentM,SensitiveWordsM,
     OrganizationM, CabinetM, WarehouseM,
-    StoreQuery
+    StoreQuery,InStoreData
 }
