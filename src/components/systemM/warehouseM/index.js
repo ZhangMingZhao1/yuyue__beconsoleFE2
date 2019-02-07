@@ -181,80 +181,78 @@ class WarehouseM extends React.Component {
         return (
             <React.Fragment>
                 <BreadcrumbCustom first="系统管理" second="仓库维护" />
-                <div>
-                    所属部门：
-                    <Select
-                        style={{ width: 120, marginLeft: '10px' }}
-                        onChange={this.handleSelectChange}
-                    >
-                        <Option value="1">1</Option>
-                    </Select>
-                    <Input
-                        style={{ width: '400px', marginLeft: '10px' }}
-                        placeholder="仓库名称，编号，联系人，地址模糊查询"
-                        onChange={this.searchInputChange}
-                        value={this.state.searchInputValue}
-                    />
-                    <Button
-                        type="primary"
-                        onClick={this.searchBtnClick}
-                        style={{ marginLeft: '10px' }}
-                    >
-                        查询
-                    </Button>
-                </div>
-                <div>
-                    <Row gutter={16}>
-                        <Col className="gutter-row" md={24}>
-                            <div className="gutter-box">
-                                <Card bordered={false}>
-                                    <div>
+                <Card title="仓库维护">
+                    <div>
+                        所属部门：
+                        <Select
+                            style={{ width: 120, marginLeft: '10px' }}
+                            onChange={this.handleSelectChange}
+                        >
+                            <Option value="1">1</Option>
+                        </Select>
+                        <Input
+                            style={{ width: '400px', marginLeft: '10px' }}
+                            placeholder="仓库名称，编号，联系人，地址模糊查询"
+                            onChange={this.searchInputChange}
+                            value={this.state.searchInputValue}
+                        />
+                        <Button
+                            type="primary"
+                            onClick={this.searchBtnClick}
+                            style={{ marginLeft: '10px' }}
+                        >
+                            查询
+                        </Button>
+                    </div>
+                    <div>
+                        <div className="gutter-box">
+                            <div style={{ marginTop: '24px' }}>
+                                <Button
+                                    type="primary"
+                                    onClick={this.addBtnClick}
+                                >
+                                    新建
+                                </Button>
+                                {
+                                    editing ?
                                         <Button
                                             type="primary"
-                                            style={{ marginTop: '10px' }}
-                                            onClick={this.addBtnClick}
+                                            onClick={this.saveBtnClick}
                                         >
-                                            新建
+                                            保存
                                         </Button>
-                                        {
-                                            editing ?
-                                                <Button
-                                                    type="primary"
-                                                    style={{ marginTop: '10px' }}
-                                                    onClick={this.saveBtnClick}
-                                                >
-                                                    保存
-                                                </Button>
-                                                :
-                                                <Button
-                                                    type="primary"
-                                                    style={{ marginTop: '10px' }}
-                                                    disabled={!hasSelected}
-                                                    onClick={this.editBtnClick}
-                                                >
-                                                    修改
-                                                </Button>
-                                        }
+                                        :
                                         <Button
                                             type="primary"
-                                            style={{ marginTop: '10px' }}
                                             disabled={!hasSelected}
-                                            onClick={this.deleteBtnClick}
+                                            onClick={this.editBtnClick}
                                         >
-                                            删除
+                                            修改
                                         </Button>
-                                    </div>
-                                    <Table
-                                        rowSelection={rowSelection}
-                                        columns={columns}
-                                        dataSource={this.state.warehouseData}
-                                        style={{ marginTop: '24px' }}
-                                    />
-                                </Card>
+                                }
+                                <Button
+                                    type="primary"
+                                    disabled={!hasSelected}
+                                    onClick={this.deleteBtnClick}
+                                >
+                                    删除
+                                </Button>
                             </div>
-                        </Col>
-                    </Row>
-                </div>
+                            <Table
+                                bordered
+                                rowSelection={rowSelection}
+                                columns={columns}
+                                dataSource={this.state.warehouseData}
+                                style={{ marginTop: '10px' }}
+                                pagination={{
+                                    showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
+                                    showSizeChanger: true,
+                                    pageSizeOptions: ['10', '20', '50']
+                                }}
+                            />
+                        </div>
+                    </div>
+                </Card>
             </React.Fragment>
         );
     }

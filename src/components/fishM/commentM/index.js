@@ -103,7 +103,7 @@ class CommentM extends React.Component {
             <div>
               <Input
                 placeholder="标题/内容模糊查询"
-                style={{ width: '180px', marginLeft: '24px' }}
+                style={{ width: '180px' }}
               />
               <Input
                 placeholder="评论人"
@@ -125,32 +125,24 @@ class CommentM extends React.Component {
               <Button
                 type="primary"
                 onClick={this.deleteCommentBtnClick}
-                style={{ marginLeft: '24px', marginTop: '24px', marginRight: '10px' }}
+                style={{ marginTop: '24px', marginRight: '10px' }}
                 disabled={!hasSelected}
               >
                 删除评论
               </Button>
             </div>
-            <div>
-              <Row gutter={16}>
-                <Col className="gutter-row" md={24}>
-                  <div className="gutter-box">
-                    <Card bordered={false}>
-                      <Table
-                        bordered
-                        rowSelection={rowSelection}
-                        columns={columns}
-                        dataSource={this.state.commentData}
-                        pagination={{
-                          showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
-                          showSizeChanger: true,
-                          pageSizeOptions: ['10', '20', '50']
-                        }}
-                      />
-                    </Card>
-                  </div>
-                </Col>
-              </Row>
+            <div className="gutter-box" style={{ marginTop: '10px' }}>
+              <Table
+                bordered
+                rowSelection={rowSelection}
+                columns={columns}
+                dataSource={this.state.commentData}
+                pagination={{
+                  showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
+                  showSizeChanger: true,
+                  pageSizeOptions: ['10', '20', '50']
+                }}
+              />
             </div>
           </Card>
         </div>

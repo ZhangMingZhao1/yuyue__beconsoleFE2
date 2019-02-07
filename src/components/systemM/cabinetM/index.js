@@ -209,56 +209,52 @@ class CabinetM extends React.Component {
                                 查询
                             </Button>
                         </div>
-                        <Card
-                            style={{ marginTop: '10px' }}
-                        >
-                            <div>
-                                <Button
-                                    type="primary"
-                                    style={{ marginTop: '10px' }}
-                                    onClick={this.addBtnClick}
-                                >
-                                    新增
-                                </Button>
-                                <Select
-                                    style={{ width: '150px', marginLeft: '20%' }}
-                                    onChange={this.handleSelectChange}
-                                    defaultValue="海淀区"
-                                >
-                                    <Option value="海淀区">海淀区</Option>
-                                    <Option value="全部">全部</Option>
-                                </Select>
-                                <Select
-                                    style={{ width: '150px', marginLeft: '10px' }}
-                                    onChange={this.handleSelectChange}
-                                    defaultValue="朝阳街道"
-                                >
-                                    <Option value="朝阳街道">朝阳街道</Option>
-                                    <Option value="全部">全部</Option>
-                                </Select>
-                                <Select
-                                    style={{ width: '150px', marginLeft: '10px' }}
-                                    onChange={this.handleSelectChange}
-                                    defaultValue="正常"
-                                >
-                                    <Option value="正常">正常</Option>
-                                    <Option value="全部">全部</Option>
-                                </Select>
-                            </div>
-                            <div>
-                                <Table
-                                    bordered
-                                    dataSource={dataSource}
-                                    columns={columns}
-                                    style={{ marginTop: '24px' }}
-                                    pagination={{
-                                        showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
-                                        showSizeChanger: true,
-                                        pageSizeOptions: ['10', '20', '50']
-                                    }}
-                                />
-                            </div>
-                        </Card>
+                        <div style={{ marginTop: '24px' }}>
+                            <Button
+                                type="primary"
+                                style={{ marginTop: '10px' }}
+                                onClick={this.addBtnClick}
+                            >
+                                新增
+                            </Button>
+                            <Select
+                                style={{ width: '150px', marginLeft: '20%' }}
+                                onChange={this.handleSelectChange}
+                                defaultValue="海淀区"
+                            >
+                                <Option value="海淀区">海淀区</Option>
+                                <Option value="全部">全部</Option>
+                            </Select>
+                            <Select
+                                style={{ width: '150px', marginLeft: '10px' }}
+                                onChange={this.handleSelectChange}
+                                defaultValue="朝阳街道"
+                            >
+                                <Option value="朝阳街道">朝阳街道</Option>
+                                <Option value="全部">全部</Option>
+                            </Select>
+                            <Select
+                                style={{ width: '150px', marginLeft: '10px' }}
+                                onChange={this.handleSelectChange}
+                                defaultValue="正常"
+                            >
+                                <Option value="正常">正常</Option>
+                                <Option value="全部">全部</Option>
+                            </Select>
+                        </div>
+                        <div>
+                            <Table
+                                bordered
+                                dataSource={dataSource}
+                                columns={columns}
+                                style={{ marginTop: '10px' }}
+                                pagination={{
+                                    showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
+                                    showSizeChanger: true,
+                                    pageSizeOptions: ['10', '20', '50']
+                                }}
+                            />
+                        </div>
                     </Card>
                 </div>
             </React.Fragment>
