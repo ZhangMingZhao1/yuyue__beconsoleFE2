@@ -6,7 +6,7 @@ import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchData, receiveData } from '@/action';
-import { PwaInstaller } from '../widget';
+import { PwaInstaller } from '../../widget';
 
 const FormItem = Form.Item;
 

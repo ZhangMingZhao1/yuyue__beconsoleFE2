@@ -4,9 +4,9 @@
  * 
  **/
  
-const HISTORY= 'https://www.xxxxx.com/';
+const HISTORY= 'http://localhost:3006/';
 const URL ={
-    histOpen:HISTORY+'type/pagelist',//接口1
-    histdata:HISTORY+'type/pagedata' //接口2
+    beyuyue:HISTORY+'beyuyue',//接口1
+    // histdata:HISTORY+'type/pagedata' //接口2
 }
 export default URL
