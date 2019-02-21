@@ -5,15 +5,17 @@ import React from 'react';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { fetchData, receiveData } from '@/action';
 import { PwaInstaller } from '../../widget';
+import { actionCreators } from './store';
+// import './mock';
 
 const FormItem = Form.Item;
 
 class Login extends React.Component {
     componentWillMount() {
-        const { receiveData } = this.props;
-        receiveData(null, 'auth');
+        //?
+        // const { receiveData } = this.props;
+        // receiveData(null, 'auth');
     }
     componentDidUpdate(prevProps) { // React 16.3+弃用componentWillReceiveProps
         const { auth: nextAuth = {}, history } = this.props;
@@ -25,14 +27,23 @@ class Login extends React.Component {
     }
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-                console.log('Received values of form: ', values);
-                const { fetchData } = this.props;
-                if (values.userName === 'admin' && values.password === 'admin') fetchData({funcName: 'admin', stateName: 'auth'});
-                if (values.userName === 'guest' && values.password === 'guest') fetchData({funcName: 'guest', stateName: 'auth'});
-            }
-        });
+        let formData = this.props.form.getFieldsValue();
+        console.log('formData',formData);
+        let options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include', // 请求带上cookies，是每次请求保持会话一直
+            body: JSON.stringify({
+                username: formData.userName,
+                password: formData.password
+            })
+        };
+        this.props.login(
+            formData.userName,
+            formData.password
+        )
     };
     gitHub = () => {
         window.location.href = 'https://github.com/login/oauth/authorize?client_id=792cdcd244e98dcd2dee&redirect_uri=http://localhost:3006/&scope=user&state=reactAdmin';
@@ -85,12 +96,14 @@ class Login extends React.Component {
 }
 
 const mapStateToPorps = state => {
-    const { auth } = state.httpData;
-    return { auth };
+    // const { auth } = state.httpData;
+    // return { auth };
 };
 const mapDispatchToProps = dispatch => ({
-    fetchData: bindActionCreators(fetchData, dispatch),
-    receiveData: bindActionCreators(receiveData, dispatch)
+    login(userNameElem, passwordElem) {
+        console.log('111111',userNameElem, passwordElem);
+        dispatch(actionCreators.login(userNameElem.value, passwordElem.value));
+    }
 });
 
 

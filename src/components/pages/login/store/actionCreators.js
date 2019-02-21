@@ -1,5 +1,6 @@
 import axios from 'axios';
 import * as constants from './constants';
+// import api from '../../../../api/api'; 
 
 const changeLogin = () => ({
 	type: constants.CHANGE_LOGIN,
@@ -13,7 +14,7 @@ export const logout = () => ({
 
 export const login = (accout, password) => {
 	return (dispatch) => {
-		axios.get('/api/login.json?account=' + accout + '&password=' + password).then((res) => {
+		axios.post('http://localhost/login').then((res) => {
 			const result = res.data.data;
 			if (result) {
 				dispatch(changeLogin())
