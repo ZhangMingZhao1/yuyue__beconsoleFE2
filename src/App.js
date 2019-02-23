@@ -15,11 +15,6 @@ class App extends Component {
         collapsed: false,
     };
     componentWillMount() {
-        const { receiveData } = this.props;
-        const user = JSON.parse(localStorage.getItem('user'));
-        user && receiveData(user, 'auth');
-        // receiveData({a: 213}, 'auth');
-        // fetchData({funcName: 'admin', stateName: 'auth'});
         this.getClientWidth();
         window.onresize = () => {
             console.log('屏幕变化了');
@@ -28,10 +23,12 @@ class App extends Component {
     }
 
     getClientWidth = () => { // 获取当前浏览器宽度并设置responsive管理响应式
-        const { receiveData } = this.props;
+        // const { receiveData } = this.props;
         const clientWidth = window.innerWidth;
         console.log(clientWidth);
-        receiveData({isMobile: clientWidth <= 992}, 'responsive');
+        if(clientWidth <= 992) {
+            this.setState({collapsed:true});
+        }
     };
     toggle = () => {
         this.setState({
@@ -39,13 +36,22 @@ class App extends Component {
         });
     };
     render() {
-        const { auth, responsive } = this.props;
+        // const {auth} = this.props;
+        // console.log('11111111user',auth);
+        // // console.log(auth1.data);
+        const auth = {
+            isFetching: false,
+            data: {
+                uid: 1, permissions: ["auth", "auth/testPage", "auth/authPage", "auth/authPage/edit", "auth/authPage/visit"],
+                role: "系统管理员", roleType: 1, userName: "张三"}
+        }
         return (
+           
             <Layout>
-                {!responsive.data.isMobile && <SiderCustom collapsed={this.state.collapsed} />}
+                <SiderCustom collapsed={this.state.collapsed} />
                 <ThemePicker />
                 <Layout style={{flexDirection: 'column'}}>
-                    <HeaderCustom toggle={this.toggle} collapsed={this.state.collapsed} user={auth.data || {}} />
+                    <HeaderCustom toggle={this.toggle} collapsed={this.state.collapsed} user={auth.data|| {}} />
                     <Content style={{ margin: '0 16px', overflow: 'initial', flex: '1 1 0' }}>
                         <Routes auth={auth} />
                     </Content>
@@ -53,29 +59,16 @@ class App extends Component {
                     React-Admin ©{new Date().getFullYear()} Created by 865470087@qq.com
                     </Footer>
                 </Layout>
-                
-                {/* {
-                    responsive.data.isMobile && (   // 手机端对滚动很慢的处理
-                        <style>
-                        {`
-                            #root{
-                                height: auto;
-                            }
-                        `}
-                        </style>
-                    )
-                } */}
             </Layout>
         );
     }
 }
 
 const mapStateToProps = state => {
-    const { auth = {data: {}}, responsive = {data: {}} } = state.httpData;
-    return {auth, responsive};
-};
-const mapDispatchToProps = dispatch => ({
-    // receiveData: bindActionCreators(receiveData, dispatch)
-});
+    // const { auth = {data: {}}} = state.getIn(['login', 'user']);
+    // return auth;
+    auth: state.getIn(['login', 'user'])
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+
+export default connect(mapStateToProps, null)(App);

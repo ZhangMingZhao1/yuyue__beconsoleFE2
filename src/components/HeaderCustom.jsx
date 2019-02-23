@@ -61,7 +61,8 @@ class HeaderCustom extends Component {
         this.setState({ visible });
     };
     render() {
-        const { responsive, path } = this.props;
+        const { path } = this.props;
+        const responsive = {data:{isMobile:false}};
         return (
             <Header className="custom-theme header" >
                 {
@@ -111,8 +112,8 @@ class HeaderCustom extends Component {
 }
 
 const mapStateToProps = state => {
-    const { responsive = {data: {}} } = state.httpData;
-    return {responsive};
+    // const { responsive = {data: {}} } = state.httpData;
+    // return {responsive};
 };
 
 export default withRouter(connect(mapStateToProps)(HeaderCustom));

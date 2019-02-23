@@ -1,20 +1,21 @@
 // import axios from 'axios';
 import * as constants from './constants';
-// import api from '../../../../api/api'; 
-// import '../mock';
-const changeLogin = () => ({
+import baseURL from '../../../../api/config'; 
+
+const changeLogin = (data) => ({
 	type: constants.CHANGE_LOGIN,
-	value: true
+	value: data
 })
 
 export const logout = () => ({
 	type: constants.LOGOUT,
-	value: false
+	value: null
 })
 
 export const login = (userName, password) => {
 	return (dispatch) => {
-		fetch('http://localhost:3000/login',{
+		console.log('`${baseURL}/login`',`${baseURL}/login`);
+		fetch(`${baseURL}/login`,{
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -28,7 +29,7 @@ export const login = (userName, password) => {
 			console.log(data);
 			const result = data;
 			if (result) {
-				dispatch(changeLogin())
+				dispatch(changeLogin(result))
 			}else {
 				alert('登陆失败')
 			}

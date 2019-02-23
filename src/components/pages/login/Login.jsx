@@ -18,10 +18,16 @@ class Login extends React.Component {
         // receiveData(null, 'auth');
     }
     componentDidUpdate(prevProps) { // React 16.3+弃用componentWillReceiveProps
-        const { auth: nextAuth = {}, history } = this.props;
+        // const { auth: nextAuth = {}, history } = this.props;
         // const { history } = this.props;
-        if (nextAuth.data && nextAuth.data.uid) { // 判断是否登陆
-            localStorage.setItem('user', JSON.stringify(nextAuth.data));
+        // if (nextAuth.data && nextAuth.data.uid) { // 判断是否登陆
+        //     localStorage.setItem('user', JSON.stringify(nextAuth.data));
+        //     history.push('/');
+        // }
+        const { user, history } = this.props;
+        if (user) { // 判断是否登陆
+            console.log('componentDidUpdate',user);
+            // localStorage.setItem('user', JSON.stringify(nextAuth.data));
             history.push('/');
         }
     }
@@ -47,6 +53,8 @@ class Login extends React.Component {
     };
 
     render() {
+        const { user } = this.props;
+        console.log(user);
         const { getFieldDecorator } = this.props.form;
         return (
             <div className="login">
@@ -89,11 +97,9 @@ class Login extends React.Component {
     }
 }
 
-const mapStateToPorps = state => {
-    console.log('state',state);
-    // const { auth } = state.httpData;
-    // return { auth };
-};
+const mapStateToPorps = state => ({
+    user: state.getIn(['login', 'user'])
+});
 const mapDispatchToProps = dispatch => ({
     login(userNameElem, passwordElem) {
         console.log('111111',userNameElem, passwordElem);

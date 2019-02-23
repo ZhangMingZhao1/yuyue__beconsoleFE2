@@ -4,9 +4,7 @@
  * 
  **/
  
-const HISTORY= 'http://localhost:3006/';
-const URL ={
-    beyuyue:HISTORY+'beyuyue',//接口1
-    // histdata:HISTORY+'type/pagedata' //接口2
-}
-export default URL
+const base= ' https://www.easy-mock.com/mock/';
+const SK = "5c7134c16f09752cdf0d69f4/example"
+const baseURL = base+SK;
+export default baseURL;
