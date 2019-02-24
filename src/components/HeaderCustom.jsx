@@ -116,4 +116,4 @@ const mapStateToProps = state => {
     // return {responsive};
 };
 
-export default withRouter(connect(mapStateToProps)(HeaderCustom));
+export default withRouter(connect(mapStateToProps,null)(HeaderCustom));

@@ -36,38 +36,44 @@ class App extends Component {
         });
     };
     render() {
-        // const {auth} = this.props;
+        let user = this.props.auth;
+        console.log('1111user',user);
+        console.log('this.props',this.props);
         // console.log('11111111user',auth);
-        // // console.log(auth1.data);
-        const auth = {
-            isFetching: false,
-            data: {
-                uid: 1, permissions: ["auth", "auth/testPage", "auth/authPage", "auth/authPage/edit", "auth/authPage/visit"],
-                role: "系统管理员", roleType: 1, userName: "张三"}
-        }
-        return (
-           
-            <Layout>
-                <SiderCustom collapsed={this.state.collapsed} />
-                <ThemePicker />
-                <Layout style={{flexDirection: 'column'}}>
-                    <HeaderCustom toggle={this.toggle} collapsed={this.state.collapsed} user={auth.data|| {}} />
-                    <Content style={{ margin: '0 16px', overflow: 'initial', flex: '1 1 0' }}>
-                        <Routes auth={auth} />
-                    </Content>
-                    <Footer style={{ textAlign: 'center' }}>
-                    React-Admin ©{new Date().getFullYear()} Created by 865470087@qq.com
-                    </Footer>
+        // console.log(auth1.data);
+        // const auth = {
+        //     isFetching: false,
+        //     data: {
+        //         uid: 1, permissions: ["auth", "auth/testPage", "auth/authPage", "auth/authPage/edit", "auth/authPage/visit"],
+        //         role: "系统管理员", roleType: 1, userName: "张三"}
+        // }
+
+        const auth = user?user:{data:{}};
+        // if(auth!='null') {
+            return (     
+                <Layout>
+                    <SiderCustom collapsed={this.state.collapsed} />
+                    <ThemePicker />
+                    <Layout style={{flexDirection: 'column'}}>
+                        <HeaderCustom toggle={this.toggle} collapsed={this.state.collapsed} user={auth.data|| {}} />
+                        <Content style={{ margin: '0 16px', overflow: 'initial', flex: '1 1 0' }}>
+                            <Routes auth={auth} />
+                        </Content>
+                        <Footer style={{ textAlign: 'center' }}>
+                       111
+                        </Footer>
+                    </Layout>
                 </Layout>
-            </Layout>
-        );
+            );
+        // }
     }
 }
 
 const mapStateToProps = state => {
-    // const { auth = {data: {}}} = state.getIn(['login', 'user']);
-    // return auth;
-    auth: state.getIn(['login', 'user'])
+    let auth = state.getIn(['login', 'user']);
+    // return tmp=='null'?{user:{}}:tmp;
+    return {auth};
+    // user: state.getIn(['login', 'user'])
 }
 
 
