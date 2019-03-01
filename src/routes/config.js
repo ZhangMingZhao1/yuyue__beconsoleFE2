@@ -71,14 +71,6 @@ export default {
         { key: '/app/orderM/checkO', title: '还捐审单', component: 'CheckO' },
         { key: '/app/orderM/borrowH', title: '历史借阅', component: 'BorrowH' },
       ]
-    }, {
-      key: '/app/systemM', title: '系统管理', icon: 'rocket',
-      subs: [
-        { key: '/app/systemM/organizationM', title: '机构管理', component: 'OrganizationM' },
-        { key: '/app/systemM/warehouseM', title: '仓库维护', component: 'WarehouseM' },
-        { key: '/app/systemM/cabinetM', title: '机柜管理', component: 'CabinetM' },
-        { key: '/app/systemM/staffM', title: '员工管理', component: 'StaffM' }
-      ],
     },
     {
       key: '/app/franchiseeM', title: '加盟商管理', icon: 'rocket',
@@ -106,6 +98,15 @@ export default {
         { key: '/app/statisticsT/donate', title: '捐书统计表', component: 'BannerControl' },
         { key: '/app/statisticsT/book', title: '书籍统计表', component: 'BannerControl' },
         { key: '/app/statisticsT/finance', title: '资金统计表', component: 'BannerControl' },
+      ],
+    },
+    {
+      key: '/app/systemM', title: '系统管理', icon: 'rocket',
+      subs: [
+        { key: '/app/systemM/organizationM', title: '机构管理', component: 'OrganizationM' },
+        { key: '/app/systemM/warehouseM', title: '仓库维护', component: 'WarehouseM' },
+        { key: '/app/systemM/cabinetM', title: '机柜管理', component: 'CabinetM' },
+        { key: '/app/systemM/staffM', title: '员工管理', component: 'StaffM' }
       ],
     },
     {
