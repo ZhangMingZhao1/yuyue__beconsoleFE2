@@ -60,6 +60,18 @@ export default {
         { key: '/app/systemM/organizationM', title: '机构管理', component: 'OrganizationM' },
         { key: '/app/systemM/warehouseM', title: '仓库维护', component: 'WarehouseM' },
         { key: '/app/systemM/cabinetM', title: '机柜管理', component: 'CabinetM' },
+        { key: '/app/systemM/staffM', title: '员工管理', component: 'StaffM' }
+      ],
+    },
+    {
+      key: '/app/storehouseM', title: '仓库管理', icon: 'rocket',
+      subs: [
+        { key: '/app/storehouseM/query', title: '机构管理', component: 'StoreQuery' },
+        { key: '/app/storehouseM/indata', title: '仓库维护', component: 'InStoreData' },
+        { key: '/app/storehouseM/transferInData', title: '机柜管理', component: 'CabinetM' },
+        { key: '/app/storehouseM/transferOutData', title: '机柜管理', component: 'CabinetM' },
+        { key: '/app/storehouseM/outHouseData', title: '机柜管理', component: 'CabinetM' },
+        { key: '/app/storehouseM/inHouseData', title: '机柜管理', component: 'CabinetM' },
         {
           key: '/app/systemM/staffM', title: '员工管理',
           subs: [
@@ -68,24 +80,6 @@ export default {
           ]
         }
       ],
-    },
-    {
-        key: '/app/storehouseM', title: '仓库管理', icon: 'rocket',
-        subs: [
-          { key: '/app/storehouseM/query', title: '机构管理', component: 'StoreQuery' },
-          { key: '/app/storehouseM/indata', title: '仓库维护', component: 'InStoreData' },
-          { key: '/app/storehouseM/transferInData', title: '机柜管理', component: 'CabinetM' },
-          { key: '/app/storehouseM/transferOutData', title: '机柜管理', component: 'CabinetM' },
-          { key: '/app/storehouseM/outHouseData', title: '机柜管理', component: 'CabinetM' },
-          { key: '/app/storehouseM/inHouseData', title: '机柜管理', component: 'CabinetM' },
-          {
-            key: '/app/systemM/staffM', title: '员工管理',
-            subs: [
-              { key: '/app/systemM/staffM/addStaff', title: '新增', component: 'AddStaff' },
-              { key: '/app/systemM/staffM/editStaff', title: '修改', component: 'EditStaff' },
-            ]
-          }
-        ],      
     },
     {
       key: '/app/table', title: '表格', icon: 'copy',
