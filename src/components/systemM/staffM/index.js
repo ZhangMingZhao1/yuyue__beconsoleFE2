@@ -1,269 +1,144 @@
 import React from 'react';
-import { Card, Button, Input, Select, Popconfirm, Table } from 'antd';
+import { Card, Button, Input, Select, Form, Table, Divider, Modal } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
+import { Link } from 'react-router-dom';
+
+const Option = Select.Option;
+const confirm = Modal.confirm;
+const StaffSearchForm = Form.create()(
+    (props) => {
+        const { getFieldDecorator } = props.form;
+        const selectData = [{
+            label: "所属机构",
+            placeholder: "全部",
+            name: "category",
+            value: ['全部', '朝阳街道']
+        }, {
+            label: "所属部门",
+            placeholder: "全部",
+            name: "isSelected",
+            value: ['全部', '技术部', '运维部'],
+        }, {
+            label: "状态",
+            placeholder: "全部",
+            name: "publisher",
+            value: ['全部', '正常', '停用']
+        }];
+        return (
+            <Form layout="inline">
+                <Form.Item>
+                    <label>姓名：</label>
+                    <Input placeholder="姓名" style={{ width: 120 }} />
+                </Form.Item>
+                {selectData.map(i => (
+                    <Form.Item key={i.name} label={i.label}>
+                        {getFieldDecorator(i.name)(
+                            <Select placeholder={i.placeholder} style={{ width: 120 }}>
+                                {i.value.map(v => (<Option key={v} value={v}>{v}</Option>))}
+                            </Select>
+                        )}
+                    </Form.Item>
+                ))}
+                <Form.Item>
+                    <Button type="primary" htmlType="submit">查询</Button>
+                </Form.Item>
+            </Form>
+        );
+    }
+);
+
 
 class StaffM extends React.Component {
 
-    constructor(props) {
-        super(props);
-        this.columns = [{
-            title: '员工姓名',
-            dataIndex: 'staffName',
-            render: (text, record, index) => this.renderColumns(this.state.staffData, index, 'staffName', text),
-        }, {
-            title: '手机号码',
-            dataIndex: 'phoneNumber',
-            render: (text, record, index) => this.renderColumns(this.state.staffData, index, 'phoneNumber', text),
-        }, {
-            title: '所属机构',
-            dataIndex: 'whichOrg',
-            render: (text, record, index) => this.renderColumns(this.state.staffData, index, 'whichOrg', text),
-        }, {
-            title: '所属部门',
-            dataIndex: 'whichDepartment',
-            render: (text, record, index) => this.renderColumns(this.state.staffData, index, 'whichDepartment', text),
-        }, {
-            title: '角色',
-            dataIndex: 'role',
-            render: (text, record, index) => this.renderColumns(this.state.staffData, index, 'role', text),
-        }, {
-            title: '状态',
-            dataIndex: 'state',
-            render: (text, record, index) => this.renderColumns(this.state.staffData, index, 'state', text),
-        }, {
-            title: '操作',
-            dataIndex: 'operation',
-            render: (text, record, index) => {
-                const { editable } = this.state.staffData[index].name;
-                return (
-                    <div>
-                        {
-                            editable ?
-                                <span>
-                                    <a onClick={() => this.editDone(index, 'save')}>保存</a>
-                                    <Popconfirm
-                                        okText="确定"
-                                        cancelText="取消"
-                                        title="确定放弃修改？"
-                                        onConfirm={() => this.editDone(index, 'cancel')}
-                                    >
-                                        <a>取消</a>
-                                    </Popconfirm>
-                                </span>
-                                :
-                                <span>
-                                    <a onClick={() => this.edit(index)}>修改</a>
-                                </span>
-                        }
-                        {
-                            this.state.staffData.length > 0 ?
-                                (
-                                    <span>
-                                        <Popconfirm
-                                            okText="确定"
-                                            cancelText="取消"
-                                            title="确定删除？"
-                                            onConfirm={() => this.onDelete(index)}
-                                        >
-                                            <a href="javascript:;">删除</a>
-                                        </Popconfirm>
-                                    </span>
-                                ) : null
-                        }
-                    </div>
-                );
-            }
-        }];
-        this.state = {
-            staffData: [{
-                staffName: {
-                    editable: false,
-                    value: '毛大虎'
-                },
-                phoneNumber: {
-                    editable: false,
-                    value: '13102020202'
-                },
-                whichOrg: {
-                    editable: false,
-                    value: '朝阳街道'
-                },
-                whichDepartment: {
-                    editable: false,
-                    value: '技术部'
-                },
-                role: {
-                    editable: false,
-                    value: '系统管理员'
-                },
-                state: {
-                    editable: false,
-                    value: '正常'
-                },
-            }]
-        }
-        this.findBtnClick = this.findBtnClick.bind(this);
-    }
-
-    findBtnClick() {
-        console.log('findBtnClicked');
-    }
-
-    editDone(index, type) {
-        const { staffData } = this.state;
-        Object.keys(staffData[index]).forEach((item) => {
-            if (staffData[index][item] && typeof staffData[index][item].editable !== 'undefined') {
-                staffData[index][item].editable = false;
-                staffData[index][item].status = type;
-            }
+    showConfirm = () => {
+        confirm({
+            title: 'Want to delete these items?',
+            content: 'some descriptions',
+            onOk() {
+                console.log('OK');
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
         });
-        this.setState({ staffData }, () => {
-            Object.keys(staffData[index]).forEach((item) => {
-                if (staffData[index][item] && typeof staffData[index][item].editable !== 'undefined') {
-                    delete staffData[index][item].status;
-                }
-            });
-        });
-    }
-
-    onDelete(index) {
-        const data = [...this.state.staffData];
-        data.splice(index, 1);
-        this.setState({ staffData: data });
-    }
-
-    renderColumns(data, index, key, text) {
-        const { editable, status } = data[index][key];
-        if (typeof editable === 'undefined') {
-            return text;
-        }
-        return (
-            <EditableCell
-                editable={editable}
-                value={text}
-                onChange={value => this.handleChange(key, index, value)}
-                status={status}
-            />);
-    }
-
-    handleChange(key, index, value) {
-        const { data } = this.state;
-        data[index][key].value = value;
-        this.setState({ staffData: data });
-    }
+    };
 
     render() {
-        const { staffData } = this.state;
-        const dataSource = staffData.map((item) => {
-            const obj = {};
-            Object.keys(item).forEach((key) => {
-                obj[key] = key === 'key' ? item[key] : item[key].value;
-            });
-            return obj;
-        });
-        const columns = this.columns;
+
+        const columns = [{
+            title: '员工姓名',
+            dataIndex: 'name',
+        }, {
+            title: '手机号',
+            dataIndex: 'phoneNumber',
+        }, {
+            title: '所属机构',
+            dataIndex: 'org',
+        }, {
+            title: '所属部门',
+            dataIndex: 'department',
+        }, {
+            title: '角色',
+            dataIndex: 'character',
+        }, {
+            title: '状态',
+            dataIndex: 'status',
+        }, {
+            title: '操作',
+            dataIndex: 'action',
+            render: (text, record) => (
+                <span>
+                    <a href="javascript:;" onClick={this.showConfirm}>重置密码</a>
+                    <Divider type="vertical" />
+                    <Link to={`${this.props.match.url}/changeStaff/${record.bibliographyId}`}>修改</Link>
+                    <Divider type="vertical" />
+                    <a href="javascript:;">删除</a>
+                </span>
+            ),
+        }];
+
+        const data = [{
+            name: '毛大虎',
+            phoneNumber: '13102020202',
+            org: '朝阳街道',
+            department: '技术部',
+            character: '系统管理员',
+            status: '正常',
+        }, {
+            name: '毛大虎',
+            phoneNumber: '13102020202',
+            org: '朝阳街道',
+            department: '技术部',
+            character: '系统管理员',
+            status: '正常',
+        }];
+
+        data.map(i => i.key = i.bibliographyId);
+
         return (
             <React.Fragment>
                 <BreadcrumbCustom first="系统管理" second="员工管理" />
-                <Card title="员工管理">
-                    <div>
-                        <Input
-                            placeholder="姓名"
-                            style={{ width: '100px' }}
-                        />
-                        <Select
-                            style={{ width: '150px', marginLeft: '10px' }}
-                            defaultValue="朝阳街道"
-                        >
-                            <Select.Option value="朝阳街道">朝阳街道</Select.Option>
-                        </Select>
-                        <Select
-                            style={{ width: '150px', marginLeft: '10px' }}
-                            defaultValue="技术部"
-                        >
-                            <Select.Option value="技术部">技术部</Select.Option>
-                        </Select>
-                        <Select
-                            style={{ width: '150px', marginLeft: '10px' }}
-                            defaultValue="正常"
-                        >
-                            <Select.Option value="正常">正常</Select.Option>
-                            <Select.Option value="停用">停用</Select.Option>
-                        </Select>
-                        <Button
-                            type="primary"
-                            style={{ marginLeft: '10px' }}
-                            onClick={this.findBtnClick}
-                        >
-                            查询
-                        </Button>
+                <Card
+                    title="书目库"
+                >
+                    <StaffSearchForm /><br />
+                    <div style={{ marginBottom: '10px' }}>
+                        <Button type="primary"><Link to={`${this.props.match.url}/addStaff`}>新增</Link></Button>
                     </div>
-                    <Table
-                        bordered
-                        dataSource={dataSource}
+                    <Table className="infoC-table"
                         columns={columns}
-                        style={{ marginTop: '10px' }}
+                        dataSource={data}
                         pagination={{
                             showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
                             showSizeChanger: true,
                             pageSizeOptions: ['10', '20', '50']
                         }}
+                        bordered
                     />
                 </Card>
             </React.Fragment>
         );
-    }
-}
-
-class EditableCell extends React.Component {
-    state = {
-        value: this.props.value,
-        editable: this.props.editable || false,
-    }
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.editable !== this.state.editable) {
-            this.setState({ editable: nextProps.editable });
-            if (nextProps.editable) {
-                this.cacheValue = this.state.value;
-            }
-        }
-        if (nextProps.status && nextProps.status !== this.props.status) {
-            if (nextProps.status === 'save') {
-                this.props.onChange(this.state.value);
-            } else if (nextProps.status === 'cancel') {
-                this.setState({ value: this.cacheValue });
-                this.props.onChange(this.cacheValue);
-            }
-        }
-    }
-    shouldComponentUpdate(nextProps, nextState) {
-        return nextProps.editable !== this.state.editable ||
-            nextState.value !== this.state.value;
-    }
-    handleChange(e) {
-        const value = e.target.value;
-        this.setState({ value });
-    }
-    render() {
-        const { value, editable } = this.state;
-        return (
-            <div>
-                {
-                    editable ?
-                        <div>
-                            <Input
-                                value={value}
-                                onChange={e => this.handleChange(e)}
-                            />
-                        </div>
-                        :
-                        <div className="editable-row-text">
-                            {value.toString() || ' '}
-                        </div>
-                }
-            </div>
-        );
-    }
+    };
 }
 
 export default StaffM;
