@@ -23,7 +23,6 @@ export default {
       key: '/app/memberM', title: '会员管理', icon: 'rocket',
       subs: [
         { key: '/app/memberM/xinxiguanli', title: '信息管理', component: 'InfoC' },
-        { key: '/app/memberM/xinxiguanli/infodetail/:memberId', title: '查看', component: 'InfoDetail' },
         { key: '/app/memberM/zhifudingdan', title: '支付订单', component: 'PayO' },
         { key: '/app/memberM/yaoqingma', title: '邀请码', component: 'BannerControl' },
         { key: '/app/memberM/jifenguanli', title: '积分管理', component: 'PointC' },
@@ -44,6 +43,24 @@ export default {
         { key: '/app/bookM/bookLib', title: '书目库', component: 'BookLib' },
         { key: '/app/bookM/publisherM', title: '出版社维护', component: 'PublisherM' },
         { key: '/app/bookM/goodsM', title: '商品管理', component: 'GoodsM' },
+      ],
+    },
+    {
+      key: '/app/storehouseM', title: '仓库管理', icon: 'rocket',
+      subs: [
+        { key: '/app/storehouseM/query', title: '机构管理', component: 'StoreQuery' },
+        { key: '/app/storehouseM/indata', title: '仓库维护', component: 'InStoreData' },
+        { key: '/app/storehouseM/transferInData', title: '机柜管理', component: 'CabinetM' },
+        { key: '/app/storehouseM/transferOutData', title: '机柜管理', component: 'CabinetM' },
+        { key: '/app/storehouseM/outHouseData', title: '机柜管理', component: 'CabinetM' },
+        { key: '/app/storehouseM/inHouseData', title: '机柜管理', component: 'CabinetM' },
+        {
+          key: '/app/systemM/staffM', title: '员工管理',
+          subs: [
+            { key: '/app/systemM/staffM/addStaff', title: '新增', component: 'AddStaff' },
+            { key: '/app/systemM/staffM/editStaff', title: '修改', component: 'EditStaff' },
+          ]
+        }
       ],
     },
     {
@@ -70,22 +87,32 @@ export default {
       ],
     },
     {
-        key: '/app/storehouseM', title: '仓库管理', icon: 'rocket',
-        subs: [
-          { key: '/app/storehouseM/query', title: '机构管理', component: 'StoreQuery' },
-          { key: '/app/storehouseM/indata', title: '仓库维护', component: 'InStoreData' },
-          { key: '/app/storehouseM/transferInData', title: '机柜管理', component: 'CabinetM' },
-          { key: '/app/storehouseM/transferOutData', title: '机柜管理', component: 'CabinetM' },
-          { key: '/app/storehouseM/outHouseData', title: '机柜管理', component: 'CabinetM' },
-          { key: '/app/storehouseM/inHouseData', title: '机柜管理', component: 'CabinetM' },
-          {
-            key: '/app/systemM/staffM', title: '员工管理',
-            subs: [
-              { key: '/app/systemM/staffM/addStaff', title: '新增', component: 'AddStaff' },
-              { key: '/app/systemM/staffM/editStaff', title: '修改', component: 'EditStaff' },
-            ]
-          }
-        ],      
+      key: '/app/franchiseeM', title: '加盟商管理', icon: 'rocket',
+      subs: [
+        { key: '/app/franchiseeM/level', title: '等级维护', component: 'BannerControl' },
+        { key: '/app/franchiseeM/info', title: '信息管理', component: 'BannerControl' },
+        { key: '/app/franchiseeM/financial', title: '财务结算', component: 'BannerControl' },
+        { key: '/app/franchiseeM/tables', title: '统计专表', component: 'BannerControl' },
+      ],
+    },
+    {
+      key: '/app/bookCaseM', title: '书柜管理', icon: 'rocket',
+      subs: [
+        { key: '/app/bookCaseM/caseState', title: '机柜状态跟踪', component: 'BannerControl' },
+        { key: '/app/bookCaseM/monitorB', title: '监控回放', component: 'BannerControl' },
+        { key: '/app/bookCaseM/dailyReport', title: '日常检查报告', component: 'BannerControl' },
+        { key: '/app/bookCaseM/warrantyR', title: '保修记录', component: 'BannerControl' },
+      ],
+    },
+    {
+      key: '/app/statisticsT', title: '统计报表', icon: 'rocket',
+      subs: [
+        { key: '/app/statisticsT/member', title: '会员统计表', component: 'BannerControl' },
+        { key: '/app/statisticsT/borrow', title: '借阅统计表', component: 'BannerControl' },
+        { key: '/app/statisticsT/donate', title: '捐书统计表', component: 'BannerControl' },
+        { key: '/app/statisticsT/book', title: '书籍统计表', component: 'BannerControl' },
+        { key: '/app/statisticsT/finance', title: '资金统计表', component: 'BannerControl' },
+      ],
     },
     {
       key: '/app/table', title: '表格', icon: 'copy',
@@ -121,8 +148,27 @@ export default {
     },
   ],
   others: [
-    { key: '/app/memberM/xinxiguanli/infodetail/:memberId', title: '查看', component: 'InfoDetail' },
-    { key: '/app/bookM/bookLib/addBookLib', title: '添加书目', component: 'AddBookLib' },
-    { key: '/app/bookM/bookLib/modifyBookLib/:id', title: '修改书目', component: 'ModifyBookLib' },
+    {
+      key: '/app/memberM', title: '会员管理',
+      subs: [
+        { key: '/app/memberM/xinxiguanli/infodetail/:memberId', title: '查看', component: 'InfoDetail' },
+      ],
+    },
+    {
+      key: '/app/bookM/bookLib', title: '书籍管理/书目库',
+      subs: [
+        { key: '/app/bookM/bookLib/addBookLib', title: '新增', component: 'AddBookLib' },
+        { key: '/app/bookM/bookLib/modifyBookLib/:id', title: '修改', component: 'ModifyBookLib' },
+      ],
+    },
+    {
+      key: '/app/franchiseeM/tables', title: '加盟商管理/统计专表',
+      subs: [
+        { key: '/app/franchiseeM/tables/summary', title: '总表', component: 'BannerControl' },
+        { key: '/app/franchiseeM/tables/business', title: '业绩报表', component: 'BannerControl' },
+        { key: '/app/franchiseeM/tables/expenses', title: '费用报表', component: 'BannerControl' },
+        { key: '/app/franchiseeM/tables/stock', title: '库存统计表', component: 'BannerControl' },
+      ]
+    }
   ] // 非菜单相关路由
 }
