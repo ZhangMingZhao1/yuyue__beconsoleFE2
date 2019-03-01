@@ -81,24 +81,6 @@ export default {
       ],
     },
     {
-      key: '/app/storehouseM', title: '仓库管理', icon: 'rocket',
-      subs: [
-        { key: '/app/storehouseM/query', title: '机构管理', component: 'StoreQuery' },
-        { key: '/app/storehouseM/indata', title: '仓库维护', component: 'InStoreData' },
-        { key: '/app/storehouseM/transferInData', title: '机柜管理', component: 'CabinetM' },
-        { key: '/app/storehouseM/transferOutData', title: '机柜管理', component: 'CabinetM' },
-        { key: '/app/storehouseM/outHouseData', title: '机柜管理', component: 'CabinetM' },
-        { key: '/app/storehouseM/inHouseData', title: '机柜管理', component: 'CabinetM' },
-        {
-          key: '/app/systemM/staffM', title: '员工管理',
-          subs: [
-            { key: '/app/systemM/staffM/addStaff', title: '新增', component: 'AddStaff' },
-            { key: '/app/systemM/staffM/editStaff', title: '修改', component: 'EditStaff' },
-          ]
-        }
-      ],
-    },
-    {
       key: '/app/franchiseeM', title: '加盟商管理', icon: 'rocket',
       subs: [
         { key: '/app/franchiseeM/level', title: '等级维护', component: 'BannerControl' },
