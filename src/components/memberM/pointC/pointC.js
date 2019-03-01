@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Select, DatePicker, Button, Form, Input, Table, Modal, Row, Col } from 'antd';
-import BreadcrumbCustom from '../BreadcrumbCustom';
-import { fetchGet } from '../../axios/tools';
+import BreadcrumbCustom from '../../BreadcrumbCustom';
+import { fetchGet } from '../../../axios/tools';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;

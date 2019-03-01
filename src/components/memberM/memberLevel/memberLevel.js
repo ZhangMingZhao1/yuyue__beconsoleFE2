@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, InputNumber, Checkbox, Button } from 'antd';
-import BreadcrumbCustom from '../BreadcrumbCustom';
+import BreadcrumbCustom from '../../BreadcrumbCustom';
 import './memberLevel.less';
 
 class MemberLevel extends React.Component {

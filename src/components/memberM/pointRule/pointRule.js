@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Button, Checkbox, InputNumber } from 'antd';
 import './pointRule.less';
-import BreadcrumbCustom from '../BreadcrumbCustom';
+import BreadcrumbCustom from '../../BreadcrumbCustom';
 
 class PointRule extends React.Component {
     state = {
