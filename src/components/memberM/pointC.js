@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, Select, DatePicker, Button, Form, Input, Table, Modal, Row, Col } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom';
+import { fetchGet } from '../../axios/tools';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -167,6 +168,28 @@ class PointC extends React.Component {
         modal2: false,
     };
 
+    componentDidMount() {
+        this.requestList();
+    }
+
+    requestList = () => {
+        fetchGet({
+            url: '/memberM/pointC',
+            params: {
+                page: 1
+            }
+        }).then((res) => {
+            if (res.code == 0) {
+                res.result.list.map((item, index) => {
+                    item.key = index;
+                })
+                this.setState({
+                    dataSource: res.result.list,
+                })
+            }
+        })
+    }
+
     showModal = (key) => {
         this.setState({ [key]: true });
     }
@@ -222,7 +245,6 @@ class PointC extends React.Component {
             dataIndex: 'operationTime'
         }];
 
-        const data = [];
         const addData = { account: '13476437878', nickName: '张三', balance: '123', frozen: '0' };
         return (
             <div className="">
@@ -234,7 +256,7 @@ class PointC extends React.Component {
                     <div style={{ textAlign: 'right' }} onClick={this.showModal.bind(this, "modal1")}><Button>手工增减积分</Button></div><br />
                     <Table
                         columns={columns}
-                        dataSource={data}
+                        dataSource={this.state.dataSource}
                         pagination={{
                             showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
                             showSizeChanger: true,

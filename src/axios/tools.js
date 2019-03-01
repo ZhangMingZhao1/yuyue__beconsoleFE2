@@ -34,7 +34,6 @@ export const fetchGet = (options) => {
     let base = 'https://easy-mock.com/mock/5c78d39c141be85de9c0add9';
     let params = options.data && options.data.param ? '?' + parseParams(options.data.params) : '';
     let url = base + options.url + params;
-    console.log(url);
 
     return new Promise((resolve, reject) => {
         fetch(url, {

@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Select, Input, Button, Card, Table, Divider } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import { Link } from 'react-router-dom';
+import { fetchGet } from '../../../axios/tools';
 
 const { Option } = Select;
 const BookSearchForm = Form.create()(
@@ -48,6 +49,29 @@ const BookSearchForm = Form.create()(
 );
 
 class BookLib extends React.Component {
+    state = {}
+
+    componentDidMount() {
+        this.requestList();
+    }
+
+    requestList = () => {
+        fetchGet({
+            url: '/bookM/bookLib/list',
+            params: {
+                page: 1
+            }
+        }).then((res) => {
+            if (res.code == 0) {
+                res.result.list.map((item, index) => {
+                    item.key = index;
+                })
+                this.setState({
+                    dataSource: res.result.list,
+                })
+            }
+        })
+    }
 
     render() {
         const columns = [{
@@ -83,18 +107,6 @@ class BookLib extends React.Component {
             ),
         }];
 
-        const data = [{
-            bibliographyId: '663',
-            name: '《发动机开发快速》',
-            isbn: '565365453',
-            author: '正常',
-            publisher: '即若焐热',
-            isSelected: '是',
-            category: '儿童',
-        }];
-
-        data.map(i => i.key = i.bibliographyId);
-
         return (
             <div className="">
                 <BreadcrumbCustom first="书籍管理" second="书目库" />
@@ -108,7 +120,7 @@ class BookLib extends React.Component {
                     </div>
                     <Table className="infoC-table"
                         columns={columns}
-                        dataSource={data}
+                        dataSource={this.state.dataSource}
                         pagination={{
                             showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
                             showSizeChanger: true,

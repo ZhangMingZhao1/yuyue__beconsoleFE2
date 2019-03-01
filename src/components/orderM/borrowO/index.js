@@ -4,6 +4,7 @@ import BreadcrumbCustom from '../../BreadcrumbCustom';
 import './index.less';
 import OrderDet from './orderDet';
 import DeliveryModal from './deliveryModal';
+import { fetchGet } from '../../../axios/tools';
 
 const { Option } = Select;
 const InputGroup = Input.Group;
@@ -96,23 +97,32 @@ class BorrowO extends React.Component {
         super(props);
         let id = 0;
         this.state = {
-            dataSource: [
-                { key: id++, borrowStyle: 0, state: 0 },
-                { key: id++, borrowStyle: 1, state: 0 },
-                { key: id++, borrowStyle: 1, state: 1 },
-                { key: id++, borrowStyle: 1, state: 2 },
-                { key: id++, borrowStyle: 1, state: 3 },
-                { key: id++, borrowStyle: 0, state: 3 },
-                { key: id++, borrowStyle: 0, state: 4 },
-                { key: id++, borrowStyle: 0, state: 5 },
-                { key: id++, borrowStyle: 0, state: 6 },
-            ],
             modal1: false,//快递待收书时关闭订单
             modal1Loading: false,
             modal2: false,//详情
             modal3: false,//发快递
             modal3: false,//发书柜
         }
+    }
+    componentDidMount(){
+        this.requestList();
+    }
+    requestList = () => {
+        fetchGet({
+            url: '/orderM/borrowO',
+            params: {
+                page: 1
+            }
+        }).then((res) => {
+            if (res.code == 0) {
+                res.result.list.map((item, index) => {
+                    item.key = index;
+                })
+                this.setState({
+                    dataSource: res.result.list,
+                })
+            }
+        })
     }
     handleSave(row) {
         const newData = [...this.state.dataSource];

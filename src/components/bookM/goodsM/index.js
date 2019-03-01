@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Select, Input, Button, Card, DatePicker, Table, Divider, Pagination } from 'antd';
 import './index.less';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
+import { fetchGet } from '../../../axios/tools';
 
 const { Option } = Select;
 
@@ -52,6 +53,29 @@ const GoodsSearchForm = Form.create()(
 );
 
 class GoodsM extends React.Component {
+    state = {}
+
+    componentDidMount() {
+        this.requestList();
+    }
+
+    requestList = () => {
+        fetchGet({
+            url: '/bookM/goodsM',
+            params: {
+                page: 1
+            }
+        }).then((res) => {
+            if (res.code == 0) {
+                res.result.list.map((item, index) => {
+                    item.key = index;
+                })
+                this.setState({
+                    dataSource: res.result.list,
+                })
+            }
+        })
+    }
 
     render() {
         let id = 0;
@@ -118,29 +142,6 @@ class GoodsM extends React.Component {
             }
         }];
 
-        const data = [{
-            key: id++,
-            goodsId: 12,
-            bookId: '4532',
-            bookName: '《发动机开发快速》',
-            category: '儿童',
-            author: '正常',
-            publisher: '即若焐热',
-            rfid: '52656532',
-            state: 0,
-            warehouseP: '',
-            cellId: '',
-        },{
-            key: id++,
-            state: 1,
-        },{
-            key: id++,
-            state: 2,
-        },{
-            key: id++,
-            state: 3,
-        }];
-
         return (
             <div className="">
                 <BreadcrumbCustom first="书籍管理" second="商品管理" />
@@ -151,7 +152,7 @@ class GoodsM extends React.Component {
                     <Table
                         className="goodsM-table"
                         columns={columns}
-                        dataSource={data}
+                        dataSource={this.state.dataSource}
                         pagination={{
                             showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
                             showSizeChanger: true,
