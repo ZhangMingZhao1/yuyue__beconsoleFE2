@@ -77,6 +77,18 @@ export default {
         { key: '/app/systemM/organizationM', title: '机构管理', component: 'OrganizationM' },
         { key: '/app/systemM/warehouseM', title: '仓库维护', component: 'WarehouseM' },
         { key: '/app/systemM/cabinetM', title: '机柜管理', component: 'CabinetM' },
+        { key: '/app/systemM/staffM', title: '员工管理', component: 'StaffM' }
+      ],
+    },
+    {
+      key: '/app/storehouseM', title: '仓库管理', icon: 'rocket',
+      subs: [
+        { key: '/app/storehouseM/query', title: '机构管理', component: 'StoreQuery' },
+        { key: '/app/storehouseM/indata', title: '仓库维护', component: 'InStoreData' },
+        { key: '/app/storehouseM/transferInData', title: '机柜管理', component: 'CabinetM' },
+        { key: '/app/storehouseM/transferOutData', title: '机柜管理', component: 'CabinetM' },
+        { key: '/app/storehouseM/outHouseData', title: '机柜管理', component: 'CabinetM' },
+        { key: '/app/storehouseM/inHouseData', title: '机柜管理', component: 'CabinetM' },
         {
           key: '/app/systemM/staffM', title: '员工管理',
           subs: [
