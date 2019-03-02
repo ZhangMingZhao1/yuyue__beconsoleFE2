@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Select, Input, Button, Card, DatePicker, Table } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import './index.less';
+import { fetchGet } from '../../../axios/tools';
 
 const { Option } = Select;
 const InputGroup = Input.Group;
@@ -76,15 +77,30 @@ const DonateOSearchForm = Form.create()(
 class BorrowH extends React.Component {
     constructor(props) {
         super(props);
-        let id = 0;
         this.state = {
-            dataSource: [
-                { key: id++ },
-            ],
             modal1: false,
         }
     }
-
+    componentDidMount(){
+        this.requestList();
+    }
+    requestList = () => {
+        fetchGet({
+            url: '/orderO/borrowH',
+            params: {
+                page: 1
+            }
+        }).then((res) => {
+            if (res.code == 0) {
+                res.result.list.map((item, index) => {
+                    item.key = index;
+                })
+                this.setState({
+                    dataSource: res.result.list,
+                })
+            }
+        })
+    }
     showModal(key) {
         this.setState({ [key]: true });
     }

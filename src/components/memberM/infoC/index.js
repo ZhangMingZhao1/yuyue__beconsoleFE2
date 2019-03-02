@@ -3,12 +3,8 @@ import React from 'react';
 import { Form, Select, Input, Button, Card, DatePicker, Table, Divider, Pagination } from 'antd';
 import './index.less';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
-import {
-    Link
-  } from 'react-router-dom'
-import {
-    Route,
-  } from 'react-router-dom';
+import { Link } from 'react-router-dom'
+import { fetchGet } from '../../../axios/tools';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -35,13 +31,13 @@ const MemberSearchForm = Form.create()(
             name: "customer",
             value: ['1', '2']
         }, {
-            key:4,
+            key: 4,
             label: "加盟商",
             placeholder: "全部",
             name: "company",
             value: ['1', '2']
         }, {
-            key:5,
+            key: 5,
             label: "城市",
             placeholder: "全部",
             name: "city",
@@ -77,6 +73,29 @@ const MemberSearchForm = Form.create()(
 );
 
 class InfoC extends React.Component {
+    state = {}
+
+    componentDidMount() {
+        this.requestList();
+    }
+
+    requestList = () => {
+        fetchGet({
+            url: '/memberM/info/list',
+            params: {
+                page: 1
+            }
+        }).then((res) => {
+            if (res.code == 0) {
+                res.result.list.map((item, index) => {
+                    item.key = index;
+                })
+                this.setState({
+                    dataSource: res.result.list,
+                })
+            }
+        })
+    }
 
     render() {
         let id = 0;
@@ -110,37 +129,13 @@ class InfoC extends React.Component {
         }, {
             title: '操作',
             dataIndex: 'action',
-            render: (text,record) => (
+            render: (text, record) => (
                 <span>
                     <Link to={`${this.props.match.url}/infodetail/${record.memberId}`}>查看</Link>
                     <Divider type="vertical" />
                     <a href="javascript:;">删除</a>
                 </span>
             ),
-        }];
-
-        const data = [{
-            key: id++,
-            memberId: '4455665445',
-            phone: '13545263365',
-            nickName: '啦啦啦',
-            status: '正常',
-            type: '个人',
-            city: '北京',
-            customer: 'XXX社区',
-            company: '',
-            registerTime: '2017-05-11 15:11:00'
-        }, {
-            key: id++,
-            memberId: '2115545666',
-            phone: '13544789587',
-            nickName: '小宇宙',
-            status: '停用',
-            type: '家庭',
-            city: '北京',
-            customer: '',
-            company: '张三',
-            registerTime: '2015-02-24 12:56:00'
         }];
 
         return (
@@ -153,17 +148,17 @@ class InfoC extends React.Component {
                     <div style={{ textAlign: 'right' }}><Button onClick={this.handleReset}>导入会员</Button></div><br />
                     <Table className="infoC-table"
                         columns={columns}
-                        dataSource={data}
+                        dataSource={this.state.dataSource}
                         pagination={{
-                            showTotal:(total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
+                            showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
                             showSizeChanger: true,
-                            pageSizeOptions: ['10','20','50']
+                            pageSizeOptions: ['10', '20', '50']
                         }}
                         bordered
                     />
                 </Card>
             </div>
-          
+
         )
     }
 }

@@ -29,10 +29,10 @@ import Cssmodule from './cssmodule';
 import MapUi from './ui/map';
 
 import InfoC from './memberM/infoC/index.js';
-import PayO from './memberM/payO.js';
-import PointC from './memberM/pointC.js';
-import PointRule from './memberM/pointRule.js';
-import MemberLevel from './memberM/memberLevel.js';
+import PayO from './memberM/payO/payO.js';
+import PointC from './memberM/pointC/pointC.js';
+import PointRule from './memberM/pointRule/pointRule.js';
+import MemberLevel from './memberM/memberLevel/memberLevel.js';
 import InfoDetail from './memberM/infodetail';
 import BookLib from './bookM/bookLib/index.js';
 import AddBookLib from './bookM/bookLib/addBookLib.js';
