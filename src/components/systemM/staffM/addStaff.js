@@ -16,7 +16,7 @@ class AddStaff extends React.Component {
                 >
                     <StaffForm
                         wrappedComponentRef={this.StaffFormRef}
-                        type='add'
+                        type="add"
                         onSubmit={() => { console.log(this.staff_formRef.props.form.getFieldsValue()) }}
                         onCancel={() => { }}
                     />
