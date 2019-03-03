@@ -1,5 +1,4 @@
 import React from 'react';
-import moment from 'moment';
 import StaffForm from './staffForm';
 import { Card } from 'antd';
 
@@ -10,24 +9,24 @@ class ChangeStaff extends React.Component {
     }
 
     render() {
-        const dateFormat = 'YYYY/MM/DD';
         const data = {
-            publish: '新华出版社',
-            category: '儿童',
-            isSelected: '是',
-            printTime: moment('2015/01/01', dateFormat),
-            clc: '儿童',
+            name: '毛大虎',
+            status: '正常',
+            character: '管理员',
+            phoneNumber: '13901239091',
+            org: '朝阳街道',
+            department: '技术部',
             createTime: '2018-02-02 12:23:23',
             modifyTime: '2018-02-02 12:23:23',
         }
         return (
             <div className="">
                 <Card
-                    title={`修改员工${this.props.match.params.id}`}
+                    title={`修改员工：${this.props.match.params.id}`}
                 >
                     <StaffForm
-                        wrappedComponentRef={this.bookLibFormRef}
-                        type='change'
+                        wrappedComponentRef={this.StaffFormRef}
+                        type="change"
                         initialValues={data}
                         onSubmit={() => { console.log(this.staff_formRef.props.form.getFieldsValue()) }}
                         onCancel={() => { }}

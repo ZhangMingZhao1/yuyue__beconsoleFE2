@@ -55,11 +55,7 @@ export default {
         { key: '/app/storehouseM/outHouseData', title: '机柜管理', component: 'CabinetM' },
         { key: '/app/storehouseM/inHouseData', title: '机柜管理', component: 'CabinetM' },
         {
-          key: '/app/systemM/staffM', title: '员工管理',
-          subs: [
-            { key: '/app/systemM/staffM/addStaff', title: '新增', component: 'AddStaff' },
-            { key: '/app/systemM/staffM/editStaff', title: '修改', component: 'EditStaff' },
-          ]
+          key: '/app/systemM/staffM', title: '员工管理', component: 'StaffM'
         }
       ],
     },
@@ -155,6 +151,13 @@ export default {
         { key: '/app/bookM/bookLib/addBookLib', title: '新增', component: 'AddBookLib' },
         { key: '/app/bookM/bookLib/modifyBookLib/:id', title: '修改', component: 'ModifyBookLib' },
       ],
+    },
+    {
+      key: '/app/systemM/staffM', title: '员工管理',
+      subs: [
+        { key: '/app/systemM/staffM/addStaff', title: '新增', component: 'AddStaff' },
+        { key: '/app/systemM/staffM/changeStaff/:id', title: '修改', component: 'ChangeStaff' },
+      ]
     },
     {
       key: '/app/franchiseeM/tables', title: '加盟商管理/统计专表',

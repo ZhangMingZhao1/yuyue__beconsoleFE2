@@ -47,7 +47,6 @@ const StaffSearchForm = Form.create()(
     }
 );
 
-
 class StaffM extends React.Component {
 
     showConfirm = () => {
@@ -66,6 +65,9 @@ class StaffM extends React.Component {
     render() {
 
         const columns = [{
+            title: '员工ID',
+            dataIndex: 'ID',
+        }, {
             title: '员工姓名',
             dataIndex: 'name',
         }, {
@@ -84,13 +86,16 @@ class StaffM extends React.Component {
             title: '状态',
             dataIndex: 'status',
         }, {
+            title: '备注',
+            dataIndex: 'remark',
+        }, {
             title: '操作',
             dataIndex: 'action',
             render: (text, record) => (
                 <span>
                     <a href="javascript:;" onClick={this.showConfirm}>重置密码</a>
                     <Divider type="vertical" />
-                    <Link to={`${this.props.match.url}/changeStaff/${record.bibliographyId}`}>修改</Link>
+                    <Link to={`${this.props.match.url}/changeStaff/${record.name}`}>修改</Link>
                     <Divider type="vertical" />
                     <a href="javascript:;">删除</a>
                 </span>
@@ -98,22 +103,26 @@ class StaffM extends React.Component {
         }];
 
         const data = [{
+            ID: 1,
             name: '毛大虎',
             phoneNumber: '13102020202',
             org: '朝阳街道',
             department: '技术部',
             character: '系统管理员',
             status: '正常',
+            remark: ''
         }, {
+            ID: 2,
             name: '毛大虎',
             phoneNumber: '13102020202',
             org: '朝阳街道',
             department: '技术部',
             character: '系统管理员',
             status: '正常',
+            remark: ''
         }];
 
-        data.map(i => i.key = i.bibliographyId);
+        data.map(i => i.key = i.ID);
 
         return (
             <React.Fragment>
