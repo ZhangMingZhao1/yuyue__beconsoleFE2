@@ -48,15 +48,12 @@ export default {
     {
       key: '/app/storehouseM', title: '仓库管理', icon: 'rocket',
       subs: [
-        { key: '/app/storehouseM/query', title: '机构管理', component: 'StoreQuery' },
-        { key: '/app/storehouseM/indata', title: '仓库维护', component: 'InStoreData' },
-        { key: '/app/storehouseM/transferInData', title: '机柜管理', component: 'CabinetM' },
-        { key: '/app/storehouseM/transferOutData', title: '机柜管理', component: 'CabinetM' },
-        { key: '/app/storehouseM/outHouseData', title: '机柜管理', component: 'CabinetM' },
-        { key: '/app/storehouseM/inHouseData', title: '机柜管理', component: 'CabinetM' },
-        {
-          key: '/app/systemM/staffM', title: '员工管理', component: 'StaffM'
-        }
+        { key: '/app/storehouseM/query', title: '仓库查询', component: 'StoreQuery' },
+        { key: '/app/storehouseM/indata', title: '入库单', component: 'InStoreData' },
+        { key: '/app/storehouseM/transferInData', title: '调拨入柜单', component: 'CabinetM' },
+        { key: '/app/storehouseM/transferOutData', title: '调拨出柜单', component: 'CabinetM' },
+        { key: '/app/storehouseM/outHouseData', title: '出库单', component: 'OutStoreData' },
+        { key: '/app/storehouseM/inHouseData', title: '移库单', component: 'CabinetM' },
       ],
     },
     {
@@ -150,6 +147,12 @@ export default {
       subs: [
         { key: '/app/bookM/bookLib/addBookLib', title: '新增', component: 'AddBookLib' },
         { key: '/app/bookM/bookLib/modifyBookLib/:id', title: '修改', component: 'ModifyBookLib' },
+      ],
+    },
+    {
+      key: '/app/storehouseM/outHouseData', title: '仓库管理/出库单',
+      subs: [
+        { key: '/app/storehouseM/outHouseData/add', title: '新增', component: 'AddOutStore' },
       ],
     },
     {
