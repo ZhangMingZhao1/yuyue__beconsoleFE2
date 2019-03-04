@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Input, DatePicker, Button, Row, Col, Modal, Table } from 'antd';
+import { Card, Input, DatePicker, Button, Modal, Table } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import 'antd/dist/antd.css';
 
@@ -12,29 +12,23 @@ class CommentM extends React.Component {
 
     this.state = {
       selectedRowKeys: [], // Check here to configure the default column
-      commentData: [{
-        number: 1,
-        bookname: '钢铁是怎样炼成的',
-        comment: '吉利李书福占戴勒姆近10%股份',
-        commentpeople: '胡晓雪',
-        time: '2018-02-26 15:25:00'
-      },
-      {
-        number: 2,
-        bookname: '我的好妈妈',
-        comment: '两会代表就房产税提议：2019年北京开始试点',
-        commentpeople: '胡晓雪',
-        time: '2018-02-26 13:54:00'
-      }],
+      commentData: []
     };
     this.dateRangeChange = this.dateRangeChange.bind(this);
     this.findBtnClick = this.findBtnClick.bind(this);
     this.deleteCommentBtnClick = this.deleteCommentBtnClick.bind(this);
   }
+
+
+  componentDidMount() {
+    this.requestList();
+  }
+
   onSelectChange = (selectedRowKeys) => {
     console.log('selectedRowKeys changed: ', selectedRowKeys);
     this.setState({ selectedRowKeys });
   };
+
   dateRangeChange() {
     console.log('DateRangeChanged');
   }
@@ -66,6 +60,31 @@ class CommentM extends React.Component {
         console.log('Cancel');
       },
     });
+  }
+
+  requestList = () => {
+    const url = 'https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/fishM/commentM';
+    fetch(url)
+      .then((res) => {
+        if (res.status === 200) {//http请求成功
+          return res.json()
+        } else {
+          Promise.reject(res);
+        }
+      })
+      .then(data => {
+        console.log(data.data.commentData);
+        // eslint-disable-next-line
+        data.data.commentData.map((item, index) => {
+          item.key = index;
+        });
+        this.setState({
+          commentData: data.data.commentData
+        });
+      })
+      .catch(err => {
+        console.log('fetch error', err)
+      });
   }
 
   render() {

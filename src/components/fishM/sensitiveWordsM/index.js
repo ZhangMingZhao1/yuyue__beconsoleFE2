@@ -11,30 +11,38 @@ class SensitiveWordsM extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      sensitiveWords: [],
       disabled: true,
       editing: false
     };
-    this.handleSaveBtnClick = this.handleSaveBtnClick.bind(this);
-    this.handleEditBtnClick = this.handleEditBtnClick.bind(this);
-    this.handleCancelBtnClick = this.handleCancelBtnClick.bind(this);
   }
 
-  handleSaveBtnClick() {
+  componentDidMount() {
+    this.requestList();
+  }
+
+  onChange = (e) => {
+    this.setState({
+      sensitiveWords: e.target.value
+    });
+  }
+
+  handleSaveBtnClick = () => {
     this.setState(() => ({
       disabled: true,
       editing: false
     }));
-    console.log('Save');
+    console.log(this.state);
   }
 
-  handleEditBtnClick() {
+  handleEditBtnClick = () => {
     this.setState(() => ({
       disabled: false,
       editing: true
     }));
   }
 
-  handleCancelBtnClick() {
+  handleCancelBtnClick = () => {
     confirm({
       okText: '是',
       cancelText: '否',
@@ -51,6 +59,28 @@ class SensitiveWordsM extends React.Component {
     })
   }
 
+  requestList = () => {
+    const url = 'https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/fishM/sensitiveWordsM';
+    fetch(url)
+      .then((res) => {
+        if (res.status === 200) {//http请求成功
+          return res.json()
+        } else {
+          Promise.reject(res);
+        }
+      })
+      .then(data => {
+        console.log(data.data.sensitiveWords);
+        const res = data.data.sensitiveWords;
+        this.setState({
+          sensitiveWords: [...this.state.sensitiveWords, res]
+        });
+      })
+      .catch(err => {
+        console.log('fetch error', err)
+      });
+  }
+
   render() {
     const { editing } = this.state;
     return (
@@ -59,7 +89,12 @@ class SensitiveWordsM extends React.Component {
         <div>
           <Card title="敏感词库">
             <div>
-              <TextArea disabled={this.state.disabled} autosize={{ minRows: 6 }} />
+              <TextArea
+                disabled={this.state.disabled}
+                value={this.state.sensitiveWords}
+                onChange={this.onChange}
+                autosize={{ minRows: 6 }}
+              />
               <div
                 style={{ margin: '10px 40% 0px' }}
               >
@@ -84,7 +119,7 @@ class SensitiveWordsM extends React.Component {
                     <Button
                       type="primary"
                       onClick={this.handleEditBtnClick}
-                      style={{ marginLeft: '20%'}}
+                      style={{ marginLeft: '20%' }}
                     >
                       修改
                     </Button>
