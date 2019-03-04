@@ -53,23 +53,25 @@ import AddStaff from './systemM/staffM/addStaff.js';
 import ChangeStaff from './systemM/staffM/changeStaff.js';
 import StoreQuery from './storehouseM/storequery/storequery.js';
 import InStoreData from './storehouseM/instoredata/instoredata.js';
+import OutStoreData from './storehouseM/outStoreData/index.js';
+import AddOutStore from './storehouseM/outStoreData/addOutStore.js';
 const WysiwygBundle = Loadable({ // 按需加载富文本配置
     loader: () => import('./ui/Wysiwyg'),
     loading: Loading,
 });
 
 export default {
-    ThemeControl,BannerControl,
-     BasicTable, AdvancedTable, AsynchronousTable,
+    ThemeControl, BannerControl,
+    BasicTable, AdvancedTable, AsynchronousTable,
     Echarts, Recharts, Icons, Buttons, Spins, Modals, Notifications,
     Tabs, Banners, Drags, Dashboard, Gallery, BasicAnimations,
     ExampleAnimations, AuthBasic, RouterEnter, WysiwygBundle,
     Cssmodule, MapUi,
-    InfoC,PayO,PointC,PointRule,MemberLevel,
+    InfoC, PayO, PointC, PointRule, MemberLevel,
     InfoDetail,
-    BookLib,AddBookLib,ModifyBookLib,PublisherM,GoodsM,
-    BorrowO,DonateO,CheckO,BorrowH,
-    CommentM,SensitiveWordsM,
+    BookLib, AddBookLib, ModifyBookLib, PublisherM, GoodsM,
+    BorrowO, DonateO, CheckO, BorrowH,
+    CommentM, SensitiveWordsM,
     OrganizationM, CabinetM, WarehouseM, StaffM, AddStaff, ChangeStaff,
-    StoreQuery,InStoreData
+    StoreQuery, InStoreData, OutStoreData, AddOutStore
 }
