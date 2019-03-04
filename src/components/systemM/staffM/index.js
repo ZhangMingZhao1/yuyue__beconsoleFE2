@@ -49,6 +49,14 @@ const StaffSearchForm = Form.create()(
 
 class StaffM extends React.Component {
 
+    state = {
+        data: []
+    }
+
+    componentDidMount() {
+        this.requestList();
+    }
+
     showConfirm = () => {
         confirm({
             title: 'Want to delete these items?',
@@ -60,7 +68,35 @@ class StaffM extends React.Component {
                 console.log('Cancel');
             },
         });
-    };
+    }
+
+    changeClick = () => {
+
+    }
+
+    requestList = () => {
+        const url = 'https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/systemM/staffM';
+        fetch(url)
+            .then((res) => {
+                if (res.status === 200) {//http请求成功
+                    return res.json()
+                } else {
+                    Promise.reject(res);
+                }
+            })
+            .then(data => {
+                // eslint-disable-next-line
+                data.data.data.map((item, index) => {
+                    item.key = index;
+                });
+                this.setState({
+                    data: data.data.data
+                });
+            })
+            .catch(err => {
+                console.log('fetch error', err)
+            });
+    }
 
     render() {
 
@@ -93,36 +129,18 @@ class StaffM extends React.Component {
             dataIndex: 'action',
             render: (text, record) => (
                 <span>
+                    {/* eslint-disable-next-line */}
                     <a href="javascript:;" onClick={this.showConfirm}>重置密码</a>
                     <Divider type="vertical" />
-                    <Link to={`${this.props.match.url}/changeStaff/${record.name}`}>修改</Link>
+                    <Link to={`${this.props.match.url}/changeStaff/${record.ID}`}>修改</Link>
                     <Divider type="vertical" />
+                    {/* eslint-disable-next-line */}
                     <a href="javascript:;">删除</a>
                 </span>
             ),
         }];
 
-        const data = [{
-            ID: 1,
-            name: '毛大虎',
-            phoneNumber: '13102020202',
-            org: '朝阳街道',
-            department: '技术部',
-            character: '系统管理员',
-            status: '正常',
-            remark: ''
-        }, {
-            ID: 2,
-            name: '毛大虎',
-            phoneNumber: '13102020202',
-            org: '朝阳街道',
-            department: '技术部',
-            character: '系统管理员',
-            status: '正常',
-            remark: ''
-        }];
-
-        data.map(i => i.key = i.ID);
+        const { data } = this.state;
 
         return (
             <React.Fragment>

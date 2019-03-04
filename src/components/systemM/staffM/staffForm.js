@@ -20,6 +20,10 @@ const StaffForm = Form.create()(
             }
         }
 
+        inputChange = (e) => {
+            this.props.initialValues.name = e.target.value;
+        }
+
         render() {
             const { getFieldDecorator } = this.props.form;
             const initial = this.props.initialValues;
@@ -46,7 +50,7 @@ const StaffForm = Form.create()(
                                     switch (i.type) {
                                         case 1:
                                             return <span>
-                                                <Input value={initial ? initial.name : null} style={{ width: `${i.width}` }} />
+                                                <Input value={initial ? initial.name : null} style={{ width: `${i.width}` }} onChange={this.inputChange} />
                                             </span>
                                         case 2:
                                             return <Select style={{ width: `${i.width}` }}>
