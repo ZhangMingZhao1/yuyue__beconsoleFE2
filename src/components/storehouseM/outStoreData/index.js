@@ -71,9 +71,9 @@ class OutStoreData extends React.Component {
                 title: '操作', dataIndex: 'action',
                 render: (text, record) => {
                     let config = {
-                        '1': <a href="javascript:;">编辑</a>,
-                        '2': <a href="javascript:;">审核</a>,
-                        '3': <a href="javascript:;">查看</a>,
+                        '1': <Link to={`${this.props.match.url}/add`}>编辑</Link>,
+                        '2': <Link to={`${this.props.match.url}/check`}>审核</Link>,
+                        '3': <Link to={`${this.props.match.url}/detail`}>查看</Link>,
                     }
                     return config[record.orderState];
                 }
