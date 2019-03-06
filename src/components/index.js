@@ -54,7 +54,7 @@ import ChangeStaff from './systemM/staffM/changeStaff.js';
 import StoreQuery from './storehouseM/storequery/storequery.js';
 import InStoreData from './storehouseM/instoredata/instoredata.js';
 import OutStoreData from './storehouseM/outStoreData/index.js';
-import AddOutStore from './storehouseM/outStoreData/addOutStore.js';
+import OutStoreInfo from './storehouseM/outStoreData/outStoreInfo.js';
 import MvStoreData from './storehouseM/mvStoreData/index.js';
 import MvStoreInfo from './storehouseM/mvStoreData/mvStoreInfo';
 const WysiwygBundle = Loadable({ // 按需加载富文本配置
@@ -75,5 +75,5 @@ export default {
     BorrowO, DonateO, CheckO, BorrowH,
     CommentM, SensitiveWordsM,
     OrganizationM, CabinetM, WarehouseM, StaffM, AddStaff, ChangeStaff,
-    StoreQuery, InStoreData, OutStoreData, AddOutStore, MvStoreData, MvStoreInfo
+    StoreQuery, InStoreData, OutStoreData, OutStoreInfo, MvStoreData, MvStoreInfo
 }

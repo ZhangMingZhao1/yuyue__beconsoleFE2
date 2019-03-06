@@ -32,7 +32,7 @@ const OutStoreForm = Form.create()(
     }
 );
 
-class OutStoreData extends React.Component {
+class OutStoreInfo extends React.Component {
     state = { data: [] }
 
     handleSave = () => {
@@ -104,4 +104,4 @@ class OutStoreData extends React.Component {
     }
 }
 
-export default OutStoreData;
+export default OutStoreInfo;

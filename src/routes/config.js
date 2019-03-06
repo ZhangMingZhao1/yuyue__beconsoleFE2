@@ -152,7 +152,7 @@ export default {
     {
       key: '/app/storehouseM/outHouseData', title: '仓库管理/出库单',
       subs: [
-        { key: '/app/storehouseM/outHouseData/:type', title: '新增/审核/查看', component: 'AddOutStore' },
+        { key: '/app/storehouseM/outHouseData/:type', title: '新增/审核/查看', component: 'OutStoreInfo' },
       ],
     },
     {
