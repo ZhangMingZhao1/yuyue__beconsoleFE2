@@ -2,7 +2,7 @@ import React from 'react';
 import { Input, Form, Select, DatePicker } from "antd";
 
 const Option = Select.Option;
-function getOptionList(data) {
+export const getOptionList = (data) => {
     if (!data) {
         return [];
     }
@@ -28,11 +28,12 @@ export const getFormItem = (form, formList) => {
             let width = item.width;
             let disabled = item.disabled;
             let extra = item.extra ;
+            let rules = item.rules;
             switch (item.type) {
                 case "INPUT":
                     formItemList.push(
                         <FormItem label={label} key={name}>
-                            {getFieldDecorator(name)(
+                            {getFieldDecorator(name, {initialValue: initialValue})(
                                 <span style={{whiteSpace:'nowrap'}}>
                                     <Input disabled={disabled} placeholder={placeholder} style={{ width: width }} />
                                     <span style={{marginLeft: 10 }}>{extra}</span>
@@ -49,6 +50,7 @@ export const getFormItem = (form, formList) => {
                                     initialValue: initialValue
                                 })(
                                     <Select
+                                        disabled={disabled}
                                         style={{ width: width }}
                                         placeholder={placeholder}
                                     >
@@ -75,7 +77,7 @@ export const getFormItem = (form, formList) => {
                         <FormItem label={label} key={name}>
                             {
                                 getFieldDecorator(name)(
-                                    <TextArea style={{ width: width }}/>
+                                    <TextArea disabled={disabled} style={{ width: width }}/>
                                 )
                             }
                         </FormItem>
