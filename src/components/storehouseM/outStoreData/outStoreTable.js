@@ -55,7 +55,7 @@ class EditableCell extends React.Component {
 class OutStoreTable extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { editingKey: '', data: this.props.dataSource, count: 0 };
+        this.state = { editingKey: '',type: this.props.type, data: this.props.dataSource, count: 0 };
         this.form = {};//每行数据对应的form
         this.columns = [
             { title: '序号', dataIndex: 'index', width: '16.5%', render: (text, record, index) => index },//key!=index
@@ -80,6 +80,14 @@ class OutStoreTable extends React.Component {
                 },
             },
         ];
+        if(this.state.type!=='add'){
+            //增加'成本价'栏
+            this.columns.splice(4,0,{ title: '成本价', dataIndex: 'cost', width: '16.5%', editable: true });
+            //删除'操作'栏
+            this.columns.splice(-1,1);
+            //置为不可编辑
+            this.columns.forEach(i=>{i.editable=false});
+        }
         this.inputItem = {
             'barCode': { type: 'INPUT', rules: [{ required: true, message: 'null' }] },
             'isbn': { type: 'INPUT', rules: [{ required: true, message: 'null' }] },
@@ -182,7 +190,7 @@ class OutStoreTable extends React.Component {
 
         return (
             <div style={{ position: 'relative' }}>
-                <div style={{display:`${this.props.type=='add'? 'inline':'none'}`}}>
+                <div style={{display:`${this.state.type=='add'? 'inline':'none'}`}}>
                     <Button type="primary" onClick={() => this.handleAdd()}>新增一条记录</Button>
                     <Button type="primary" >批量导入</Button>
                 </div><br />
@@ -206,11 +214,11 @@ class OutStoreTable extends React.Component {
                     }}
                 />
                 {
-                    this.props.type=='add'?
+                    this.state.type=='add'?
                     <p style={{ position: 'absolute', bottom: 0, marginBottom: 28 }}>合计：{this.state.data.length} 本书</p>:
                     <p style={{textAlign: 'justify'}}>
                         <font style={{float:'left'}}>合计：{this.state.data.length} 本书</font>
-                        {this.props.type=='detail'? <font style={{float:'right'}}>审核时间：2018-12-11  08:12:24</font>:''}
+                        {this.state.type=='detail'? <font style={{float:'right'}}>审核时间：2018-12-11  08:12:24</font>:''}
                         <font style={{float:'right',marginRight: 20}}>审核人：李四</font>
                     </p>
                 }

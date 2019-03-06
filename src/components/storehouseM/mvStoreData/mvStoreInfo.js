@@ -110,7 +110,7 @@ class MvStoreInfo extends React.Component {
                 { text: '打印', onClick: () => { } },
             ],
             'detail': [
-                { text: '打印', onClick: () => { }, disabled: true },
+                { text: '打印', onClick: () => { }},
             ],
         }
 
