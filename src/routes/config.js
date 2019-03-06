@@ -53,7 +53,7 @@ export default {
         { key: '/app/storehouseM/transferInData', title: '调拨入柜单', component: 'CabinetM' },
         { key: '/app/storehouseM/transferOutData', title: '调拨出柜单', component: 'CabinetM' },
         { key: '/app/storehouseM/outHouseData', title: '出库单', component: 'OutStoreData' },
-        { key: '/app/storehouseM/inHouseData', title: '移库单', component: 'CabinetM' },
+        { key: '/app/storehouseM/mvHouseData', title: '移库单', component: 'MvStoreData' },
       ],
     },
     {
@@ -152,7 +152,13 @@ export default {
     {
       key: '/app/storehouseM/outHouseData', title: '仓库管理/出库单',
       subs: [
-        { key: '/app/storehouseM/outHouseData/:type', title: '新增', component: 'AddOutStore' },
+        { key: '/app/storehouseM/outHouseData/:type', title: '新增/审核/查看', component: 'OutStoreInfo' },
+      ],
+    },
+    {
+      key: '/app/storehouseM/mvHouseData', title: '仓库管理/移库单',
+      subs: [
+        { key: '/app/storehouseM/mvHouseData/:type', title: '新增/审核/查看', component: 'MvStoreInfo' },
       ],
     },
     {

@@ -52,17 +52,18 @@ class EditableCell extends React.Component {
     }
 }
 
-class OutStoreTable extends React.Component {
+class MvStoreTable extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { editingKey: '',type: this.props.type, data: this.props.dataSource, count: 0 };
+        this.state = { editingKey: '', type: this.props.type, data: this.props.dataSource, count: 0 };
         this.form = {};//每行数据对应的form
         this.columns = [
-            { title: '序号', dataIndex: 'index', width: '16.5%', render: (text, record, index) => index },//key!=index
-            { title: '条码', dataIndex: 'barCode', width: '16.5%', editable: true },
-            { title: 'ISBN', dataIndex: 'isbn', width: '16.5%', editable: true },
-            { title: '电子标签', dataIndex: 'eLabel', width: '16.5%', editable: true },
-            { title: '货位', dataIndex: 'location', width: '16.5%', editable: true },
+            { title: '序号', dataIndex: 'index', width: '14.3%', render: (text, record, index) => index },//key!=index
+            { title: '条码', dataIndex: 'barCode', width: '14.3%', editable: true },
+            { title: 'ISBN', dataIndex: 'isbn', width: '14.3%', editable: true },
+            { title: '电子标签', dataIndex: 'eLabel', width: '14.3%', editable: true },
+            { title: '出库货位', dataIndex: 'outLocation', width: '14.3%', editable: true },
+            { title: '入库货位', dataIndex: 'inLocation', width: '14.3%', editable: true },
             {
                 title: '操作',
                 dataIndex: 'operation',
@@ -80,19 +81,16 @@ class OutStoreTable extends React.Component {
                 },
             },
         ];
-        if(this.state.type!=='add'){
-            //增加'成本价'栏
-            this.columns.splice(4,0,{ title: '成本价', dataIndex: 'cost', width: '16.5%', editable: true });
-            //删除'操作'栏
-            this.columns.splice(-1,1);
-            //置为不可编辑
-            this.columns.forEach(i=>{i.editable=false});
+        if (this.state.type !== 'add') {
+            this.columns.splice(-1, 1);//去掉'操作'项
+            this.columns.forEach(i => { i.editable = false });//表格不可编辑
         }
         this.inputItem = {
             'barCode': { type: 'INPUT', rules: [{ required: true, message: 'null' }] },
             'isbn': { type: 'INPUT', rules: [{ required: true, message: 'null' }] },
             'eLabel': { type: 'INPUT', rules: [{ required: true, message: 'null' }] },
-            'location': { type: 'SELECT', list: [] },
+            'outLocation': { type: 'SELECT', list: [] },
+            'inLocation': { type: 'SELECT', list: [] },
         }
     }
     isEditing = record => record.key == this.state.editingKey;
@@ -133,7 +131,7 @@ class OutStoreTable extends React.Component {
                     this.setState({ data: newData, editingKey: '' }, () => { callback(this.state.data) });
                 }
             });
-        }else{
+        } else {
             callback(this.state.data);
         }
     }
@@ -190,7 +188,7 @@ class OutStoreTable extends React.Component {
 
         return (
             <div style={{ position: 'relative' }}>
-                <div style={{display:`${this.state.type=='add'? 'inline':'none'}`}}>
+                <div style={{ display: `${this.state.type == 'add' ? 'inline' : 'none'}` }}>
                     <Button type="primary" onClick={() => this.handleAdd()}>新增一条记录</Button>
                     <Button type="primary" >批量导入</Button>
                 </div><br />
@@ -214,18 +212,17 @@ class OutStoreTable extends React.Component {
                     }}
                 />
                 {
-                    this.state.type=='add'?
-                    <p style={{ position: 'absolute', bottom: 0, marginBottom: 28 }}>合计：{this.state.data.length} 本书</p>:
-                    <p style={{textAlign: 'justify'}}>
-                        <font style={{float:'left'}}>合计：{this.state.data.length} 本书</font>
-                        {this.state.type=='detail'? <font style={{float:'right'}}>审核时间：2018-12-11  08:12:24</font>:''}
-                        <font style={{float:'right',marginRight: 20}}>审核人：李四</font>
-                    </p>
+                    this.state.type == 'add' ?
+                        <p style={{ position: 'absolute', bottom: 0, marginBottom: 28 }}>合计：{this.state.data.length} 本书</p> :
+                        <p style={{ textAlign: 'justify' }}>
+                            <font style={{ float: 'left' }}>合计：{this.state.data.length} 本书</font>
+                            {this.state.type == 'detail' ? <font style={{ float: 'right' }}>审核时间：2018-12-11  08:12:24</font> : ''}
+                            <font style={{ float: 'right', marginRight: 20 }}>审核人：李四</font>
+                        </p>
                 }
-                
             </div>
         )
     }
 }
 
-export default OutStoreTable;
+export default MvStoreTable;
