@@ -23,7 +23,7 @@ class SensitiveWordsM extends React.Component {
 
   onChange = (e) => {
     this.setState({
-      sensitiveWords: e.target.value
+      sensitiveWords: e.target.value.split('|')
     });
   }
 
@@ -32,6 +32,7 @@ class SensitiveWordsM extends React.Component {
       disabled: true,
       editing: false
     }));
+    this.requestList();
     console.log(this.state);
   }
 
@@ -61,19 +62,21 @@ class SensitiveWordsM extends React.Component {
 
   requestList = () => {
     const url = 'https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/fishM/sensitiveWordsM';
-    fetch(url)
-      .then((res) => {
-        if (res.status === 200) {//http请求成功
-          return res.json()
-        } else {
-          Promise.reject(res);
-        }
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json', 'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        sensitiveWords: this.state.sensitiveWords
       })
+    })
+      .then((res) => res.json())
       .then(data => {
         console.log(data.data.sensitiveWords);
         const res = data.data.sensitiveWords;
         this.setState({
-          sensitiveWords: [...this.state.sensitiveWords, res]
+          sensitiveWords: res
         });
       })
       .catch(err => {
@@ -82,7 +85,8 @@ class SensitiveWordsM extends React.Component {
   }
 
   render() {
-    const { editing } = this.state;
+    const { editing, sensitiveWords } = this.state;
+    const value = sensitiveWords.join('|');
     return (
       <React.Fragment>
         <BreadcrumbCustom first="鱼群管理" second="敏感词管理" />
@@ -91,7 +95,7 @@ class SensitiveWordsM extends React.Component {
             <div>
               <TextArea
                 disabled={this.state.disabled}
-                value={this.state.sensitiveWords}
+                value={value}
                 onChange={this.onChange}
                 autosize={{ minRows: 6 }}
               />

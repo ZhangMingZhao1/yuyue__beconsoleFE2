@@ -64,14 +64,16 @@ class CommentM extends React.Component {
 
   requestList = () => {
     const url = 'https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/fishM/commentM';
-    fetch(url)
-      .then((res) => {
-        if (res.status === 200) {//http请求成功
-          return res.json()
-        } else {
-          Promise.reject(res);
-        }
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json', 'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        commentData: this.state.commentData
       })
+    })
+      .then((res) => res.json())
       .then(data => {
         console.log(data.data.commentData);
         // eslint-disable-next-line

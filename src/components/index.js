@@ -4,14 +4,8 @@
  */
 import Loadable from 'react-loadable';
 import Loading from './widget/Loading';
-import BasicTable from './tables/BasicTables';
-import AdvancedTable from './tables/AdvancedTables';
-import AsynchronousTable from './tables/AsynchronousTable';
-import Echarts from './charts/Echarts';
-import Recharts from './charts/Recharts';
 import ThemeControl from './webC/ThemeControl.js'
 import BannerControl from './webC/BannerControl.js';
-
 import Dashboard from './dashboard/Dashboard';
 
 import BasicAnimations from './animation/BasicAnimations';
@@ -54,9 +48,7 @@ import MvStoreInfo from './storehouseM/mvStoreData/mvStoreInfo';
 
 export default {
     ThemeControl, BannerControl,
-    BasicTable, AdvancedTable, AsynchronousTable,
-    Echarts, Recharts
-    ,  Dashboard, BasicAnimations,
+    Dashboard, BasicAnimations,
     ExampleAnimations, AuthBasic, RouterEnter,
     Cssmodule,
     InfoC, PayO, PointC, PointRule, MemberLevel,
