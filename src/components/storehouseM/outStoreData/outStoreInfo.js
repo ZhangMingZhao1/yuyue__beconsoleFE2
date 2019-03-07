@@ -1,15 +1,14 @@
 import React from 'react';
-import { Card, Form, Button, Divider, Table } from 'antd';
-import BreadcrumbCustom from '../../BreadcrumbCustom';
+import { Card, Form, Button, Modal } from 'antd';
 import { getFormItem } from '../../baseFormItem';
 import "./index.less"
-import { Link } from 'react-router-dom'
 import OutStoreTable from './outStoreTable';
 
+const confirm = Modal.confirm;
 const OutStoreForm = Form.create()(
     class extends React.Component {
         render() {
-            const { form,type } = this.props;
+            const { form, type } = this.props;
             const formList = [
                 { type: 'INPUT', label: '订单编号', name: 'orderCode', disabled: true },
                 { type: 'SELECT', label: '出库仓库', name: 'store', width: '100px', list: [] },
@@ -18,8 +17,8 @@ const OutStoreForm = Form.create()(
                 { type: 'INPUT', label: '运费', name: 'freight', width: '100px', extra: '元' },
                 { type: 'TEXTAREA', label: '备注', name: 'remarks', width: '600px' },
             ];
-            if (type!=='add'){
-                formList.forEach(i=>{
+            if (type !== 'add') {
+                formList.forEach(i => {
                     i.disabled = true
                 })
             }
@@ -32,12 +31,55 @@ const OutStoreForm = Form.create()(
     }
 );
 
-class OutStoreData extends React.Component {
+class OutStoreInfo extends React.Component {
     state = { data: [] }
 
     handleSave = () => {
         this.table.getTableValues((v) => { console.log(v) })
         this.outStore_formRef.props.form.getFieldsValue()
+    }
+
+    handleDelete = () => {
+        confirm({
+            title: '确认删除该订单？',
+            okText: '确认',
+            okType: 'danger',
+            cancelText: '取消',
+            onOk() {
+                console.log('删除订单');
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
+    }
+
+    handleSubmit = () => {
+        confirm({
+            title: '确认提交该订单？',
+            okText: '确认',
+            cancelText: '取消',
+            onOk() {
+                console.log('提交订单');
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
+    }
+
+    handleCheck = () => {
+        confirm({
+            title: '审核是否该订单？',
+            okText: '通过',
+            cancelText: '不通过',
+            onOk() {
+                console.log("变为'草稿'");
+            },
+            onCancel() {
+                console.log("订单状态为'审核通过'");
+            },
+        });
     }
 
     outStoreFormRef = (formRef) => {
@@ -56,25 +98,25 @@ class OutStoreData extends React.Component {
         const action_btn = {
             'add': [
                 { text: '保存', onClick: this.handleSave },
-                { text: '删除', onClick: () => { } },
-                { text: '提交', onClick: () => { } },
-                { text: '审核', onClick: () => { }, disabled: true },
+                { text: '删除', onClick: this.handleDelete },
+                { text: '提交', onClick: this.handleSubmit },
+                { text: '审核', onClick: this.handleCheck, disabled: true },
 
             ],
             'check': [
                 { text: '保存', onClick: this.handleSave, disabled: true },
-                { text: '删除', onClick: () => { }, disabled: true },
-                { text: '提交', onClick: () => { }, disabled: true },
-                { text: '审核', onClick: () => { } },
+                { text: '删除', onClick: this.handleDelete, disabled: true },
+                { text: '提交', onClick: this.handleSubmit, disabled: true },
+                { text: '审核', onClick: this.handleCheck },
             ],
             'detail': [
-                { text: '打印', onClick: () => { }, disabled: true },
+                { text: '打印', onClick: () => { } },
             ],
         }
 
         const title = <div>
             {
-                action_btn[type].map((i,index) => (
+                action_btn[type].map((i, index) => (
                     <Button key={index} type="primary" onClick={i.onClick} disabled={i.disabled ? true : false}>
                         {i.text}
                     </Button>
@@ -104,4 +146,4 @@ class OutStoreData extends React.Component {
     }
 }
 
-export default OutStoreData;
+export default OutStoreInfo;
