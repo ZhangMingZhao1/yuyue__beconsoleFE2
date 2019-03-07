@@ -19,7 +19,7 @@ import ExampleAnimations from './animation/ExampleAnimations';
 import AuthBasic from './auth/Basic';
 import RouterEnter from './auth/RouterEnter';
 import Cssmodule from './cssmodule';
-import MapUi from './ui/map';
+
 
 import InfoC from './memberM/infoC/index.js';
 import PayO from './memberM/payO/payO.js';
@@ -58,7 +58,7 @@ export default {
     Echarts, Recharts
     ,  Dashboard, BasicAnimations,
     ExampleAnimations, AuthBasic, RouterEnter,
-    Cssmodule, MapUi,
+    Cssmodule,
     InfoC, PayO, PointC, PointRule, MemberLevel,
     InfoDetail,
     BookLib, AddBookLib, ModifyBookLib, PublisherM, GoodsM,
