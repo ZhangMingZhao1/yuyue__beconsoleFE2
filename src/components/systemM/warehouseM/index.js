@@ -71,14 +71,16 @@ class WarehouseM extends React.Component {
 
     requestList = () => {
         const url = 'https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/staffM/organizationM';
-        fetch(url)
-            .then((res) => {
-                if (res.status === 200) {//http请求成功
-                    return res.json()
-                } else {
-                    Promise.reject(res);
-                }
+        fetch(url,{
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json', 'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                data: this.state.data
             })
+        })
+            .then((res) => res.json())
             .then(data => {
                 // eslint-disable-next-line
                 data.data.warehouseData.map((item, index) => {
@@ -145,7 +147,7 @@ class WarehouseM extends React.Component {
                             style={{ width: 120, marginLeft: '10px' }}
                             onChange={this.handleSelectChange}
                         >
-                            <Option value="1">1</Option>
+                            <Option placeholder="全部" value="1">1</Option>
                         </Select>
                         <Input
                             style={{ width: '400px', marginLeft: '10px' }}

@@ -70,20 +70,18 @@ class StaffM extends React.Component {
         });
     }
 
-    changeClick = () => {
-
-    }
-
     requestList = () => {
         const url = 'https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/systemM/staffM';
-        fetch(url)
-            .then((res) => {
-                if (res.status === 200) {//http请求成功
-                    return res.json()
-                } else {
-                    Promise.reject(res);
-                }
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json', 'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                data: this.state.data
             })
+        })
+            .then((res) => res.json())
             .then(data => {
                 // eslint-disable-next-line
                 data.data.data.map((item, index) => {
@@ -146,7 +144,7 @@ class StaffM extends React.Component {
             <React.Fragment>
                 <BreadcrumbCustom first="系统管理" second="员工管理" />
                 <Card
-                    title="书目库"
+                    title="员工管理"
                 >
                     <StaffSearchForm /><br />
                     <div style={{ marginBottom: '10px' }}>
