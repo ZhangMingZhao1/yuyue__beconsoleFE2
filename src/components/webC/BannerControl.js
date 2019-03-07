@@ -1,7 +1,7 @@
 
 import React from 'react';
 // import { Row, Col, Card, Timeline, Icon } from 'antd';
-import BreadcrumbCustom from '../../BreadcrumbCustom';
+import BreadcrumbCustom from '../BreadcrumbCustom';
 
 
 

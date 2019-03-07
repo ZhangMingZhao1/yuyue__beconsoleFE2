@@ -5,18 +5,7 @@ export default {
       key: '/app/ui', title: '网站管理', icon: 'scan',
       subs: [
         { key: '/app/ui/themeControl', title: '专题管理', component: 'ThemeControl' },
-        { key: '/app/ui/bannerControl', title: 'banner管理', component: 'BannerControl' },
-        { key: '/app/ui/buttons', title: '按钮', component: 'Buttons' },
-        { key: '/app/ui/icons', title: '图标', component: 'Icons' },
-        { key: '/app/ui/spins', title: '加载中', component: 'Spins' },
-        { key: '/app/ui/modals', title: '对话框', component: 'Modals' },
-        { key: '/app/ui/notifications', title: '通知提醒框', component: 'Notifications' },
-        { key: '/app/ui/tabs', title: '标签页', component: 'Tabs' },
-        { key: '/app/ui/banners', title: '轮播图', component: 'Banners' },
-        { key: '/app/ui/wysiwyg', title: '富文本', component: 'WysiwygBundle' },
-        { key: '/app/ui/drags', title: '拖拽', component: 'Drags' },
-        { key: '/app/ui/gallery', title: '画廊', component: 'Gallery' },
-        { key: '/app/ui/map', title: '地图', component: 'MapUi' },
+        { key: '/app/ui/bannerControl', title: 'banner管理', component: 'BannerControl' }
       ],
     },
     {

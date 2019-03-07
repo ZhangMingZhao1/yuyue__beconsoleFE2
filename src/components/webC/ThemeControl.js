@@ -3,10 +3,10 @@
  */
 import React from 'react';
 import {Card, Table, Divider, Tag, Input, Button, Icon, Modal, Switch } from 'antd';
-import BreadcrumbCustom from '../../BreadcrumbCustom';
+import BreadcrumbCustom from '../BreadcrumbCustom';
 import './ThemeControl.less';
 
-class Themecontrol extends React.Component {
+class ThemeControl extends React.Component {
     state = {
       searchText: '',
       visible: false
@@ -157,4 +157,4 @@ class Themecontrol extends React.Component {
     }
 }
 
-export default Themecontrol;
+export default ThemeControl;

@@ -9,18 +9,11 @@ import AdvancedTable from './tables/AdvancedTables';
 import AsynchronousTable from './tables/AsynchronousTable';
 import Echarts from './charts/Echarts';
 import Recharts from './charts/Recharts';
-import ThemeControl from './ui/webcontrol/ThemeControl.js'
-import BannerControl from './ui/webcontrol/BannerControl.js';
-import Icons from './ui/Icons';
-import Buttons from './ui/Buttons';
-import Spins from './ui/Spins';
-import Modals from './ui/Modals';
-import Notifications from './ui/Notifications';
-import Tabs from './ui/Tabs';
-import Banners from './ui/banners';
-import Drags from './ui/Draggable';
+import ThemeControl from './webC/ThemeControl.js'
+import BannerControl from './webC/BannerControl.js';
+
 import Dashboard from './dashboard/Dashboard';
-import Gallery from './ui/Gallery';
+
 import BasicAnimations from './animation/BasicAnimations';
 import ExampleAnimations from './animation/ExampleAnimations';
 import AuthBasic from './auth/Basic';
@@ -55,17 +48,15 @@ import StoreQuery from './storehouseM/storequery/storequery.js';
 import InStoreData from './storehouseM/instoredata/instoredata.js';
 import OutStoreData from './storehouseM/outStoreData/index.js';
 import AddOutStore from './storehouseM/outStoreData/addOutStore.js';
-const WysiwygBundle = Loadable({ // 按需加载富文本配置
-    loader: () => import('./ui/Wysiwyg'),
-    loading: Loading,
-});
+
+
 
 export default {
     ThemeControl, BannerControl,
     BasicTable, AdvancedTable, AsynchronousTable,
-    Echarts, Recharts, Icons, Buttons, Spins, Modals, Notifications,
-    Tabs, Banners, Drags, Dashboard, Gallery, BasicAnimations,
-    ExampleAnimations, AuthBasic, RouterEnter, WysiwygBundle,
+    Echarts, Recharts
+    ,  Dashboard, BasicAnimations,
+    ExampleAnimations, AuthBasic, RouterEnter,
     Cssmodule, MapUi,
     InfoC, PayO, PointC, PointRule, MemberLevel,
     InfoDetail,
