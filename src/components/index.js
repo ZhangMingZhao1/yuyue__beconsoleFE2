@@ -6,7 +6,7 @@ import Loadable from 'react-loadable';
 import Loading from './widget/Loading';
 import ThemeControl from './webC/themeControl/ThemeControl.js'
 import ThemeContent from './webC/themeControl/themeContent.js'
-import BannerControl from './webC/BannerControl.js';
+import BannerControl from './webC/bannerC/index.js';
 import Dashboard from './dashboard/Dashboard';
 
 import BasicAnimations from './animation/BasicAnimations';
