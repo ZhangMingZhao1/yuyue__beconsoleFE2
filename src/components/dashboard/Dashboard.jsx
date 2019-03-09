@@ -6,7 +6,6 @@ import { Row, Col, Card, Timeline, Icon } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom';
 
 
-import b1 from '../../style/imgs/b1.jpg';
 
 
 class Dashboard extends React.Component {

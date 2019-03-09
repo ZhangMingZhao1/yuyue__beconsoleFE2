@@ -112,6 +112,7 @@ class HeaderCustom extends Component {
 }
 
 const mapStateToProps = state => {
+    console.log("header",state.getIn(['login', 'user']));
     // const { responsive = {data: {}} } = state.httpData;
     // return {responsive};
 };

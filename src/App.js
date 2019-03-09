@@ -71,6 +71,7 @@ class App extends Component {
 
 const mapStateToProps = state => {
     let auth = state.getIn(['login', 'user']);
+    console.log('App111',auth);
     // return tmp=='null'?{user:{}}:tmp;
     return {auth};
     // user: state.getIn(['login', 'user'])
