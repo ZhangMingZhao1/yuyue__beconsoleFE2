@@ -119,11 +119,11 @@ class BannerC extends React.Component {
                 title: '操作',
                 dataIndex: 'action',
                 render: (text, record) => (
-                        <span>
-                            <a onClick={()=>{this.setState({modalType:'modify',visible:true})}}>修改</a>
-                            <Divider type="vertical" />
-                            <a onClick={this.handleDelete}>删除</a>
-                        </span>
+                    <span>
+                        <a onClick={() => { this.setState({ modalType: 'modify', visible: true }) }}>修改</a>
+                        <Divider type="vertical" />
+                        <a onClick={this.handleDelete}>删除</a>
+                    </span>
                 ),
             }
         ];
@@ -136,7 +136,7 @@ class BannerC extends React.Component {
                 >
                     <BannerSearch />
                     <div style={{ textAlign: 'left' }}>
-                        <Button type="primary" onClick={() => {this.setState({modalType:'add',visible: true})}}>新增</Button>
+                        <Button type="primary" onClick={() => { this.setState({ modalType: 'add', visible: true }) }}>新增</Button>
                     </div><br />
                     <Table className="advertise-table"
                         columns={columns}
@@ -152,8 +152,8 @@ class BannerC extends React.Component {
                 <BannerInfoModal
                     type={this.state.modalType}
                     visible={this.state.visible}
-                    onOk={()=>{this.setState({visible: false})}}
-                    onCancel={()=>{this.setState({visible: false})}}
+                    onOk={() => { this.setState({ visible: false }) }}
+                    onCancel={() => { this.setState({ visible: false }) }}
                 />
             </div>
 

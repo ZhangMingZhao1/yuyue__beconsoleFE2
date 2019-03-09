@@ -41,7 +41,8 @@ import StaffM from './systemM/staffM/index.js';
 import AddStaff from './systemM/staffM/addStaff.js';
 import ChangeStaff from './systemM/staffM/changeStaff.js';
 import StoreQuery from './storehouseM/storequery/storequery.js';
-import InStoreData from './storehouseM/instoredata/instoredata.js';
+import InStoreData from './storehouseM/instoredata/index.js';
+import InStoreInfo from './storehouseM/instoredata/inStoreInfo.js';
 import OutStoreData from './storehouseM/outStoreData/index.js';
 import OutStoreInfo from './storehouseM/outStoreData/outStoreInfo.js';
 import MvStoreData from './storehouseM/mvStoreData/index.js';
@@ -49,7 +50,7 @@ import MvStoreInfo from './storehouseM/mvStoreData/mvStoreInfo';
 
 
 export default {
-    ThemeControl,ThemeContent, BannerControl,AdvertiseM,
+    ThemeControl, ThemeContent, BannerControl, AdvertiseM,
     Dashboard, BasicAnimations,
     ExampleAnimations, AuthBasic, RouterEnter,
     Cssmodule,
@@ -59,5 +60,5 @@ export default {
     BorrowO, DonateO, CheckO, BorrowH,
     CommentM, SensitiveWordsM,
     OrganizationM, CabinetM, WarehouseM, StaffM, AddStaff, ChangeStaff,
-    StoreQuery, InStoreData, OutStoreData, OutStoreInfo, MvStoreData, MvStoreInfo
+    StoreQuery, InStoreData, InStoreInfo, OutStoreData, OutStoreInfo, MvStoreData, MvStoreInfo
 }
