@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Form, Select, DatePicker } from "antd";
+import { Input, Form, Select, DatePicker, Switch, Upload, Button, Icon } from "antd";
 
 const Option = Select.Option;
 export const getOptionList = (data) => {
@@ -27,16 +27,17 @@ export const getFormItem = (form, formList) => {
             let placeholder = item.placeholder;
             let width = item.width;
             let disabled = item.disabled;
-            let extra = item.extra ;
+            let extra = item.extra;
             let rules = item.rules;
+            let formItemLayout = item.formItemLayout
             switch (item.type) {
                 case "INPUT":
                     formItemList.push(
-                        <FormItem label={label} key={name}>
-                            {getFieldDecorator(name, {initialValue: initialValue})(
-                                <span style={{whiteSpace:'nowrap'}}>
+                        <FormItem label={label} key={name} {...formItemLayout}>
+                            {getFieldDecorator(name, { initialValue: initialValue })(
+                                <span style={{ whiteSpace: 'nowrap' }}>
                                     <Input disabled={disabled} placeholder={placeholder} style={{ width: width }} />
-                                    <span style={{marginLeft: 10 }}>{extra}</span>
+                                    <span style={{ marginLeft: 10 }}>{extra}</span>
                                 </span>
                             )}
                         </FormItem>
@@ -44,7 +45,7 @@ export const getFormItem = (form, formList) => {
                     break;
                 case "SELECT":
                     formItemList.push(
-                        <FormItem label={label} key={name}>
+                        <FormItem label={label} key={name} {...formItemLayout}>
                             {
                                 getFieldDecorator(name, {
                                     initialValue: initialValue
@@ -63,7 +64,7 @@ export const getFormItem = (form, formList) => {
                     break;
                 case "RANGPICKER":
                     formItemList.push(
-                        <FormItem label={label} key={name}>
+                        <FormItem label={label} key={name} {...formItemLayout}>
                             {
                                 getFieldDecorator(name)(
                                     <RangePicker />
@@ -72,14 +73,51 @@ export const getFormItem = (form, formList) => {
                         </FormItem>
                     );
                     break;
-                case "TEXTAREA":
+                case "DATEPICKER":
                     formItemList.push(
-                        <FormItem label={label} key={name}>
+                        <FormItem label={label} key={name} {...formItemLayout}>
                             {
                                 getFieldDecorator(name)(
-                                    <TextArea disabled={disabled} style={{ width: width }}/>
+                                    <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" />
                                 )
                             }
+                        </FormItem>
+                    );
+                    break;
+                case "SWITCH":
+                    formItemList.push(
+                        <FormItem label={label} key={name} {...formItemLayout}>
+                            {
+                                getFieldDecorator(name, { valuePropName: 'checked' })(
+                                    <Switch />
+                                )
+                            }
+                        </FormItem>
+                    );
+                    break;
+                case "TEXTAREA":
+                    formItemList.push(
+                        <FormItem label={label} key={name} {...formItemLayout}>
+                            {
+                                getFieldDecorator(name)(
+                                    <TextArea disabled={disabled} style={{ width: width }} />
+                                )
+                            }
+                        </FormItem>
+                    );
+                    break;
+                case "UPLOAD":
+                    formItemList.push(
+                        <FormItem label={label} key={name} {...formItemLayout}>
+                            {getFieldDecorator(name, {
+                                valuePropName: 'fileList',
+                            })(
+                                <Upload action="/upload.do" listType="picture">
+                                    <Button>
+                                        <Icon type="upload" /> Click to upload
+                                    </Button>
+                                </Upload>
+                            )}
                         </FormItem>
                     );
                     break;
