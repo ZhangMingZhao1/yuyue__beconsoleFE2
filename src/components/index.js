@@ -4,7 +4,8 @@
  */
 import Loadable from 'react-loadable';
 import Loading from './widget/Loading';
-import ThemeControl from './webC/ThemeControl.js'
+import ThemeControl from './webC/themeControl/ThemeControl.js'
+import ThemeContent from './webC/themeControl/themeContent.js'
 import BannerControl from './webC/BannerControl.js';
 import Dashboard from './dashboard/Dashboard';
 
@@ -47,7 +48,7 @@ import MvStoreInfo from './storehouseM/mvStoreData/mvStoreInfo';
 
 
 export default {
-    ThemeControl, BannerControl,
+    ThemeControl,ThemeContent, BannerControl,
     Dashboard, BasicAnimations,
     ExampleAnimations, AuthBasic, RouterEnter,
     Cssmodule,

@@ -94,6 +94,12 @@ export default {
   ],
   others: [
     {
+      key: '/app/ui', title: '网站管理',
+      subs: [
+        { key: '/app/ui/themeControl/content', title: '专题设置/专题内容管理', component: 'ThemeContent' },
+      ],
+    },
+    {
       key: '/app/memberM', title: '会员管理',
       subs: [
         { key: '/app/memberM/xinxiguanli/infodetail/:memberId', title: '查看', component: 'InfoDetail' },
