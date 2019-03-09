@@ -5,7 +5,8 @@ export default {
       key: '/app/ui', title: '网站管理', icon: 'scan',
       subs: [
         { key: '/app/ui/themeControl', title: '专题管理', component: 'ThemeControl' },
-        { key: '/app/ui/bannerControl', title: 'banner管理', component: 'BannerControl' }
+        { key: '/app/ui/bannerControl', title: 'banner管理', component: 'BannerControl' },
+        { key: '/app/ui/advertiseM', title: '广告管理', component: 'AdvertiseM' }
       ],
     },
     {

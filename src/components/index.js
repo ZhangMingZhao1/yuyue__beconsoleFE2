@@ -7,6 +7,7 @@ import Loading from './widget/Loading';
 import ThemeControl from './webC/themeControl/ThemeControl.js'
 import ThemeContent from './webC/themeControl/themeContent.js'
 import BannerControl from './webC/bannerC/index.js';
+import AdvertiseM from './webC/advertiseM/index.js';
 import Dashboard from './dashboard/Dashboard';
 
 import BasicAnimations from './animation/BasicAnimations';
@@ -48,7 +49,7 @@ import MvStoreInfo from './storehouseM/mvStoreData/mvStoreInfo';
 
 
 export default {
-    ThemeControl,ThemeContent, BannerControl,
+    ThemeControl,ThemeContent, BannerControl,AdvertiseM,
     Dashboard, BasicAnimations,
     ExampleAnimations, AuthBasic, RouterEnter,
     Cssmodule,
