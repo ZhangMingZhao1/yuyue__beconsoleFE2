@@ -1,6 +1,6 @@
 export default {
   menus: [ // 菜单相关路由
-    { key: '/app/dashboard/index', title: '首页', icon: 'mobile', component: 'Dashboard', login:false },
+    { key: '/app/dashboard/index', title: '首页', icon: 'mobile', component: 'Dashboard', login: false },
     {
       key: '/app/ui', title: '网站管理', icon: 'scan',
       subs: [
@@ -120,6 +120,13 @@ export default {
         { key: '/app/storehouseM/mvHouseData/:type', title: '移库单:新增|审核|查看', component: 'MvStoreInfo' },
         { key: '/app/storehouseM/indata/:type', title: '入库单:新增|审核|查看', component: 'InStoreInfo' },
       ],
+    },
+    {
+      key: '/app/systemM/cabinetM', title: '机柜管理',
+      subs: [
+        { key: '/app/systemM/cabinetM/addCabinet', title: '新增', component: 'AddCabinet' },
+        { key: '/app/systemM/cabinetM/changeCabinet/:id', title: '修改', component: 'ChangeCabinet' }
+      ]
     },
     {
       key: '/app/systemM/staffM', title: '员工管理',

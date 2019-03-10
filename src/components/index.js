@@ -36,6 +36,8 @@ import BorrowH from './orderM/borrowH/index.js';
 import SensitiveWordsM from './fishM/sensitiveWordsM/index.js';
 import OrganizationM from './systemM/organizationM/index.js';
 import CabinetM from './systemM/cabinetM/index.js';
+import AddCabinet from './systemM/cabinetM/addCabinet.js';
+import ChangeCabinet from './systemM/cabinetM/changeCabinet.js';
 import WarehouseM from './systemM/warehouseM/index.js';
 import StaffM from './systemM/staffM/index.js';
 import AddStaff from './systemM/staffM/addStaff.js';
@@ -59,6 +61,8 @@ export default {
     BookLib, AddBookLib, ModifyBookLib, PublisherM, GoodsM,
     BorrowO, DonateO, CheckO, BorrowH,
     CommentM, SensitiveWordsM,
-    OrganizationM, CabinetM, WarehouseM, StaffM, AddStaff, ChangeStaff,
-    StoreQuery, InStoreData, InStoreInfo, OutStoreData, OutStoreInfo, MvStoreData, MvStoreInfo
+
+    OrganizationM, CabinetM, AddCabinet, ChangeCabinet, WarehouseM, StaffM, AddStaff, ChangeStaff,
+    StoreQuery, InStoreData, OutStoreData, OutStoreInfo, MvStoreData, MvStoreInfo
+
 }

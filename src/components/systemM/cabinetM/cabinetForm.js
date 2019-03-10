@@ -3,7 +3,7 @@ import { Row, Col, Form, Button, Input, Select } from 'antd';
 
 const TextArea = Input.TextArea;
 const Option = Select.Option;
-const StaffForm = Form.create()(
+const CabinetForm = Form.create()(
     class extends React.Component {
 
         state = {
@@ -32,14 +32,15 @@ const StaffForm = Form.create()(
                 wrapperCol: { span: 20 },
             };
             const formItem = [
-                { type: 1, label: '员工姓名*', name: 'name', width: '150px', value: '' },
-                { type: 4, label: '登录密码', name: 'password', width: '150px', },
-                { type: 2, label: '状态', name: 'status', width: '150px', value: ['正常', '停用'] },
-                { type: 2, label: '角色', name: 'character', width: '150px', value: ['管理员', '审稿员'] },
-                { type: 3, label: '手机号*', name: 'phoneNumber', width: '250px', },
-                { type: 5, label: '注册时间', name: 'time', width: '300px', value: '2017-05-11 15:11:00' },
-                { type: 2, label: '所属机构', name: 'org', width: '150px', value: ['朝阳街道', '1', '2'] },
-                { type: 2, label: '所属部门', name: 'department', width: '150px', value: ['运维部', '技术部'] },
+                { type: 3, label: '柜子编号', name: 'ID', width: '150px' },
+                { type: 1, label: '柜子名称', name: 'name', width: '150px', },
+                { type: 1, label: '所属仓库', name: 'wareHouse', width: '150px' },
+                { type: 1, label: '容量', name: 'capacity', width: '150px' },
+                { type: 1, label: '运维人', name: 'people', width: '150px', },
+                { type: 3, label: '联系方式', name: 'phoneNum', width: '300px' },
+                { type: 1, label: '柜子地址', name: 'address', width: '300px' },
+                { type: 2, label: '柜子状态', name: 'status', width: '150px', value: ['停用', '正常'] },
+                { type: 1, label: '操作员', name: 'operator', width: '150px' },
             ];
             return (
                 <Form onSubmit={(e) => { this.props.onSubmit(e) }}><Row>
@@ -47,6 +48,7 @@ const StaffForm = Form.create()(
                         <Col key={i.name} span={i.span ? i.span : 12}>
                             <Form.Item {...formItemLayout} label={i.label} help={i.help}>
                                 {getFieldDecorator(i.name, { initialValue: initial ? initial[i.name] : null })((() => {
+                                    console.log(i.name)
                                     switch (i.type) {
                                         case 1:
                                             return <span>
@@ -60,14 +62,6 @@ const StaffForm = Form.create()(
                                             return <span>
                                                 <Input value={initial ? initial[i.name] : null} style={{ width: `${i.width}` }} onChange={this.onChange} />
                                             </span>
-                                        case 4:
-                                            return <span>
-                                                <Input type="password" style={{ width: `${i.width}` }} />
-                                            </span>
-                                        case 5:
-                                            return <div style={{ width: `${i.width}` }}>
-                                                {i.value}
-                                            </div>
                                         default:
                                             return null
                                     }
@@ -97,7 +91,7 @@ const StaffForm = Form.create()(
                                 {...formItemLayout}
                                 label="最近修改时间"
                             >
-                                <span style={{ marginLeft: 10 }}>{initial ? initial['modifyTime'] : null}</span>
+                                <span style={{ marginLeft: 10 }}>{initial ? initial['date'] : null}</span>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -111,4 +105,4 @@ const StaffForm = Form.create()(
     }
 );
 
-export default StaffForm;
+export default CabinetForm;

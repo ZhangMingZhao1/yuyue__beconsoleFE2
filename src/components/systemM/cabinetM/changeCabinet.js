@@ -1,8 +1,8 @@
 import React from 'react';
-import StaffForm from './staffForm';
+import CabinetForm from './cabinetForm';
 import { Card } from 'antd';
 
-class ChangeStaff extends React.Component {
+class ChangeCabinet extends React.Component {
 
     state = {
         data: []
@@ -12,12 +12,12 @@ class ChangeStaff extends React.Component {
         this.requestList();
     }
 
-    StaffFormRef = (formRef) => {
-        this.staff_formRef = formRef;
+    CabinetFormRef = (formRef) => {
+        this.cabinet_formRef = formRef;
     }
 
     requestList = () => {
-        const url = 'https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/systemM/staffM';
+        const url = 'https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/systemM/cabinetM';
         fetch(url, {
             method: 'POST',
             headers: {
@@ -39,7 +39,7 @@ class ChangeStaff extends React.Component {
                     // eslint-disable-next-line
                     if (item.ID == this.props.match.params.id) {
                         this.setState({
-                            data: [...this.state.data, item]
+                            data: [item]
                         });
                     }
                 });
@@ -54,13 +54,13 @@ class ChangeStaff extends React.Component {
         return (
             <div className="">
                 <Card
-                    title={`修改员工：${this.props.match.params.id}`}
+                    title={`修改机柜：${this.props.match.params.id}`}
                 >
-                    <StaffForm
-                        wrappedComponentRef={this.StaffFormRef}
+                    <CabinetForm
+                        wrappedComponentRef={this.CabinetFormRef}
                         type="change"
                         initialValues={data[0]}
-                        onSubmit={() => { console.log(this.staff_formRef.props.form.getFieldsValue()) }}
+                        onSubmit={() => { console.log(this.cabinet_formRef.props.form.getFieldsValue()) }}
                         onCancel={() => { }}
                     />
                 </Card>
@@ -69,4 +69,4 @@ class ChangeStaff extends React.Component {
     }
 }
 
-export default ChangeStaff;
+export default ChangeCabinet;

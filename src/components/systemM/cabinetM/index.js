@@ -89,7 +89,7 @@ class StaffM extends React.Component {
 
         const columns = [{
             title: '序号',
-            dataIndex: 'key',
+            dataIndex: 'num',
         }, {
             title: '柜子编号',
             dataIndex: 'ID',
