@@ -5,7 +5,8 @@ export default {
       key: '/app/ui', title: '网站管理', icon: 'scan',
       subs: [
         { key: '/app/ui/themeControl', title: '专题管理', component: 'ThemeControl' },
-        { key: '/app/ui/bannerControl', title: 'banner管理', component: 'BannerControl' }
+        { key: '/app/ui/bannerControl', title: 'banner管理', component: 'BannerControl' },
+        { key: '/app/ui/advertiseM', title: '广告管理', component: 'AdvertiseM' }
       ],
     },
     {
@@ -94,6 +95,12 @@ export default {
   ],
   others: [
     {
+      key: '/app/ui', title: '网站管理',
+      subs: [
+        { key: '/app/ui/themeControl/content', title: '专题设置/专题内容管理', component: 'ThemeContent' },
+      ],
+    },
+    {
       key: '/app/memberM', title: '会员管理',
       subs: [
         { key: '/app/memberM/xinxiguanli/infodetail/:memberId', title: '查看', component: 'InfoDetail' },
@@ -107,15 +114,11 @@ export default {
       ],
     },
     {
-      key: '/app/storehouseM/outHouseData', title: '仓库管理/出库单',
+      key: '/app/storehouseM/outHouseData', title: '仓库管理',
       subs: [
-        { key: '/app/storehouseM/outHouseData/:type', title: '新增/审核/查看', component: 'OutStoreInfo' },
-      ],
-    },
-    {
-      key: '/app/storehouseM/mvHouseData', title: '仓库管理/移库单',
-      subs: [
-        { key: '/app/storehouseM/mvHouseData/:type', title: '新增/审核/查看', component: 'MvStoreInfo' },
+        { key: '/app/storehouseM/outHouseData/:type', title: '出库单:新增|审核|查看', component: 'OutStoreInfo' },
+        { key: '/app/storehouseM/mvHouseData/:type', title: '移库单:新增|审核|查看', component: 'MvStoreInfo' },
+        { key: '/app/storehouseM/indata/:type', title: '入库单:新增|审核|查看', component: 'InStoreInfo' },
       ],
     },
     {

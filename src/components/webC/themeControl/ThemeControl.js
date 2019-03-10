@@ -3,8 +3,9 @@
  */
 import React from 'react';
 import {Card, Table, Divider, Tag, Input, Button, Icon, Modal, Switch } from 'antd';
-import BreadcrumbCustom from '../BreadcrumbCustom';
 import './ThemeControl.less';
+import BreadcrumbCustom from '../../BreadcrumbCustom';
+import { Link } from 'react-router-dom'
 
 class ThemeControl extends React.Component {
     state = {
@@ -104,7 +105,7 @@ class ThemeControl extends React.Component {
                 <Divider type="vertical" />
                 <a href="javascript:;">删除</a>
                 <Divider type="vertical" />
-                <a href="javascript:;">专题内容管理</a>
+                <Link to={`${this.props.match.url}/content`}>专题内容管理</Link>
               </span>
             ),
           }];
