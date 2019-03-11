@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Layout, notification, Icon } from 'antd';
 import SiderCustom from './components/SiderCustom';
-import HeaderCustom from './components/HeaderCustom';
+import HeaderCustom from './components/HeaderCustom/HeaderCustom';
 // import { receiveData } from './action';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';

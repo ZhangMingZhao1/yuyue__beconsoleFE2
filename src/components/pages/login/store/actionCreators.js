@@ -26,7 +26,7 @@ export const login = (userName, password) => {
 				password: password
 			})
 		}).then((res) => res.json()).then(data=>{
-			console.log(data);
+			console.log('loginData',data);
 			const result = data;
 			if (result) {
 				dispatch(changeLogin(result))
@@ -38,3 +38,9 @@ export const login = (userName, password) => {
 		})
 	}
 }
+
+export const doLogout = ()=>{
+	return (dispatch)=> {
+		dispatch(logout())
+	}
+} 

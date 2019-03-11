@@ -4,17 +4,19 @@
 import React, { Component } from 'react';
 import { Menu, Icon, Layout, Badge, Popover } from 'antd';
 import screenfull from 'screenfull';
-import { gitOauthToken, gitOauthInfo } from '../axios';
-import { queryString } from '../utils';
-import avater from '../style/imgs/b1.jpg';
-import SiderCustom from './SiderCustom';
+import { gitOauthToken, gitOauthInfo } from '../../axios';
+import { queryString } from '../../utils';
+import avater from '../../style/imgs/b1.jpg';
+import SiderCustom from '../SiderCustom';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { PwaInstaller } from './widget';
+import { PwaInstaller } from '../widget';
+import { actionCreators } from '../pages/login/store'
+
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
-
+ 
 class HeaderCustom extends Component {
     state = {
         user: '',
@@ -46,11 +48,12 @@ class HeaderCustom extends Component {
     };
     menuClick = e => {
         console.log(e);
-        e.key === 'logout' && this.logout();
+        // e.key === 'logout' && this.logout();
     };
     logout = () => {
         localStorage.removeItem('user');
-        this.props.history.push('/login')
+        this.props.logout();
+        this.props.history.push('/login');
     };
     popoverHide = () => {
         this.setState({
@@ -116,5 +119,10 @@ const mapStateToProps = state => {
     // const { responsive = {data: {}} } = state.httpData;
     // return {responsive};
 };
-
-export default withRouter(connect(mapStateToProps,null)(HeaderCustom));
+const mapDispatchToProps = dispatch => ({
+    logout() {
+        console.log("11111111111111logout");
+        dispatch(actionCreators.doLogout());
+    }
+});
+export default withRouter(connect(mapStateToProps,mapDispatchToProps)(HeaderCustom));
