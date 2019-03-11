@@ -39,6 +39,8 @@ import CabinetM from './systemM/cabinetM/index.js';
 import AddCabinet from './systemM/cabinetM/addCabinet.js';
 import ChangeCabinet from './systemM/cabinetM/changeCabinet.js';
 import WarehouseM from './systemM/warehouseM/index.js';
+import AddWarehouse from './systemM/warehouseM/addWarehouse.js';
+import ChangeWarehouse from './systemM/warehouseM/changeWarehouse.js';
 import StaffM from './systemM/staffM/index.js';
 import AddStaff from './systemM/staffM/addStaff.js';
 import ChangeStaff from './systemM/staffM/changeStaff.js';
@@ -62,7 +64,7 @@ export default {
     BorrowO, DonateO, CheckO, BorrowH,
     CommentM, SensitiveWordsM,
 
-    OrganizationM, CabinetM, AddCabinet, ChangeCabinet, WarehouseM, StaffM, AddStaff, ChangeStaff,
-    StoreQuery, InStoreData, OutStoreData, OutStoreInfo, MvStoreData, MvStoreInfo
+    OrganizationM, CabinetM, AddCabinet, ChangeCabinet, WarehouseM, AddWarehouse, ChangeWarehouse, StaffM, AddStaff, ChangeStaff,
+    StoreQuery, InStoreData, InStoreInfo, OutStoreData, OutStoreInfo, MvStoreData, MvStoreInfo
 
 }

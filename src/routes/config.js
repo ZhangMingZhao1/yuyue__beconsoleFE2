@@ -122,6 +122,13 @@ export default {
       ],
     },
     {
+      key: '/app/systemM/warehouseM', title: '仓库维护',
+      subs: [
+        { key: '/app/systemM/warehouseM/addWarehouse', title: '新增', component: 'AddWarehouse' },
+        { key: '/app/systemM/warehouseM/changeWarehouse/:id', title: '修改', component: 'ChangeWarehouse' }
+      ]
+    },
+    {
       key: '/app/systemM/cabinetM', title: '机柜管理',
       subs: [
         { key: '/app/systemM/cabinetM/addCabinet', title: '新增', component: 'AddCabinet' },
