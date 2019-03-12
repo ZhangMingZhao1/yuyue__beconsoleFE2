@@ -1,6 +1,7 @@
 import React from 'react';
 import { Select, Input, Button, Card, Table, Modal } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
+import { Link } from 'react-router-dom';
 
 const Option = Select.Option;
 const confirm = Modal.confirm;
@@ -21,7 +22,7 @@ class WarehouseM extends React.Component {
         this.deleteBtnClick = this.deleteBtnClick.bind(this);
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.requestList();
     }
 
@@ -71,7 +72,7 @@ class WarehouseM extends React.Component {
 
     requestList = () => {
         const url = 'https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/staffM/organizationM';
-        fetch(url,{
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json', 'Content-Type': 'application/json',
@@ -98,13 +99,14 @@ class WarehouseM extends React.Component {
 
     render() {
 
-        const { selectedRowKeys, editing } = this.state;
+        const { selectedRowKeys } = this.state;
         const rowSelection = {
             selectedRowKeys,
             onChange: this.onSelectChange,
             // onSelection: this.onSelection,
         };
         const hasSelected = selectedRowKeys.length > 0;
+        const changeForm = selectedRowKeys.length === 1;
         const columns = [{
             title: '序号',
             dataIndex: 'number',
@@ -169,24 +171,25 @@ class WarehouseM extends React.Component {
                                 <Button
                                     type="primary"
                                 >
-                                    新建
+                                    <Link to={`${this.props.match.url}/addWarehouse`}>
+                                        新建
+                                    </Link>
                                 </Button>
-                                {
-                                    editing ?
-                                        <Button
-                                            type="primary"
-                                            onClick={this.saveBtnClick}
-                                        >
-                                            保存
-                                        </Button>
-                                        :
-                                        <Button
-                                            type="primary"
-                                            disabled={!hasSelected}
-                                        >
-                                            修改
-                                        </Button>
-                                }
+                                <Button
+                                    type="primary"
+                                    disabled={!changeForm}
+                                >
+                                    {
+                                        //这一行有问题，需要学长帮忙修改
+                                    }
+                                    <Link to={{
+                                        path: `${this.props.match.url}/changeWarehouse/${selectedRowKeys[0]}`,
+                                        state: this.state.warehouseData[selectedRowKeys[0]]
+                                    }}
+                                    >
+                                        修改
+                                    </Link>
+                                </Button>
                                 <Button
                                     type="primary"
                                     disabled={!hasSelected}
@@ -210,7 +213,7 @@ class WarehouseM extends React.Component {
                         </div>
                     </div>
                 </Card>
-            </React.Fragment>
+            </React.Fragment >
         );
     }
 }
