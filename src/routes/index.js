@@ -31,7 +31,7 @@ export default class CRouter extends Component {
                         routesConfig[key].map(r => {
                             const route = r => {
                                 const Component = AllComponents[r.component];
-                                console.log('rrrrr',r,r.login);
+                                // console.log('rrrrr',r,r.login);
                                 return (
                                     <Route
                                         key={r.route || r.key}

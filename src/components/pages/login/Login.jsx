@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { PwaInstaller } from '../../widget';
 import { actionCreators } from './store';
-// import './mock';
 
 const FormItem = Form.Item;
 
@@ -35,17 +34,6 @@ class Login extends React.Component {
         e.preventDefault();
         let formData = this.props.form.getFieldsValue();
         console.log('formData',formData);
-        let options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include', // 请求带上cookies，是每次请求保持会话一直
-            body: JSON.stringify({
-                username: formData.userName,
-                password: formData.password
-            })
-        };
         this.props.login(
             formData.userName,
             formData.password
@@ -60,7 +48,7 @@ class Login extends React.Component {
             <div className="login">
                 <div className="login-form" >
                     <div className="login-logo">
-                        <span>React Admin</span>
+                        <span>鱼阅后台管理系统</span>
                         <PwaInstaller />
                     </div>
                     <Form onSubmit={this.handleSubmit} style={{maxWidth: '300px'}}>
@@ -103,7 +91,7 @@ const mapStateToPorps = state => ({
 const mapDispatchToProps = dispatch => ({
     login(userNameElem, passwordElem) {
         console.log('111111',userNameElem, passwordElem);
-        dispatch(actionCreators.login(userNameElem.value, passwordElem.value));
+        dispatch(actionCreators.login(userNameElem, passwordElem));
     }
 });
 
