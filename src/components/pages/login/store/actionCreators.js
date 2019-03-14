@@ -1,6 +1,7 @@
 // import axios from 'axios';
 import * as constants from './constants';
 import baseURL from '../../../../api/config'; 
+import { message } from 'antd';
 
 const changeLogin = (data) => ({
 	type: constants.CHANGE_LOGIN,
@@ -21,7 +22,7 @@ export const login = (userName, password) => {
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			credentials: 'include', // 请求带上cookies，是每次请求保持会话一直
+			// credentials: 'include', // 请求带上cookies，是每次请求保持会话一直
 			body: JSON.stringify({
 				userName: userName,
 				password: password
@@ -31,9 +32,10 @@ export const login = (userName, password) => {
 			const result = data;
 			console.log('result.data:',result.data);
 			if (result.data) {
+				message.success('登陆成功');
 				dispatch(changeLogin(result))
 			}else {
-				alert('登陆失败')
+				message.error(`${result.message}`);
 			}
 		}).catch((err)=>{
 			console.log(err);
