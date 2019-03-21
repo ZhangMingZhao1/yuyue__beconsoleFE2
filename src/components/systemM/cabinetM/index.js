@@ -128,10 +128,10 @@ class StaffM extends React.Component {
                     <Link to={`${this.props.match.url}/changeCabinet/${record.ID}`}>修改</Link>
                     <Divider type="vertical" />
                     {/* eslint-disable-next-line */}
-                    <a href="javascript:;">删除</a>
+                    <a href="javascript:;" onClick={this.showConfirm}>删除</a>
                     <Divider type="vertical" />
                     {/* eslint-disable-next-line */}
-                    <a href="javascript:;" onClick={this.showConfirm}>格子管理</a>
+                    <a href="javascript:;">格子管理</a>
                 </span>
             ),
         }];

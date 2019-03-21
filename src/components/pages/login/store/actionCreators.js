@@ -1,6 +1,6 @@
 // import axios from 'axios';
 import * as constants from './constants';
-import baseURL from '../../../../api/config'; 
+import baseURL from '../../../../api/config';
 import { message } from 'antd';
 
 const changeLogin = (data) => ({
@@ -16,7 +16,8 @@ export const logout = () => ({
 export const login = (userName, password) => {
 	return (dispatch) => {
 		// console.log('`${baseURL}/login`',`${baseURL}/login`);
-		fetch("http://119.3.231.11:8080/yuyue/login",{
+		// fetch("http://119.3.231.11:8080/yuyue/login",{
+		fetch("https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/login", {
 			method: 'POST',
 			mode: 'cors',
 			headers: {
@@ -27,24 +28,24 @@ export const login = (userName, password) => {
 				userName: userName,
 				password: password
 			})
-		}).then((res) => res.json()).then(data=>{
-			console.log('loginData',data);
+		}).then((res) => res.json()).then(data => {
+			console.log('loginData', data);
 			const result = data;
-			console.log('result.data:',result.data);
+			console.log('result.data:', result.data);
 			if (result.data) {
 				message.success('登陆成功');
 				dispatch(changeLogin(result))
-			}else {
+			} else {
 				message.error(`${result.message}`);
 			}
-		}).catch((err)=>{
+		}).catch((err) => {
 			console.log(err);
 		})
 	}
 }
 
-export const doLogout = ()=>{
-	return (dispatch)=> {
+export const doLogout = () => {
+	return (dispatch) => {
 		dispatch(logout())
 	}
 } 

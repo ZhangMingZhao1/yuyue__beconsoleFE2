@@ -53,7 +53,6 @@ class CommentM extends React.Component {
           cnt++;
         }
         this.setState({ selectedRowKeys: [], commentData: data })
-
         console.log(data);
       },
       onCancel: () => {
