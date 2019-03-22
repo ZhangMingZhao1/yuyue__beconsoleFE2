@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Input, Button, Modal } from 'antd';
+import { Card, Input, Button, Modal, message } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import 'antd/dist/antd.css';
 
@@ -12,6 +12,7 @@ class SensitiveWordsM extends React.Component {
     super(props);
     this.state = {
       sensitiveWords: [],
+      words: [],
       disabled: true,
       editing: false
     };
@@ -28,12 +29,49 @@ class SensitiveWordsM extends React.Component {
   }
 
   handleSaveBtnClick = () => {
+    const { sensitiveWords, words } = this.state;
+    const changeWords = [];
+    for (let i = 0, ilen = sensitiveWords.length; i < ilen; i++) {
+      for (let j = 0, jlen = words.length; j < jlen; j++) {
+        if (sensitiveWords[i] === words[j]) {
+          sensitiveWords.splice(i, 1);
+          words.splice(j, 1);
+        }
+      }
+    }
+    if (sensitiveWords !== []) {
+      changeWords.push(...sensitiveWords);
+    } else {
+      changeWords.push(...words);
+    }
+    const url = 'http://119.3.231.11:8080/yuyue/addSensitive';
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json', 'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        word: sensitiveWords
+      })
+    })
+      .then((res) => res.json())
+      .then(data => {
+        console.log(data);
+        if (data.data) {
+          message.success('保存成功');
+        } else {
+          message.error(`${data.message}`);
+        }
+      })
+      .catch(err => {
+        console.log('fetch error', err);
+      });
     this.setState(() => ({
       disabled: true,
       editing: false
     }));
-    this.requestList();
-    console.log(this.state);
+    // this.requestList();
+    // console.log(this.state);
   }
 
   handleEditBtnClick = () => {
@@ -61,26 +99,22 @@ class SensitiveWordsM extends React.Component {
   }
 
   requestList = () => {
-    const url = 'https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/fishM/sensitiveWordsM';
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json', 'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        sensitiveWords: this.state.sensitiveWords
-      })
-    })
+    const words = [];
+    const url = 'http://119.3.231.11:8080/yuyue/listSensitive';
+    fetch(url)
       .then((res) => res.json())
       .then(data => {
-        console.log(data.data.sensitiveWords);
-        const res = data.data.sensitiveWords;
+        // console.log(data);
+        data.map((item) => {
+          words.push(item.word);
+        });
         this.setState({
-          sensitiveWords: res
+          sensitiveWords: words,
+          words: words
         });
       })
       .catch(err => {
-        console.log('fetch error', err)
+        console.log('fetch error', err);
       });
   }
 

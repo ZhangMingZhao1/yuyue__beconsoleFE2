@@ -32,14 +32,14 @@ const StaffForm = Form.create()(
                 wrapperCol: { span: 20 },
             };
             const formItem = [
-                { type: 1, label: '员工姓名*', name: 'name', width: '150px', value: '' },
+                { type: 1, label: '员工姓名*', name: 'userName', width: '150px', value: '' },
                 { type: 4, label: '登录密码', name: 'password', width: '150px', },
                 { type: 2, label: '状态', name: 'status', width: '150px', value: ['正常', '停用'] },
-                { type: 2, label: '角色', name: 'character', width: '150px', value: ['管理员', '审稿员'] },
-                { type: 3, label: '手机号*', name: 'phoneNumber', width: '250px', },
+                { type: 2, label: '角色', name: 'role', width: '150px', value: ['管理员', '审稿员'] },
+                { type: 3, label: '手机号*', name: 'telephone', width: '250px', },
                 { type: 5, label: '注册时间', name: 'time', width: '300px', value: '2017-05-11 15:11:00' },
-                { type: 2, label: '所属机构', name: 'org', width: '150px', value: ['朝阳街道', '1', '2'] },
-                { type: 2, label: '所属部门', name: 'department', width: '150px', value: ['运维部', '技术部'] },
+                { type: 2, label: '所属机构', name: 'beInstitution', width: '150px', value: [] },
+                { type: 2, label: '所属部门', name: 'beDepartment', width: '150px', value: [] },
             ];
             return (
                 <Form onSubmit={(e) => { this.props.onSubmit(e) }}><Row>
@@ -54,7 +54,7 @@ const StaffForm = Form.create()(
                                             </span>
                                         case 2:
                                             return <Select style={{ width: `${i.width}` }}>
-                                                {i.value.map(v => (<Option key={v} value={v}>{v}</Option>))}
+                                                {i.value.map(v => (<Option key={v.id} value={v.name}>{v.name}</Option>))}
                                             </Select>
                                         case 3:
                                             return <span>
@@ -62,7 +62,7 @@ const StaffForm = Form.create()(
                                             </span>
                                         case 4:
                                             return <span>
-                                                <Input type="password" style={{ width: `${i.width}` }} />
+                                                <Input type="password" value={initial ? initial[i.name] : null} style={{ width: `${i.width}` }} />
                                             </span>
                                         case 5:
                                             return <div style={{ width: `${i.width}` }}>

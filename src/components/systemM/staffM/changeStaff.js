@@ -17,7 +17,7 @@ class ChangeStaff extends React.Component {
     }
 
     requestList = () => {
-        const url = 'https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/systemM/staffM';
+        const url = 'http://119.3.231.11:8080/yuyue/listUser';
         fetch(url, {
             method: 'POST',
             headers: {
@@ -35,11 +35,12 @@ class ChangeStaff extends React.Component {
                 }
             })
             .then(data => {
-                data.data.data.forEach((item) => {
+                // eslint-disable-next-line
+                data.map((item) => {
                     // eslint-disable-next-line
-                    if (item.ID == this.props.match.params.id) {
+                    if (item.uid == this.props.match.params.id) {
                         this.setState({
-                            data: [...this.state.data, item]
+                            data: [item]
                         });
                     }
                 });
