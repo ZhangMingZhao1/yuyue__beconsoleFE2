@@ -8,6 +8,7 @@ import Url from '../../../api/config';
 import ThemeInfoModal from './infoModal.js';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import { Link } from 'react-router-dom'
+import pagination from '../../pagination';
 
 class ThemeControl extends React.Component {
   state = {
@@ -37,23 +38,12 @@ class ThemeControl extends React.Component {
       if (result.code === 0) {
         let data = result.data;
         this.setState({
-          pagination: {//分页设置
-            onChange: (current) => {//改变页码
+          pagination: pagination(data,(current)=>{//改变页码
               this.params.currentPage = current;
               this.requestList()
-            },
-            onShowSizeChange: (current, size)=>{//pageSize 变化的回调
-              this.params.pageSize = size;
-            },
-            current: data.number,//当前页
-            pageSize: data.size,//页面大小
-            total: data.totalElements,//总数据
-            showTotal: (total, range) => {
-              return `第 ${range[0]} 条到第 ${range[1]} 条，共 ${data.totalElements} 条`
-            },
-            showSizeChanger: true,
-            pageSizeOptions: ['10', '20', '50']
-          },
+          },(size)=>{//pageSize 变化的回调
+            this.params.pageSize = size;
+          }),
           dataSource: data.content.map(i => ({
             key: i.booksubjectId,
             subjectName: i.subjectName,
@@ -210,6 +200,7 @@ class ThemeControl extends React.Component {
     }, {
       title: '排序',
       dataIndex: 'sort',
+      //启用？ sort+1000：sort
       sorter: (a, b) => (((Math.abs(a.isShow - 1)) * 1000 + a.sort) - (Math.abs(b.isShow - 1) * 1000 + b.sort)),
       sortOrder: 'ascend',
     },
