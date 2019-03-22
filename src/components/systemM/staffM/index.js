@@ -71,7 +71,7 @@ class StaffM extends React.Component {
     }
 
     requestList = () => {
-        const url = 'https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/systemM/staffM';
+        const url = 'http://119.3.231.11:8080/yuyue/listUser';
         fetch(url, {
             method: 'POST',
             headers: {
@@ -83,12 +83,13 @@ class StaffM extends React.Component {
         })
             .then((res) => res.json())
             .then(data => {
+                console.log(data);
                 // eslint-disable-next-line
-                data.data.data.map((item, index) => {
+                data.map((item, index) => {
                     item.key = index;
                 });
                 this.setState({
-                    data: data.data.data
+                    data: data
                 });
             })
             .catch(err => {
@@ -100,22 +101,22 @@ class StaffM extends React.Component {
 
         const columns = [{
             title: '员工ID',
-            dataIndex: 'ID',
+            dataIndex: 'uid',
         }, {
             title: '员工姓名',
-            dataIndex: 'name',
+            dataIndex: 'userName',
         }, {
             title: '手机号',
-            dataIndex: 'phoneNumber',
+            dataIndex: 'telephone',
         }, {
             title: '所属机构',
-            dataIndex: 'org',
+            dataIndex: 'beDepartment.name',
         }, {
             title: '所属部门',
-            dataIndex: 'department',
+            dataIndex: 'beInstitution.name',
         }, {
             title: '角色',
-            dataIndex: 'character',
+            dataIndex: 'role',
         }, {
             title: '状态',
             dataIndex: 'status',
@@ -130,7 +131,7 @@ class StaffM extends React.Component {
                     {/* eslint-disable-next-line */}
                     <a href="javascript:;" onClick={this.showConfirm}>重置密码</a>
                     <Divider type="vertical" />
-                    <Link to={`${this.props.match.url}/changeStaff/${record.ID}`}>修改</Link>
+                    <Link to={`${this.props.match.url}/changeStaff/${record.uid}`}>修改</Link>
                     <Divider type="vertical" />
                     {/* eslint-disable-next-line */}
                     <a href="javascript:;">删除</a>

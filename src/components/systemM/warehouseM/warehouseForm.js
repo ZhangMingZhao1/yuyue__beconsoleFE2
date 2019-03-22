@@ -20,8 +20,8 @@ const WarehouseForm = Form.create()(
             }
         }
 
-        inputChange = (e) => {
-            console.log(e.target.value);
+        inputChange = (e, i) => {
+            this.props.initialValues[i.name] = e.target.value;
         }
 
         render() {
@@ -50,7 +50,7 @@ const WarehouseForm = Form.create()(
                                     switch (i.type) {
                                         case 1:
                                             return <span>
-                                                <Input value={initial ? initial[i.name] : null} style={{ width: `${i.width}` }} onChange={this.inputChange} />
+                                                <Input value={initial ? initial[i.name] : null} style={{ width: `${i.width}` }} onChange={() => this.inputChange(i)} />
                                             </span>
                                         case 2:
                                             return <Select style={{ width: `${i.width}` }}>

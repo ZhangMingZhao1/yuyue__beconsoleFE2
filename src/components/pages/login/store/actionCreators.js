@@ -16,8 +16,8 @@ export const logout = () => ({
 export const login = (userName, password) => {
 	return (dispatch) => {
 		// console.log('`${baseURL}/login`',`${baseURL}/login`);
-		// fetch("http://119.3.231.11:8080/yuyue/login",{
-		fetch("https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/login", {
+		fetch("http://119.3.231.11:8080/yuyue/login",{
+		// fetch("https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/login", {
 			method: 'POST',
 			mode: 'cors',
 			headers: {
