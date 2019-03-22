@@ -2,9 +2,10 @@
  * Created by hao.cheng on 2017/5/3.
  */
 import React from 'react';
-import { Card, Table, Divider, Tag, Input, Button, Icon, Modal, Switch } from 'antd';
-import './ThemeControl.less';
+import { Card, Table, Divider, Tag, Input, Button, Icon, Modal, Switch, message } from 'antd';
+import './index.less';
 import Url from '../../../api/config';
+import ThemeInfoModal from './infoModal.js';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import { Link } from 'react-router-dom'
 
@@ -37,7 +38,7 @@ class ThemeControl extends React.Component {
         let data = result.data;
         this.setState({
           pagination: {
-            onChange: (current)=>{
+            onChange: (current) => {
               this.params.currentPage = current;
               this.requestList()
             },
@@ -62,29 +63,34 @@ class ThemeControl extends React.Component {
       console.log(err);
     })
   }
-  
-  handleSwitch = (value) => {
-    console.log('switch', value);
-  }
-  hangleOnclik = () => {
-    this.showModal();
-  }
-  showModal = () => {
-    this.setState({
-      visible: true,
-    });
+
+  handleOk = (form) => {
+    let values = form.getFieldsValue();
+    if (this.state.modalType === 'add') {//新增专题
+      fetch(`${Url.baseURL}/addsubject`, {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(values)
+      }).then((res) => res.json()).then(result => {
+        if (result.code === 0) {
+          message.success("新增成功 " + JSON.stringify(result.data))
+          form.resetFields();//重置表单
+          this.setState({ visible: false });
+        } else {
+          message.error(result.message)
+        }
+      }).catch((err) => {
+        console.log(err)
+      })
+    }else{//修改专题
+
+    }
   }
 
-  handleOk = (e) => {
-    console.log(e);
-
-    this.setState({
-      visible: false,
-    });
-  }
-
-  handleCancel = (e) => {
-    console.log(e);
+  handleCancel = (form) => {
+    form.resetFields();//重置表单
     this.setState({
       visible: false,
     });
@@ -173,7 +179,9 @@ class ThemeControl extends React.Component {
       <div className="">
         <BreadcrumbCustom first="网站管理" second="专题管理" />
         <div>专题管理</div>
-        <div style={{ margin: 10 }}><Button onClick={this.hangleOnclik}>新增</Button></div>
+        <div style={{ margin: 10 }}>
+          <Button type='primary' onClick={() => { this.setState({ modalType: 'add', visible: true }) }}>新增</Button>
+        </div>
         <Card
           title="专题管理"
         // extra={<a href="#">More</a>}
@@ -185,19 +193,12 @@ class ThemeControl extends React.Component {
             pagination={this.state.pagination}
           />
         </Card>
-
-        <Modal
-          title="新增专题"
+        <ThemeInfoModal
+          type={this.state.modalType}
           visible={this.state.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
-        >
-          <Divider />
-          <div>名称: <Input style={{ width: 300 }} /></div>
-          <div style={{ marginTop: 15, marginBottom: 15 }}>状态: <Switch checkedChildren="启用" unCheckedChildren="禁用" defaultChecked onChange={this.handleSwitch} /></div>
-          <div>排序： <Input style={{ width: 100 }} /></div>
-          <Divider />
-        </Modal>
+        />
       </div>
     )
   }
