@@ -21,7 +21,7 @@ const WarehouseForm = Form.create()(
         }
 
         inputChange = (e) => {
-            this.props.initialValues.name = e.target.value;
+            console.log(e.target.value);
         }
 
         render() {
@@ -32,14 +32,12 @@ const WarehouseForm = Form.create()(
                 wrapperCol: { span: 20 },
             };
             const formItem = [
-                { type: 3, label: '柜子编号', name: 'ID', width: '150px' },
-                { type: 1, label: '柜子名称', name: 'name', width: '150px', },
-                { type: 1, label: '所属仓库', name: 'wareHouse', width: '150px' },
-                { type: 1, label: '容量', name: 'capacity', width: '150px' },
-                { type: 1, label: '运维人', name: 'people', width: '150px', },
-                { type: 3, label: '联系方式', name: 'phoneNum', width: '300px' },
-                { type: 1, label: '柜子地址', name: 'address', width: '300px' },
-                { type: 2, label: '柜子状态', name: 'status', width: '150px', value: ['停用', '正常'] },
+                { type: 3, label: '仓库编号', name: 'warehouseNumber', width: '150px' },
+                { type: 1, label: '仓库名称', name: 'warehouseName', width: '300px', },
+                { type: 2, label: '所属部门', name: 'department', width: '150px', value: ['运维部', '技术部'] },
+                { type: 1, label: '联系人', name: 'people', width: '150px' },
+                { type: 3, label: '联系方式', name: 'phoneNumber', width: '150px', },
+                { type: 1, label: '地址', name: 'address', width: '300px' },
                 { type: 1, label: '操作员', name: 'operator', width: '150px' },
             ];
             return (

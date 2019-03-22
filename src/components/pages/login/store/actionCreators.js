@@ -27,24 +27,24 @@ export const login = (userName, password) => {
 				userName: userName,
 				password: password
 			})
-		}).then((res) => res.json()).then(data=>{
-			console.log('loginData',data);
+		}).then((res) => res.json()).then(data => {
+			console.log('loginData', data);
 			const result = data;
-			console.log('result.data:',result.data);
+			console.log('result.data:', result.data);
 			if (result.data) {
 				message.success('登陆成功');
 				dispatch(changeLogin(result))
-			}else {
+			} else {
 				message.error(`${result.message}`);
 			}
-		}).catch((err)=>{
+		}).catch((err) => {
 			console.log(err);
 		})
 	}
 }
 
-export const doLogout = ()=>{
-	return (dispatch)=> {
+export const doLogout = () => {
+	return (dispatch) => {
 		dispatch(logout())
 	}
 } 

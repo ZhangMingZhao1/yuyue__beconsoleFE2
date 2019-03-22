@@ -1,5 +1,5 @@
 import React from 'react';
-import { Select, Input, Button, Card, Table, Modal } from 'antd';
+import { Select, Input, Button, Card, Table, Divider, Modal } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import { Link } from 'react-router-dom';
 
@@ -11,63 +11,28 @@ class WarehouseM extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            departmentData: [],
             searchInputValue: '',
-            selectedRowKeys: [], // Check here to configure the default column
             warehouseData: []
         }
-        this.handleSelectChange = this.handleSelectChange.bind(this);
-        this.searchInputChange = this.searchInputChange.bind(this);
-        this.searchBtnClick = this.searchBtnClick.bind(this);
-        this.deleteBtnClick = this.deleteBtnClick.bind(this);
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.requestList();
     }
 
-    handleSelectChange() {
+    handleSelectChange = () => {
 
     }
 
-    searchInputChange(e) {
+    searchInputChange = (e) => {
         const value = e.target.value;
         this.setState(() => ({
             searchInputValue: value
         }));
     }
 
-    searchBtnClick() {
+    searchBtnClick = () => {
         console.log('searchBtnClicked');
-    }
-
-    onSelectChange = (selectedRowKeys) => {
-        console.log('selectedRowKeys changed: ', selectedRowKeys);
-        this.setState({ selectedRowKeys });
-    };
-
-    deleteBtnClick() {
-        confirm({
-            okText: '删除',
-            cancelText: '取消',
-            content: `是否确定删除这 ${this.state.selectedRowKeys.length} 条仓库信息`,
-            onOk: () => {
-                let tmp = this.state.selectedRowKeys.sort();
-                let len = tmp.length;
-                let cnt = 0;
-                let data = this.state.warehouseData;
-                for (let i = 0; i < len; i++) {
-                    tmp[i] -= cnt;
-                    data.splice(tmp[i], 1);
-                    cnt++;
-                }
-                this.setState({ selectedRowKeys: [], warehouseData: data })
-                console.log(data);
-            },
-            onCancel: () => {
-                console.log('Cancel');
-            },
-        });
     }
 
     requestList = () => {
@@ -90,27 +55,35 @@ class WarehouseM extends React.Component {
                 this.setState({
                     warehouseData: data.data.warehouseData
                 });
-                console.log(this.state.warehouseData)
+                console.log(this.state.warehouseData);
             })
             .catch(err => {
-                console.log('fetch error', err)
+                console.log('fetch error', err);
             });
+    }
+
+    deleteBtnClick = (key) => {
+        confirm({
+            title: 'Want to delete these items?',
+            content: 'some descriptions',
+            onOk: () => {
+                console.log('OK');
+                console.log(key);
+                const data = this.state.warehouseData;
+                data.splice(key, 1);
+                this.setState({
+                    warehouseData: data
+                });
+            },
+            onCancel: () => {
+                console.log('Cancel');
+            },
+        });
     }
 
     render() {
 
-        const { selectedRowKeys } = this.state;
-        const rowSelection = {
-            selectedRowKeys,
-            onChange: this.onSelectChange,
-            // onSelection: this.onSelection,
-        };
-        const hasSelected = selectedRowKeys.length > 0;
-        const changeForm = selectedRowKeys.length === 1;
         const columns = [{
-            title: '序号',
-            dataIndex: 'number',
-        }, {
             title: '仓库编号',
             dataIndex: 'warehouseNumber',
         }, {
@@ -137,6 +110,17 @@ class WarehouseM extends React.Component {
         }, {
             title: '修改日期',
             dataIndex: 'changeDate'
+        }, {
+            title: '操作',
+            dataIndex: 'option',
+            render: (text, record, key) => (
+                <span>
+                    <Link to={`${this.props.match.url}/changeWarehouse/${record.warehouseNumber}`}>修改</Link>
+                    <Divider type="vertical" />
+                    {/* eslint-disable-next-line */}
+                    <a href="javascript:;" onClick={() => this.deleteBtnClick(key)}>删除</a>
+                </span>
+            )
         }];
 
         return (
@@ -175,32 +159,9 @@ class WarehouseM extends React.Component {
                                         新建
                                     </Link>
                                 </Button>
-                                <Button
-                                    type="primary"
-                                    disabled={!changeForm}
-                                >
-                                    {
-                                        //这一行有问题，需要学长帮忙修改
-                                    }
-                                    <Link to={{
-                                        path: `${this.props.match.url}/changeWarehouse/${selectedRowKeys[0]}`,
-                                        state: this.state.warehouseData[selectedRowKeys[0]]
-                                    }}
-                                    >
-                                        修改
-                                    </Link>
-                                </Button>
-                                <Button
-                                    type="primary"
-                                    disabled={!hasSelected}
-                                    onClick={this.deleteBtnClick}
-                                >
-                                    删除
-                                </Button>
                             </div>
                             <Table
                                 bordered
-                                rowSelection={rowSelection}
                                 columns={columns}
                                 dataSource={this.state.warehouseData}
                                 style={{ marginTop: '10px' }}

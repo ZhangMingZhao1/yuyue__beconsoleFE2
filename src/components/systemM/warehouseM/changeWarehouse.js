@@ -5,7 +5,7 @@ import { Card } from 'antd';
 class ChangeWarehouse extends React.Component {
 
     state = {
-        data: [this.props.state]
+        data: []
     }
 
     componentDidMount() {
@@ -35,9 +35,9 @@ class ChangeWarehouse extends React.Component {
                 }
             })
             .then(data => {
-                data.data.data.forEach((item) => {
+                data.data.warehouseData.map((item) => {
                     // eslint-disable-next-line
-                    if (item.ID == this.props.match.params.id) {
+                    if (item.warehouseNumber == this.props.match.params.id) {
                         this.setState({
                             data: [item]
                         });
