@@ -6,7 +6,7 @@ export default (data, onChange, onShowSizeChange)=>{
         onShowSizeChange: (current, size) => {//pageSize 变化的回调
             onShowSizeChange(size);
         },
-        current: data.number,//当前页
+        current: data.number+1,//当前页
         pageSize: data.size,//页面大小
         total: data.totalElements,//总数据
         showTotal: (total, range) => {

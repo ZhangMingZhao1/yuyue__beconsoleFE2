@@ -2,7 +2,7 @@
  * Created by hao.cheng on 2017/5/3.
  */
 import React from 'react';
-import { Card, Table, Divider, Tag, Input, Button, Icon, Modal, Switch, message } from 'antd';
+import { Card, Table, Divider, Tag, Input, Button, Icon, Modal, Switch, message, Popconfirm } from 'antd';
 import './index.less';
 import Url from '../../../api/config';
 import ThemeInfoModal from './infoModal.js';
@@ -25,23 +25,14 @@ class ThemeControl extends React.Component {
   }
 
   requestList = () => {
-    fetch(`${Url.baseURL}/subject`, {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        size: this.params.pageSize,
-        start: this.params.currentPage
-      })
-    }).then((res) => res.json()).then(result => {
-      if (result.code === 0) {
-        let data = result.data;
+    fetch(`${Url.ceshiURL}/subject?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`)
+      .then((res) => res.json()).then(result => {
+        let data = result;
         this.setState({
-          pagination: pagination(data,(current)=>{//改变页码
-              this.params.currentPage = current;
-              this.requestList()
-          },(size)=>{//pageSize 变化的回调
+          pagination: pagination(data, (current) => {//改变页码
+            this.params.currentPage = current;
+            this.requestList()
+          }, (size) => {//pageSize 变化的回调
             this.params.pageSize = size;
           }),
           dataSource: data.content.map(i => ({
@@ -51,17 +42,16 @@ class ThemeControl extends React.Component {
             sort: i.sort
           }))
         })
-      }
-    }).catch((err) => {
-      console.log(err);
-    })
+      }).catch((err) => {
+        console.log(err);
+      })
   }
 
   handleOk = (form, key) => {
     if (this.state.modalType === 'add') {//新增专题
       this.handleAdd(form);
     } else {//修改专题
-      this.handleModify(form,key);
+      this.handleModify(form, key);
     }
   }
 
@@ -73,12 +63,14 @@ class ThemeControl extends React.Component {
   }
 
   //新增专题
-  handleAdd=(form)=>{
+  handleAdd = (form) => {
     let values = form.getFieldsValue();
-    fetch(`${Url.baseURL}/addsubject`, {
-      method: 'post',
+    values = { ...values, isShow: values.isShow ? 1 : 0 }
+    fetch(`${Url.ceshiURL}/addsubject`, {
+      method: 'POST',
+      mode: 'cors',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json;'
       },
       body: JSON.stringify(values)
     }).then((res) => res.json()).then(result => {
@@ -96,14 +88,15 @@ class ThemeControl extends React.Component {
   }
 
   //修改专题
-  handleModify=(form, key)=>{
+  handleModify = (form, key) => {
     let values = form.getFieldsValue();
-    fetch(`${Url.baseURL}/updatesubject`, {
+    values = { ...values, isShow: values.isShow ? 1 : 0 }
+    fetch(`${Url.ceshiURL}/updatesubject`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({key,...values})
+      body: JSON.stringify({ booksubjectId: key, ...values })
     }).then((res) => res.json()).then(result => {
       if (result.code === 0) {
         console.log(result.data)
@@ -120,24 +113,19 @@ class ThemeControl extends React.Component {
   }
 
   //删除专题
-  handleDel=(key)=>{
-    fetch(`${Url.baseURL}/delsubject`, {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({key})
-    }).then((res) => res.json()).then(result => {
-      if (result.code === 0) {
-        console.log(result.data)
-        message.success("删除"+JSON.stringify(result.data)+"成功")
-        this.requestList();//刷新页面
-      } else {
-        message.error(result.message)
-      }
-    }).catch((err) => {
-      console.log(err)
-    })
+  handleDel = (key) => {
+    fetch(`${Url.ceshiURL}/deletesubject?booksubjectId=${key}`)
+      .then((res) => res.json()).then(result => {
+        if (result.code === 0) {
+          console.log(result.data)
+          message.success("删除" + JSON.stringify(result.data) + "成功")
+          this.requestList();//刷新页面
+        } else {
+          message.error(result.message)
+        }
+      }).catch((err) => {
+        console.log(err)
+      })
   }
 
   handleSearch = (selectedKeys, confirm) => () => {
@@ -210,16 +198,19 @@ class ThemeControl extends React.Component {
       render: (text, record) => (
         <span>
           <a
-            onClick={() => { 
-              this.setState({ 
-                modalType: 'modify', 
-                modalData: {...record, isShow: record.isShow===0? false:true},//isShow数据格式装换 int->boolean
-                visible: true }) 
+            onClick={() => {
+              this.setState({
+                modalType: 'modify',
+                modalData: { ...record, isShow: record.isShow === 0 ? false : true },//isShow数据格式装换 int->boolean
+                visible: true
+              })
             }}>
             修改
           </a>
           <Divider type="vertical" />
-          <a onClick={()=>{this.handleDel(record.key)}}>删除</a>
+          <Popconfirm title="是否确定删除？" okText="删除" cancelText="取消" onConfirm={() => { this.handleDel(record.key) }}>
+            <a ref="javascript:;">删除</a>
+          </Popconfirm>
           <Divider type="vertical" />
           <Link to={`${this.props.match.url}/content`}>专题内容管理</Link>
         </span>
