@@ -35,7 +35,7 @@ class ChangeCabinet extends React.Component {
                 }
             })
             .then(data => {
-                data.data.data.forEach((item) => {
+                data.data.data.map((item) => {
                     // eslint-disable-next-line
                     if (item.ID == this.props.match.params.id) {
                         this.setState({

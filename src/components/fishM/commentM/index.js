@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Input, DatePicker, Button, Modal, Table } from 'antd';
+import { Card, Input, DatePicker, Button, Modal, Table, message } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import 'antd/dist/antd.css';
 
@@ -62,25 +62,17 @@ class CommentM extends React.Component {
   }
 
   requestList = () => {
-    const url = 'https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/fishM/commentM';
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json', 'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        commentData: this.state.commentData
-      })
-    })
+    const url = 'http://119.3.231.11:8080/yuyue/listUserdynamic';
+    fetch(url)
       .then((res) => res.json())
       .then(data => {
-        console.log(data.data.commentData);
+        console.log(data.content);
         // eslint-disable-next-line
-        data.data.commentData.map((item, index) => {
+        data.content.map((item, index) => {
           item.key = index;
         });
         this.setState({
-          commentData: data.data.commentData
+          commentData: data.content
         });
       })
       .catch(err => {
@@ -98,19 +90,19 @@ class CommentM extends React.Component {
     const hasSelected = selectedRowKeys.length > 0;
     const columns = [{
       title: '序号',
-      dataIndex: 'number',
+      dataIndex: 'dynamicId',
     }, {
       title: '书名',
-      dataIndex: 'bookname',
+      dataIndex: 'bsBookinfo.bookName',
     }, {
       title: '评论内容',
-      dataIndex: 'comment',
+      dataIndex: 'content',
     }, {
       title: '评论人',
       dataIndex: 'commentpeople'
     }, {
       title: '评论时间',
-      dataIndex: 'time'
+      dataIndex: 'bsBookinfo.createTime'
     }];
 
 
