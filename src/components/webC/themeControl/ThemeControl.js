@@ -4,6 +4,7 @@
 import React from 'react';
 import { Card, Table, Divider, Tag, Input, Button, Icon, Modal, Switch } from 'antd';
 import './ThemeControl.less';
+import Url from '../../../api/config';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import { Link } from 'react-router-dom'
 
@@ -13,8 +14,8 @@ class ThemeControl extends React.Component {
     visible: false
   };
   params = {
-    start: 1,
-    size: 10
+    currentPage: 1,
+    pageSize: 10
   }
 
   componentDidMount() {
@@ -22,22 +23,46 @@ class ThemeControl extends React.Component {
   }
 
   requestList = () => {
-    fetch('http://119.3.231.11:8080/yuyue/subject', {
-      method: 'POST',
-      mode: 'cors',
+    fetch(`${Url.baseURL}/subject`, {
+      method: 'post',
       headers: {
         'Content-Type': 'application/json'
       },
-      credentials: 'include', // 请求带上cookies，是每次请求保持会话一直
       body: JSON.stringify({
-        size: this.params.size
+        size: this.params.pageSize,
+        start: this.params.currentPage
       })
-    }).then((res) => res.json()).then(json => {
-      console.log(json);
+    }).then((res) => res.json()).then(result => {
+      if (result.code === 0) {
+        let data = result.data;
+        this.setState({
+          pagination: {
+            onChange: (current)=>{
+              this.params.currentPage = current;
+              this.requestList()
+            },
+            current: data.number,
+            pageSize: data.size,
+            total: data.totalElements,
+            showTotal: (total, range) => {
+              console.log(total);
+              console.log(range);
+              return `第 ${range[0]} 条到第 ${range[1]} 条，共 ${data.totalElements} 条`
+            }
+          },
+          dataSource: data.content.map(i => ({
+            key: i.booksubjectId,
+            name: i.subjectName,
+            flag: i.isShow,
+            sort: i.sort
+          }))
+        })
+      }
     }).catch((err) => {
       console.log(err);
     })
   }
+  
   handleSwitch = (value) => {
     console.log('switch', value);
   }
@@ -143,28 +168,6 @@ class ThemeControl extends React.Component {
       ),
     }];
 
-    const data = [{
-      key: '1',
-      name: '鱼阅专题',
-      flag: 1,
-      sort: '5',
-    }, {
-      key: '3',
-      name: '青少年专题',
-      flag: 0,
-      sort: '4',
-    }, {
-      key: '2',
-      name: '文艺小说',
-      flag: 1,
-      sort: '3',
-    }, {
-      key: '4',
-      name: '青少年专题',
-      flag: 0,
-      sort: '2',
-    }];
-    // console.log('styles',styles.pannel)
     return (
 
       <div className="">
@@ -176,7 +179,11 @@ class ThemeControl extends React.Component {
         // extra={<a href="#">More</a>}
         // style={{ width: 300 }}
         >
-          <Table className="themecontrol-table" columns={columns} dataSource={data} />
+          <Table className="themecontrol-table"
+            columns={columns}
+            dataSource={this.state.dataSource}
+            pagination={this.state.pagination}
+          />
         </Card>
 
         <Modal

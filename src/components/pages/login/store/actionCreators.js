@@ -1,6 +1,6 @@
 // import axios from 'axios';
 import * as constants from './constants';
-import baseURL from '../../../../api/config'; 
+import Url from '../../../../api/config'; 
 import { message } from 'antd';
 
 const changeLogin = (data) => ({
@@ -16,7 +16,7 @@ export const logout = () => ({
 export const login = (userName, password) => {
 	return (dispatch) => {
 		// console.log('`${baseURL}/login`',`${baseURL}/login`);
-		fetch(`${baseURL}/login`,{
+		fetch(`${Url.baseURL}/login`,{
 			method: 'POST',
 			mode: 'cors',
 			headers: {
