@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Table, Divider, Tree, Input, Button, Icon, Modal, Row, Col, Radio,Popconfirm } from 'antd';
-import './ThemeControl.less';
+import './index.less';
 
 const { TreeNode } = Tree;
 const Search = Input.Search;

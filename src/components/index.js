@@ -4,7 +4,7 @@
  */
 import Loadable from 'react-loadable';
 import Loading from './widget/Loading';
-import ThemeControl from './webC/themeControl/ThemeControl.js'
+import ThemeControl from './webC/themeControl/index.js'
 import ThemeContent from './webC/themeControl/themeContent.js'
 import BannerControl from './webC/bannerC/index.js';
 import AdvertiseM from './webC/advertiseM/index.js';

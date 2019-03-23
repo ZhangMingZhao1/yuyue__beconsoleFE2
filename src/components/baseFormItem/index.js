@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Form, Select, DatePicker, Switch, Upload, Button, Icon } from "antd";
+import { Input, Form, Select, DatePicker, Switch, Upload, Button, Icon,InputNumber } from "antd";
 
 const Option = Select.Option;
 export const getOptionList = (data) => {
@@ -23,7 +23,7 @@ export const getFormItem = (form, formList) => {
         formList.map(item => {
             let label = item.label;
             let name = item.name;
-            let initialValue = item.initialValue || '';
+            let initialValue = item.initialValue ;
             let placeholder = item.placeholder;
             let width = item.width;
             let disabled = item.disabled;
@@ -34,12 +34,14 @@ export const getFormItem = (form, formList) => {
                 case "INPUT":
                     formItemList.push(
                         <FormItem label={label} key={name} {...formItemLayout}>
-                            {getFieldDecorator(name, { initialValue: initialValue })(
-                                <span style={{ whiteSpace: 'nowrap' }}>
+                         <span style={{ whiteSpace: 'nowrap' }}>
+                            {getFieldDecorator(name, { initialValue: initialValue})(
+                               
                                     <Input disabled={disabled} placeholder={placeholder} style={{ width: width }} />
-                                    <span style={{ marginLeft: 10 }}>{extra}</span>
-                                </span>
+                                    
                             )}
+                            <span style={{ marginLeft: 10 }}>{extra}</span>
+                                </span>
                         </FormItem>
                     );
                     break;
@@ -73,6 +75,19 @@ export const getFormItem = (form, formList) => {
                         </FormItem>
                     );
                     break;
+                case "INPUTNUMBER":
+                    formItemList.push(
+                        <FormItem label={label} key={name} {...formItemLayout}>
+                            {
+                                getFieldDecorator(name, {
+                                    initialValue: initialValue
+                                })(
+                                    <InputNumber/>
+                                )
+                            }
+                        </FormItem>
+                    );
+                    break;
                 case "DATEPICKER":
                     formItemList.push(
                         <FormItem label={label} key={name} {...formItemLayout}>
@@ -88,7 +103,7 @@ export const getFormItem = (form, formList) => {
                     formItemList.push(
                         <FormItem label={label} key={name} {...formItemLayout}>
                             {
-                                getFieldDecorator(name, { valuePropName: 'checked' })(
+                                getFieldDecorator(name, { valuePropName: 'checked',initialValue: initialValue })(
                                     <Switch />
                                 )
                             }
