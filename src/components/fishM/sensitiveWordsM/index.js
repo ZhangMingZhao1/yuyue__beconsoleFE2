@@ -1,116 +1,37 @@
 import React from 'react';
-import { Card, Input, Button, Modal, message } from 'antd';
+import { Card, Input, Button, Modal, Tag, Tooltip, message } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import 'antd/dist/antd.css';
 
-const { TextArea } = Input;
 const confirm = Modal.confirm;
 
 class SensitiveWordsM extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      sensitiveWords: [],
-      words: [],
-      disabled: true,
-      editing: false
-    };
-  }
+  state = {
+    tags: [],
+    id: [],
+    inputVisible: false,
+    inputValue: '',
+  };
 
   componentDidMount() {
     this.requestList();
   }
 
-  onChange = (e) => {
-    this.setState({
-      sensitiveWords: e.target.value.split('|')
-    });
-  }
-
-  handleSaveBtnClick = () => {
-    const { sensitiveWords, words } = this.state;
-    const changeWords = [];
-    for (let i = 0, ilen = sensitiveWords.length; i < ilen; i++) {
-      for (let j = 0, jlen = words.length; j < jlen; j++) {
-        if (sensitiveWords[i] === words[j]) {
-          sensitiveWords.splice(i, 1);
-          words.splice(j, 1);
-        }
-      }
-    }
-    if (sensitiveWords !== []) {
-      changeWords.push(...sensitiveWords);
-    } else {
-      changeWords.push(...words);
-    }
-    const url = 'http://119.3.231.11:8080/yuyue/addSensitive';
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json', 'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        word: sensitiveWords
-      })
-    })
-      .then((res) => res.json())
-      .then(data => {
-        console.log(data);
-        if (data.data) {
-          message.success('保存成功');
-        } else {
-          message.error(`${data.message}`);
-        }
-      })
-      .catch(err => {
-        console.log('fetch error', err);
-      });
-    this.setState(() => ({
-      disabled: true,
-      editing: false
-    }));
-    // this.requestList();
-    // console.log(this.state);
-  }
-
-  handleEditBtnClick = () => {
-    this.setState(() => ({
-      disabled: false,
-      editing: true
-    }));
-  }
-
-  handleCancelBtnClick = () => {
-    confirm({
-      okText: '是',
-      cancelText: '否',
-      content: '是否放弃修改？',
-      onOk: () => {
-        this.setState(() => ({
-          disabled: true,
-          editing: false
-        }));
-      },
-      onCancel: () => {
-        console.log('Cancel');
-      }
-    })
-  }
-
   requestList = () => {
     const words = [];
+    const id = [];
     const url = 'http://119.3.231.11:8080/yuyue/listSensitive';
     fetch(url)
       .then((res) => res.json())
       .then(data => {
-        // console.log(data);
-        data.map((item) => {
-          words.push(item.word);
+        data.map((i) => {
+          words.push(i.word);
+          id.push(i.id);
         });
         this.setState({
-          sensitiveWords: words,
-          words: words
+          tags: words,
+          id: id
         });
       })
       .catch(err => {
@@ -118,51 +39,137 @@ class SensitiveWordsM extends React.Component {
       });
   }
 
+  handleClose = (removedTag, index, e) => {
+    e.preventDefault();
+    confirm({
+      title: `确定删除敏感词：${removedTag}?`,
+      content: `点击确定删除敏感词：${removedTag}`,
+      okText: '确定',
+      cancelText: '取消',
+      onOk: () => {
+        const id = this.state.id;
+        const url = 'http://119.3.231.11:8080/yuyue/deleteSensitive';
+        fetch(url + '?id=' + id[index])
+          .then((res) => res.json())
+          .then(data => {
+            if (!data.code) {
+              message.success('删除成功');
+              const tags = this.state.tags.filter(tag => tag !== removedTag);
+              id.splice(index, 1);
+              this.setState({ tags, id });
+            } else {
+              message.error(`${data.message}`);
+            }
+          })
+          .catch(err => {
+            console.log('fetch error', err);
+          });
+      },
+      onCancel: () => {
+        console.log('Cancel');
+      },
+    });
+  }
+
+  showInput = () => {
+    this.setState({ inputVisible: true }, () => this.input.focus());
+  }
+
+  handleInputChange = (e) => {
+    this.setState({ inputValue: e.target.value });
+  }
+
+  handleInputConfirm = () => {
+    const state = this.state;
+    const inputValue = state.inputValue;
+    let tags = state.tags;
+    if (inputValue && tags.indexOf(inputValue) === -1) {
+      tags = [...tags, inputValue];
+      const url = 'http://119.3.231.11:8080/yuyue/addSensitive';
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          word: inputValue
+        })
+      })
+        .then((res) => res.json())
+        .then(data => {
+          if (!data.code) {
+            message.success('添加成功');
+            this.setState({
+              tags,
+              id: [...state.id, data.data],
+            });
+          } else {
+            message.error(`${data.message}`);
+          }
+        })
+        .catch(err => {
+          console.log('fetch error', err);
+        });
+    } else if (inputValue === '') {
+      message.error('请输入敏感词');
+    } else {
+      message.error('该敏感词已存在');
+    }
+    this.setState({
+      inputVisible: false,
+      inputValue: ''
+    });
+  }
+
+  saveInputRef = input => this.input = input
+
   render() {
-    const { editing, sensitiveWords } = this.state;
-    const value = sensitiveWords.join('|');
+    const { tags, inputVisible, inputValue } = this.state;
     return (
       <React.Fragment>
         <BreadcrumbCustom first="鱼群管理" second="敏感词管理" />
         <div>
           <Card title="敏感词库">
             <div>
-              <TextArea
-                disabled={this.state.disabled}
-                value={value}
-                onChange={this.onChange}
-                autosize={{ minRows: 6 }}
-              />
-              <div
-                style={{ margin: '10px 40% 0px' }}
-              >
-                {
-                  editing ?
-                    <React.Fragment>
-                      <Button
-                        type="primary"
-                        onClick={this.handleSaveBtnClick}
-                      >
-                        保存
-                      </Button>
-                      <Button
-                        disabled={this.state.disabled}
-                        style={{ marginLeft: '10px' }}
-                        onClick={this.handleCancelBtnClick}
-                      >
-                        取消
-                      </Button>
-                    </React.Fragment>
-                    :
-                    <Button
-                      type="primary"
-                      onClick={this.handleEditBtnClick}
-                      style={{ marginLeft: '20%' }}
-                    >
-                      修改
-                    </Button>
-                }
-              </div>
+              {tags.map((tag, index) => {
+                const isLongTag = tag.length > 20;
+                const tagElem = (
+                  <Tag key={tag}
+                    closable
+                    onClose={(e) => this.handleClose(tag, index, e)}
+                    style={{ marginBottom: '8px' }}
+                  >
+                    {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+                  </Tag>
+                );
+                const longTagElem = (
+                  <Tooltip title={tag}>{tagElem}</Tooltip>
+                );
+                return isLongTag ? longTagElem : tagElem;
+              })}
+              {inputVisible && (
+                <Input
+                  ref={this.saveInputRef}
+                  type="text" size="small"
+                  style={{ width: 78 }}
+                  value={inputValue}
+                  onChange={this.handleInputChange}
+                  onBlur={this.handleInputConfirm}
+                  onPressEnter={this.handleInputConfirm}
+                />
+              )}
+              {
+                !inputVisible
+                &&
+                <Button
+                  style={{ fontSize: '12px' }}
+                  size="small"
+                  type="dashed"
+                  onClick={this.showInput}
+                >
+                  + 添加敏感词
+                </Button>
+              }
             </div>
           </Card>
         </div>
