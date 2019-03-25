@@ -31,9 +31,10 @@ class ThemeControl extends React.Component {
         this.setState({
           pagination: pagination(data, (current) => {//改变页码
             this.params.currentPage = current;
-            this.requestList()
+            this.requestList();
           }, (size) => {//pageSize 变化的回调
             this.params.pageSize = size;
+            this.requestList();
           }),
           dataSource: data.content.map(i => ({
             key: i.booksubjectId,

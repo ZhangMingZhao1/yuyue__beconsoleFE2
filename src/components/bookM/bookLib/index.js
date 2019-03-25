@@ -2,7 +2,8 @@ import React from 'react';
 import { Form, Select, Input, Button, Card, Table, Divider } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import { Link } from 'react-router-dom';
-import { fetchGet } from '../../../axios/tools';
+import Url from '../../../api/config';
+import pagination from '../../pagination';
 
 const { Option } = Select;
 const BookSearchForm = Form.create()(
@@ -55,46 +56,67 @@ class BookLib extends React.Component {
         this.requestList();
     }
 
+    params = {
+        currentPage: 1,//当前页面
+        pageSize: 10,//每页大小
+    }
+
     requestList = () => {
-        fetchGet({
-            url: '/bookM/bookLib/list',
-            params: {
-                page: 1
-            }
-        }).then((res) => {
-            if (res.code == 0) {
-                res.result.list.map((item, index) => {
-                    item.key = index;
-                })
+        fetch(`${Url.ceshiURL}/listBookinfo?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`)
+            .then((res) => res.json()).then(data => {
                 this.setState({
-                    dataSource: res.result.list,
+                    pagination: pagination(data, (current) => {//改变页码
+                        this.params.currentPage = current;
+                        this.requestList();
+                    }, (size) => {//pageSize 变化的回调
+                        this.params.pageSize = size;
+                        this.requestList();
+                    }),
+                    dataSource: data.content.map(i => ({
+                        key: i.bookinfoId,
+                        bookinfoId: i.bookinfoId,
+                        bookName: i.bookName,
+                        isbn: i.isbn,
+                        author: i.author,
+                        pubName: i.bsPublishinfo.pubName,
+                        recommend: i.recommend,
+                        categoryName: i.bsBookcategory.categoryName,
+                    }))
                 })
-            }
-        })
+            }).catch((err) => {
+                console.log(err);
+            })
     }
 
     render() {
         const columns = [{
             title: '书目ID',
-            dataIndex: 'bibliographyId',
+            dataIndex: 'bookinfoId',
+            width: '5%',
         }, {
             title: '名称',
-            dataIndex: 'name',
+            dataIndex: 'bookName',
+            width: '25%',
         }, {
             title: 'ISBN',
             dataIndex: 'isbn',
+            width: '10%',
         }, {
             title: '作者',
             dataIndex: 'author',
+            width: '20%',
         }, {
             title: '出版社',
-            dataIndex: 'publisher',
+            dataIndex: 'pubName',
+            width: '15%',
         }, {
             title: '是否精选',
-            dataIndex: 'isSelected',
+            dataIndex: 'recommend',
+            width: '5%',
         }, {
             title: '分类',
-            dataIndex: 'category',
+            dataIndex: 'categoryName',
+            width: '10%',
         }, {
             title: '操作',
             dataIndex: 'action',
@@ -121,11 +143,7 @@ class BookLib extends React.Component {
                     <Table className="infoC-table"
                         columns={columns}
                         dataSource={this.state.dataSource}
-                        pagination={{
-                            showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
-                            showSizeChanger: true,
-                            pageSizeOptions: ['10', '20', '50']
-                        }}
+                        pagination={this.state.pagination}
                         bordered
                     />
                 </Card>
