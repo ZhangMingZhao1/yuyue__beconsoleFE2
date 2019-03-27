@@ -80,7 +80,7 @@ class BookLib extends React.Component {
                         author: i.author,
                         pubName: i.bsPublishinfo.pubName,
                         recommend: i.recommend,
-                        categoryName: i.bsBookcategory.categoryName,
+                        categoryName: i.categoryName,
                     }))
                 })
             }).catch((err) => {
