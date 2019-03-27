@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Table, Divider, Tree, Input, Button, Icon, Modal, Row, Col, Radio, Popconfirm } from 'antd';
+import { Card, Table, Divider, Tree, Input, Button, Icon, Modal, Row, Col, Radio, message, Popconfirm } from 'antd';
 import './index.less';
 import Url from '../../../api/config';
 const { TreeNode } = Tree;
@@ -64,13 +64,29 @@ class ThemeContent extends React.Component {
         fetch(`${Url.ceshiURL}/getBooks?booksubjectId=${this.props.match.params.id}`)
             .then((res) => res.json()).then(data => {
                 this.setState({
-                    dataSource: data.map(i => ({
-                        key: i.bsBookinfo.bookinfoId,
+                    subjectName: data.subject.subjectName,
+                    dataSource: data.list.map(i => ({
+                        key: i.bookinsubjectId,
                         bookName: i.bsBookinfo.bookName,
                     })),
                 })
             }).catch((err) => {
                 console.log(err);
+            })
+    }
+
+    handleDel(key) {
+        fetch(`${Url.ceshiURL}/deletebookinsubject?bookinsubjectId=${key}`)
+            .then((res) => res.json()).then(result => {
+                if (result.code === 0) {
+                    console.log(result.data)
+                    message.success("删除" + JSON.stringify(result.data) + "成功")
+                    this.requestList();//刷新页面
+                } else {
+                    message.error(result.message)
+                }
+            }).catch((err) => {
+                console.log(err)
             })
     }
 
@@ -137,7 +153,7 @@ class ThemeContent extends React.Component {
                 title: '操作',
                 key: 'action',
                 render: (text, record) => (
-                    <Popconfirm title="Sure to delete?" onConfirm={() => { }}>
+                    <Popconfirm title="Sure to delete?" onConfirm={() => {this.handleDel(record.key)}}>
                         <a href="javascript:;"><Icon type="close" /></a>
                     </Popconfirm>
                 ),
@@ -151,7 +167,7 @@ class ThemeContent extends React.Component {
                     title="专题内容管理"
                 >
                     <Table
-                        title={() => (`专题名称：${this.props.match.params.id}`)}
+                        title={() => (`专题名称：${this.state.subjectName}`)}
                         showHeader={false}
                         pagination={false}
                         className="themecontrol-table"
