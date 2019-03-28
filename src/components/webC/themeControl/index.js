@@ -31,9 +31,10 @@ class ThemeControl extends React.Component {
         this.setState({
           pagination: pagination(data, (current) => {//改变页码
             this.params.currentPage = current;
-            this.requestList()
+            this.requestList();
           }, (size) => {//pageSize 变化的回调
             this.params.pageSize = size;
+            this.requestList();
           }),
           dataSource: data.content.map(i => ({
             key: i.booksubjectId,
@@ -212,7 +213,7 @@ class ThemeControl extends React.Component {
             <a ref="javascript:;">删除</a>
           </Popconfirm>
           <Divider type="vertical" />
-          <Link to={`${this.props.match.url}/content`}>专题内容管理</Link>
+          <Link to={`${this.props.match.url}/content/${record.key}`}>专题内容管理</Link>
         </span>
       ),
     }];
