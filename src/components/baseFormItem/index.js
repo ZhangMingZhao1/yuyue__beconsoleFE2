@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Form, Select, DatePicker, Switch, Upload, Button, Icon,InputNumber } from "antd";
+import { Input, Form, Select, DatePicker, Switch, Upload, Button, Icon, InputNumber, Radio } from "antd";
 
 const Option = Select.Option;
 export const getOptionList = (data) => {
@@ -13,6 +13,18 @@ export const getOptionList = (data) => {
     return options;
 }
 
+
+export const getRadioList = (data) => {
+    if (!data) {
+        return [];
+    }
+    let options = [];
+    data.map((item) => {
+        options.push(<Radio value={item.id} key={item.id}>{item.name}</Radio>)
+    })
+    return options;
+}
+
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -21,9 +33,9 @@ export const getFormItem = (form, formList) => {
     const formItemList = [];
     if (formList && formList.length > 0) {
         formList.map(item => {
-            let label = item.label;
+            let label = item.label || '';
             let name = item.name;
-            let initialValue = item.initialValue ;
+            let initialValue = item.initialValue;
             let placeholder = item.placeholder;
             let width = item.width;
             let disabled = item.disabled;
@@ -34,14 +46,14 @@ export const getFormItem = (form, formList) => {
                 case "INPUT":
                     formItemList.push(
                         <FormItem label={label} key={name} {...formItemLayout}>
-                         <span style={{ whiteSpace: 'nowrap' }}>
-                            {getFieldDecorator(name, { initialValue: initialValue})(
-                               
+                            <span style={{ whiteSpace: 'nowrap' }}>
+                                {getFieldDecorator(name, { initialValue: initialValue })(
+
                                     <Input disabled={disabled} placeholder={placeholder} style={{ width: width }} />
-                                    
-                            )}
-                            <span style={{ marginLeft: 10 }}>{extra}</span>
-                                </span>
+
+                                )}
+                                <span style={{ marginLeft: 10 }}>{extra}</span>
+                            </span>
                         </FormItem>
                     );
                     break;
@@ -82,7 +94,7 @@ export const getFormItem = (form, formList) => {
                                 getFieldDecorator(name, {
                                     initialValue: initialValue
                                 })(
-                                    <InputNumber/>
+                                    <InputNumber />
                                 )
                             }
                         </FormItem>
@@ -103,10 +115,21 @@ export const getFormItem = (form, formList) => {
                     formItemList.push(
                         <FormItem label={label} key={name} {...formItemLayout}>
                             {
-                                getFieldDecorator(name, { valuePropName: 'checked',initialValue: initialValue })(
+                                getFieldDecorator(name, { valuePropName: 'checked', initialValue: initialValue })(
                                     <Switch />
                                 )
                             }
+                        </FormItem>
+                    );
+                    break;
+                case "RADIO":
+                    formItemList.push(
+                        <FormItem label={label} key={name} {...formItemLayout}>
+                            {getFieldDecorator(name, { initialValue: initialValue })(
+                                <Radio.Group>
+                                    {getRadioList(item.list)}
+                                </Radio.Group>
+                            )}
                         </FormItem>
                     );
                     break;
@@ -137,7 +160,16 @@ export const getFormItem = (form, formList) => {
                     );
                     break;
                 default:
-                    return null
+                    const Component = item.component;
+                    formItemList.push(
+                        Component ? <FormItem label={label} key={name} {...formItemLayout}>
+                            {getFieldDecorator(name, {
+                                
+                            })(
+                                Component
+                            )}
+                        </FormItem> : null
+                    );
             }
         })
         return formItemList;
