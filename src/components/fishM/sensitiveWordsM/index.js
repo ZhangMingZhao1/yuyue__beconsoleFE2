@@ -54,9 +54,7 @@ class SensitiveWordsM extends React.Component {
           .then(data => {
             if (!data.code) {
               message.success('删除成功');
-              const tags = this.state.tags.filter(tag => tag !== removedTag);
-              id.splice(index, 1);
-              this.setState({ tags, id });
+              this.requestList();
             } else {
               message.error(`${data.message}`);
             }
