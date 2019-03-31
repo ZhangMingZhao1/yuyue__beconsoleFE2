@@ -1,7 +1,7 @@
 import React from 'react';
-import { Card, Table, Divider, Tree, Input, Button, Icon, Modal, Row, Col, Radio,Popconfirm } from 'antd';
+import { Card, Table, Divider, Tree, Input, Button, Icon, Modal, Row, Col, Radio, message, Popconfirm } from 'antd';
 import './index.less';
-
+import Url from '../../../api/config';
 const { TreeNode } = Tree;
 const Search = Input.Search;
 const DirectoryTree = Tree.DirectoryTree;
@@ -55,6 +55,40 @@ class ThemeContent extends React.Component {
         searchValue: '',
         autoExpandParent: true,
     };
+
+    componentDidMount() {
+        this.requestList();
+    }
+
+    requestList() {
+        fetch(`${Url.ceshiURL}/getBooks?booksubjectId=${this.props.match.params.id}`)
+            .then((res) => res.json()).then(data => {
+                this.setState({
+                    subjectName: data.subject.subjectName,
+                    dataSource: data.list.map(i => ({
+                        key: i.bookinsubjectId,
+                        bookName: i.bsBookinfo.bookName,
+                    })),
+                })
+            }).catch((err) => {
+                console.log(err);
+            })
+    }
+
+    handleDel(key) {
+        fetch(`${Url.ceshiURL}/deletebookinsubject?bookinsubjectId=${key}`)
+            .then((res) => res.json()).then(result => {
+                if (result.code === 0) {
+                    console.log(result.data)
+                    message.success("删除" + JSON.stringify(result.data) + "成功")
+                    this.requestList();//刷新页面
+                } else {
+                    message.error(result.message)
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
+    }
 
     showModal = () => {
         this.setState({
@@ -114,40 +148,31 @@ class ThemeContent extends React.Component {
     render() {
         const columns = [
             { title: '序号', dataIndex: 'index', render: (text, record, index) => index + 1 },
-            { title: '书名', dataIndex: 'book' },
+            { title: '书名', dataIndex: 'bookName' },
             {
                 title: '操作',
                 key: 'action',
                 render: (text, record) => (
-                    <Popconfirm title="Sure to delete?" onConfirm={() => { }}>
-                    <a href="javascript:;"><Icon type="close" /></a>
+                    <Popconfirm title="Sure to delete?" onConfirm={() => {this.handleDel(record.key)}}>
+                        <a href="javascript:;"><Icon type="close" /></a>
                     </Popconfirm>
                 ),
             }];
-
-        const data = [{
-            key: '1',
-            book: '钢铁是怎么炼成的',
-        }, {
-            key: '2',
-            book: '我的好妈妈',
-        }];
 
         const { searchValue, expandedKeys, autoExpandParent } = this.state;
         return (
 
             <div className="">
-                <div>专题管理</div>
                 <Card
                     title="专题内容管理"
                 >
                     <Table
-                        title={() => ("专题名称：鱼阅专题")}
+                        title={() => (`专题名称：${this.state.subjectName}`)}
                         showHeader={false}
                         pagination={false}
                         className="themecontrol-table"
                         columns={columns}
-                        dataSource={data}
+                        dataSource={this.state.dataSource}
                     /><br />
                     <Button type="primary" style={{ width: 60 }} icon="plus" onClick={this.showModal} />
                 </Card>
