@@ -42,6 +42,7 @@ import WarehouseM from './systemM/warehouseM/index.js';
 import AddWarehouse from './systemM/warehouseM/addWarehouse.js';
 import ChangeWarehouse from './systemM/warehouseM/changeWarehouse.js';
 import StaffM from './systemM/staffM/index.js';
+import roleAuth from './systemM/staffM/roleAuth'
 import AddStaff from './systemM/staffM/addStaff.js';
 import ChangeStaff from './systemM/staffM/changeStaff.js';
 import StoreQuery from './storehouseM/storequery/storequery.js';
@@ -65,6 +66,6 @@ export default {
     CommentM, SensitiveWordsM,
 
     OrganizationM, CabinetM, AddCabinet, ChangeCabinet, WarehouseM, AddWarehouse, ChangeWarehouse, StaffM, AddStaff, ChangeStaff,
-    StoreQuery, InStoreData, InStoreInfo, OutStoreData, OutStoreInfo, MvStoreData, MvStoreInfo
-
+    StoreQuery, InStoreData, InStoreInfo, OutStoreData, OutStoreInfo, MvStoreData, MvStoreInfo,
+    roleAuth
 }

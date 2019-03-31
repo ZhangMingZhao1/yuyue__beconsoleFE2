@@ -89,7 +89,8 @@ export default {
         { key: '/app/systemM/organizationM', title: '机构管理', component: 'OrganizationM' },
         { key: '/app/systemM/warehouseM', title: '仓库维护', component: 'WarehouseM' },
         { key: '/app/systemM/cabinetM', title: '机柜管理', component: 'CabinetM' },
-        { key: '/app/systemM/staffM', title: '员工管理', component: 'StaffM' }
+        { key: '/app/systemM/staffM', title: '员工管理', component: 'StaffM' },
+        { key: '/app/systemM/roleAuth', title: '角色权限', component: 'roleAuth' },
       ],
     },
   ],
