@@ -12,13 +12,10 @@ const CommentM = (props) => {
 			<BreadcrumbCustom first="鱼群管理" second="评论管理" />
 			<Card title="评论管理">
 				<Tabs defaultActiveKey="1">
-					<TabPane tab="书籍动态管理" key="1">
+					<TabPane tab="动态管理" key="1">
 						<Dynamic />
 					</TabPane>
-					<TabPane tab="动态评论管理" key="2">
-						hello world！
-					</TabPane>
-					<TabPane tab="评论管理" key="3">
+					<TabPane tab="评论管理" key="2">
 						<Comment />
 					</TabPane>
 				</Tabs>
@@ -26,4 +23,5 @@ const CommentM = (props) => {
 		</React.Fragment >
 	);
 }
+
 export default CommentM;

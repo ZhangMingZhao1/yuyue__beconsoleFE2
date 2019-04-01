@@ -10,4 +10,4 @@ const baseURL = base+SK;
 
 const ceshiIP = 'http://119.3.231.11:8080';
 const ceshiURL = ceshiIP+'/yuyue';
-export default {baseURL,ceshiURL};
+export default ceshiURL;

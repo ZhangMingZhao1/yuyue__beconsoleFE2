@@ -1,19 +1,20 @@
 import React from 'react';
 import moment from 'moment';
-import { Input, DatePicker, Button, Modal, Table, message, Popover } from 'antd';
+import BreadcrumbCustom from '../../BreadcrumbCustom';
+import { Card, Input, DatePicker, Button, Modal, Table, message, Popover } from 'antd';
 import URL from '../../../api/config';
 
 const { confirm } = Modal;
 const { RangePicker } = DatePicker;
 
-class Comment extends React.Component {
+class DynamicCmnt extends React.Component {
 
     state = {
-        commnet: [],
-        selectedRowKeys: [],  // Check here to configure the default column
+        dynamicCmnt: [],
+        selectedRowKeys: [],
         input1Value: '',
         input2Value: '',
-        dateRange: ['', ''],
+        dateRange: ['', '']
     }
 
     componentDidMount() {
@@ -21,14 +22,14 @@ class Comment extends React.Component {
     }
 
     requestList = () => {
-        fetch(`${URL}/listPUserdynamic`)
+        fetch(`${URL}/listUserdynamiccmntByDynamicId?dynamicId=${this.props.match.params.id}`)
             .then((res) => res.json())
             .then((data) => {
-                console.log(data)
+                console.log(data);
                 // eslint-disable-next-line
                 data.content.map((item) => {
-                    item.key = item.dynamicId;
-                    item.createTime = moment(item.createTime).format("YYYY-MM-DD HH:mm:ss");
+                    item.key = item.commentId;
+                    item.createtime = moment(item.createtime).format("YYYY-MM-DD HH:mm:ss");
                     item.allContent = item.content;
                     item.content =
                         item.content.length > 50
@@ -38,7 +39,7 @@ class Comment extends React.Component {
                             item.content;
                 });
                 this.setState({
-                    comment: data.content
+                    dynamicCmnt: data.content
                 });
             })
             .catch(err => {
@@ -47,6 +48,7 @@ class Comment extends React.Component {
     }
 
     onSelectChange = (selectedRowKeys) => {
+        console.log('selectedRowKeys changed: ', selectedRowKeys);
         this.setState({ selectedRowKeys: selectedRowKeys });
     }
 
@@ -68,21 +70,20 @@ class Comment extends React.Component {
         });
     }
 
-    commentSearch = () => {
+    dynamicCmntSearch = () => {
         const state = this.state;
-        fetch(`${URL}/listPUserdynamic` +
-            '?content=' + state.input1Value +
+        fetch(`${URL}/listUserdynamiccmntByDynamicId` +
+            `?dynamicId=${this.props.match.params.id}` +
+            '&content=' + state.input1Value +
             '&userName=' + state.input2Value +
             '&starttime=' + state.dateRange[0] +
             '&endtime=' + state.dateRange[1]
         )
             .then((res) => res.json())
             .then((data) => {
-                console.log(data)
-                // eslint-disable-next-line
-                data.content.map((item, index) => {
-                    item.key = item.dynamicId;
-                    item.createTime = moment(item.createTime).format("YYYY-MM-DD HH:mm:ss");
+                data.content.map((item) => {
+                    item.key = item.commentId;
+                    item.createtime = moment(item.createtime).format("YYYY-MM-DD HH:mm:ss");
                     item.allContent = item.content;
                     item.content =
                         item.content.length > 50
@@ -92,15 +93,15 @@ class Comment extends React.Component {
                             item.content;
                 });
                 this.setState({
-                    comment: data.content
+                    dynamicCmnt: data.content
                 });
             })
-            .catch(err => {
-                console.log('fetch error', err)
+            .catch((err) => {
+                console.log('fetch error:', err)
             });
     }
 
-    commentDelete = () => {
+    dynamicCmntDelete = () => {
         const state = this.state;
         confirm({
             title: `确定删除第${state.selectedRowKeys}条评论？`,
@@ -108,13 +109,13 @@ class Comment extends React.Component {
             okText: '确定',
             cancelText: '取消',
             onOk: () => {
-                fetch(`${URL}/deleteUserdynamic`, {
+                fetch(`${URL}/deleteUserdynamiccmnt`, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json', 'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        dynamicIds: state.selectedRowKeys
+                        commentIds: state.selectedRowKeys
                     })
                 })
                     .then((res) => res.json())
@@ -136,21 +137,20 @@ class Comment extends React.Component {
             onCancel: () => {
                 console.log('Cancel');
             }
-        });
+        })
     }
 
     render() {
 
-        const { comment, selectedRowKeys, input1Value, input2Value } = this.state;
+        const { dynamicCmnt, selectedRowKeys, input1Value, input2Value } = this.state;
         const rowSelection = {
             selectedRowKeys: selectedRowKeys.sort(),
             onChange: this.onSelectChange,
             // onSelection: this.onSelection,
         };
-
         const columns = [{
             title: '序号',
-            dataIndex: 'dynamicId'
+            dataIndex: 'commentId'
         }, {
             title: '评论人',
             dataIndex: 'userName'
@@ -169,62 +169,65 @@ class Comment extends React.Component {
             ),
         }, {
             title: '发布时间',
-            dataIndex: 'createTime'
+            dataIndex: 'createtime'
         }];
 
         return (
             <React.Fragment>
-                <Input
-                    placeholder="内容模糊查询"
-                    style={{ width: '200px' }}
-                    value={input1Value}
-                    onChange={this.input1Change}
-                    onBlur={this.commentSearch}
-                    onPressEnter={this.commentSearch}
-                />
-                <Input
-                    placeholder="发布人"
-                    style={{ width: '150px', marginLeft: '10px' }}
-                    value={input2Value}
-                    onChange={this.input2Change}
-                    onBlur={this.commentSearch}
-                    onPressEnter={this.commentSearch}
-                />
-                <RangePicker
-                    style={{ marginLeft: '10px' }}
-                    placeholder={['起始时间', '结束时间']}
-                    onChange={this.rangePickerChange}
-                />
-                <Button
-                    type="primary"
-                    style={{ marginLeft: '10px' }}
-                    onClick={this.commentSearch}
-                >
-                    查询
-			    </Button><br />
-                <Button
-                    type="danger"
-                    disabled={!selectedRowKeys.length}
-                    style={{ marginTop: '10px' }}
-                    onClick={this.commentDelete}
-                >
-                    批量删除
-				</Button>
-                <Table
-                    bordered
-                    columns={columns}
-                    dataSource={comment}
-                    rowSelection={rowSelection}
-                    style={{ marginTop: '10px' }}
-                    pagination={{
-                        showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
-                        showSizeChanger: true,
-                        pageSizeOptions: ['10', '20', '50']
-                    }}
-                />
+                <BreadcrumbCustom first="鱼群管理" second="动态评论管理" />
+                <Card title={`动态评论管理：${this.props.match.params.id}`} >
+                    <Input
+                        placeholder="内容模糊查询"
+                        style={{ width: '200px' }}
+                        value={input1Value}
+                        onChange={this.input1Change}
+                        onBlur={this.dynamicCmntSearch}
+                        onPressEnter={this.dynamicCmntSearch}
+                    />
+                    <Input
+                        placeholder="发布人"
+                        style={{ width: '150px', marginLeft: '10px' }}
+                        value={input2Value}
+                        onChange={this.input2Change}
+                        onBlur={this.dynamicCmntSearch}
+                        onPressEnter={this.dynamicCmntSearch}
+                    />
+                    <RangePicker
+                        style={{ marginLeft: '10px' }}
+                        placeholder={['起始时间', '结束时间']}
+                        onChange={this.rangePickerChange}
+                    />
+                    <Button
+                        type="primary"
+                        style={{ marginLeft: '10px' }}
+                        onClick={this.dynamicCmntSearch}
+                    >
+                        查询
+			        </Button><br />
+                    <Button
+                        type="danger"
+                        disabled={selectedRowKeys.length === 0}
+                        style={{ marginTop: '10px' }}
+                        onClick={this.dynamicCmntDelete}
+                    >
+                        批量删除
+				    </Button>
+                    <Table
+                        bordered
+                        columns={columns}
+                        dataSource={dynamicCmnt}
+                        rowSelection={rowSelection}
+                        style={{ marginTop: '10px' }}
+                        pagination={{
+                            showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
+                            showSizeChanger: true,
+                            pageSizeOptions: ['10', '20', '50']
+                        }}
+                    />
+                </Card>
             </React.Fragment>
         );
     }
 }
 
-export default Comment;
+export default DynamicCmnt;

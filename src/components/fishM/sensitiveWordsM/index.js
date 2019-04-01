@@ -1,9 +1,9 @@
 import React from 'react';
 import { Card, Input, Button, Modal, Tag, Tooltip, message } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
-import 'antd/dist/antd.css';
+import URL from '../../../api/config';
 
-const confirm = Modal.confirm;
+const { confirm } = Modal;
 
 class SensitiveWordsM extends React.Component {
 
@@ -21,8 +21,7 @@ class SensitiveWordsM extends React.Component {
   requestList = () => {
     const words = [];
     const id = [];
-    const url = 'http://119.3.231.11:8080/yuyue/listSensitive';
-    fetch(url)
+    fetch(`${URL}/listSensitive`)
       .then((res) => res.json())
       .then(data => {
         data.map((i) => {
