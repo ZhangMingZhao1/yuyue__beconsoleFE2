@@ -11,7 +11,7 @@ import URL from '../../api/config';
 class Dashboard extends React.Component {
     state={data:{}};
     componentDidMount(){
-        fetch(`${URL.ceshiURL}/home`,{method:'GET'})
+        fetch(`${URL}/home`,{method:'GET'})
             .then((res)=>res.json())
             .then(data=>{
                 this.setState({data:data.data})
