@@ -30,7 +30,7 @@ class ThemeContent extends React.Component {
      * 专题书籍查询
      */
     requestList() {
-        fetch(`${Url.ceshiURL}/getBooks?booksubjectId=${this.props.match.params.id}`)
+        fetch(`${Url}/getBooks?booksubjectId=${this.props.match.params.id}`)
             .then((res) => res.json()).then(data => {
                 this.setState({
                     booksubjectId: data.subject.booksubjectId,
@@ -49,7 +49,7 @@ class ThemeContent extends React.Component {
      * 书籍目录获取
      */
     requestCategory() {
-        fetch(`${Url.ceshiURL}/listBookcategory`)
+        fetch(`${Url}/listBookcategory`)
             .then((res) => res.json()).then(data => {
                 this.setState({
                     treeData: [{
@@ -67,7 +67,7 @@ class ThemeContent extends React.Component {
      * 书名&目录 查询
      */
     requestQuery() {
-        fetch(`${Url.ceshiURL}/getByCategoryAndBookName?bsBookcategory=${this.state.searchCategory}&bookName=${this.state.searchValue}`)
+        fetch(`${Url}/getByCategoryAndBookName?bsBookcategory=${this.state.searchCategory}&bookName=${this.state.searchValue}`)
             .then((res) => res.json()).then(data => {
                 this.setState({
                     radioData: data.map(i => ({
@@ -87,7 +87,7 @@ class ThemeContent extends React.Component {
      */
     requestAdd(value) {
         console.log(JSON.stringify({ bsBookinfo: value, bsBooksubject: this.state.booksubjectId }))
-        fetch(`${Url.ceshiURL}/addbookinsubject`, {
+        fetch(`${Url}/addbookinsubject`, {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -121,7 +121,7 @@ class ThemeContent extends React.Component {
      * @param {*} key Bookidinsubjeck
      */
     handleDel(key) {
-        fetch(`${Url.ceshiURL}/deletebookinsubject?bookinsubjectId=${key}`)
+        fetch(`${Url}/deletebookinsubject?bookinsubjectId=${key}`)
             .then((res) => res.json()).then(result => {
                 if (result.code === 0) {
                     console.log(result.data)
