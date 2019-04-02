@@ -1,7 +1,6 @@
 import React from 'react';
 import { Card, Select, DatePicker, Button, Form, Input, Table } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
-import { fetchGet } from '../../../axios/tools';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -55,21 +54,7 @@ class PayO extends React.Component {
     }
 
     requestList = () => {
-        fetchGet({
-            url: '/memberM/payO',
-            params: {
-                page: 1
-            }
-        }).then((res) => {
-            if (res.code == 0) {
-                res.result.list.map((item, index) => {
-                    item.key = index;
-                })
-                this.setState({
-                    dataSource: res.result.list,
-                })
-            }
-        })
+
     }
 
     render() {
@@ -108,14 +93,14 @@ class PayO extends React.Component {
                 <Card
                     title="支付订单"
                 >
-                    <OrderSearchForm /><br/>
+                    <OrderSearchForm /><br />
                     <Table
                         columns={columns}
                         dataSource={this.state.dataSource}
                         pagination={{
-                            showTotal:(total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
+                            showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
                             showSizeChanger: true,
-                            pageSizeOptions: ['10','20','50']
+                            pageSizeOptions: ['10', '20', '50']
                         }}
                         bordered
                     />

@@ -14,7 +14,7 @@ export default {
       subs: [
         { key: '/app/memberM/xinxiguanli', title: '信息管理', component: 'InfoC' },
         { key: '/app/memberM/zhifudingdan', title: '支付订单', component: 'PayO' },
-        { key: '/app/memberM/yaoqingma', title: '邀请码', component: 'BannerControl' },
+        { key: '/app/memberM/invitationCode', title: '邀请码', component: 'InvitationCode' },
         { key: '/app/memberM/jifenguanli', title: '积分管理', component: 'PointC' },
         { key: '/app/memberM/jifenguize', title: '积分规则设置', component: 'PointRule' },
         { key: '/app/memberM/huiyuandengji', title: '会员等级设置', component: 'MemberLevel' },
@@ -105,6 +105,13 @@ export default {
       key: '/app/memberM', title: '会员管理',
       subs: [
         { key: '/app/memberM/xinxiguanli/infodetail/:memberId', title: '查看', component: 'InfoDetail' },
+      ],
+    },
+    {
+      key: '/app/memberM/invitationCode', title: '会员管理/邀请码',
+      subs: [
+        { key: '/app/memberM/invitationCode/addInvCode', title: '新增', component: 'AddInvCode' },
+        { key: '/app/memberM/invitationCode/changeInvCode/:id', title: '修改', component: 'ChangeInvCode' },
       ],
     },
     {

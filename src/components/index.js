@@ -19,6 +19,9 @@ import Cssmodule from './cssmodule';
 
 import InfoC from './memberM/infoC/index.js';
 import PayO from './memberM/payO/payO.js';
+import InvitationCode from './memberM/invitationCode/index.js';
+import AddInvCode from './memberM/invitationCode/addInvCode.js';
+import ChangeInvCode from './memberM/invitationCode/changeInvCode.js';
 import PointC from './memberM/pointC/pointC.js';
 import PointRule from './memberM/pointRule/pointRule.js';
 import MemberLevel from './memberM/memberLevel/memberLevel.js';
@@ -60,7 +63,7 @@ export default {
     Dashboard, BasicAnimations,
     ExampleAnimations, AuthBasic, RouterEnter,
     Cssmodule,
-    InfoC, PayO, PointC, PointRule, MemberLevel,
+    InfoC, PayO, InvitationCode, AddInvCode, ChangeInvCode, PointC, PointRule, MemberLevel,
     InfoDetail,
     BookLib, AddBookLib, ModifyBookLib, PublisherM, GoodsM,
     BorrowO, DonateO, CheckO, BorrowH,
