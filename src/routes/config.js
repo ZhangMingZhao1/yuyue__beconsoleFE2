@@ -108,6 +108,12 @@ export default {
       ],
     },
     {
+      key: '/app/fishM/commentM', title: '鱼群管理/动态评论管理',
+      subs: [
+        { key: '/app/fishM/commentM/dynamicCmnt/:id', title: '动态评论管理', component: 'DynamicCmnt' },
+      ],
+    },
+    {
       key: '/app/bookM/bookLib', title: '书籍管理/书目库',
       subs: [
         { key: '/app/bookM/bookLib/addBookLib', title: '新增', component: 'AddBookLib' },
@@ -123,21 +129,21 @@ export default {
       ],
     },
     {
-      key: '/app/systemM/warehouseM', title: '仓库维护',
+      key: '/app/systemM/warehouseM', title: '系统管理/仓库维护',
       subs: [
         { key: '/app/systemM/warehouseM/addWarehouse', title: '新增', component: 'AddWarehouse' },
         { key: '/app/systemM/warehouseM/changeWarehouse/:id', title: '修改', component: 'ChangeWarehouse' }
       ]
     },
     {
-      key: '/app/systemM/cabinetM', title: '机柜管理',
+      key: '/app/systemM/cabinetM', title: '系统管理/机柜管理',
       subs: [
         { key: '/app/systemM/cabinetM/addCabinet', title: '新增', component: 'AddCabinet' },
         { key: '/app/systemM/cabinetM/changeCabinet/:id', title: '修改', component: 'ChangeCabinet' }
       ]
     },
     {
-      key: '/app/systemM/staffM', title: '员工管理',
+      key: '/app/systemM/staffM', title: '系统管理/员工管理',
       subs: [
         { key: '/app/systemM/staffM/addStaff', title: '新增', component: 'AddStaff' },
         { key: '/app/systemM/staffM/changeStaff/:id', title: '修改', component: 'ChangeStaff' },

@@ -1,7 +1,10 @@
 import React from 'react';
 import moment from 'moment';
 import { Input, DatePicker, Button, Modal, Table, message, Popover } from 'antd';
+import URL from '../../../api/config';
+import { Link } from 'react-router-dom';
 
+const { confirm } = Modal;
 const { RangePicker } = DatePicker;
 
 class Dynamic extends React.Component {
@@ -20,10 +23,10 @@ class Dynamic extends React.Component {
     }
 
     requestList = () => {
-        const url = 'http://119.3.231.11:8080/yuyue/listBUserdynamic';
-        fetch(url)
+        fetch(`${URL}/listBUserdynamic`)
             .then((res) => res.json())
             .then((data) => {
+                console.log(data);
                 // eslint-disable-next-line
                 data.content.map((item) => {
                     item.key = item.dynamicId;
@@ -52,8 +55,7 @@ class Dynamic extends React.Component {
 
     dynamicSearch = () => {
         const state = this.state;
-        const url = 'http://119.3.231.11:8080/yuyue/listBUserdynamic';
-        fetch(url +
+        fetch(`${URL}/listBUserdynamic` +
             '?bookName=' + state.input1Value +
             '&content=' + state.input2Value +
             '&userName=' + state.input3Value +
@@ -63,8 +65,8 @@ class Dynamic extends React.Component {
             .then((res) => res.json())
             .then((data) => {
                 // eslint-disable-next-line
-                data.content.map((item, index) => {
-                    item.key = index;
+                data.content.map((item) => {
+                    item.key = item.dynamicId;
                     item.createTime = moment(item.createTime).format("YYYY-MM-DD HH:mm:ss");
                     item.allContent = item.content;
                     item.content =
@@ -109,35 +111,49 @@ class Dynamic extends React.Component {
 
     dynamicDelete = () => {
         const state = this.state;
-        const url = 'http://119.3.231.11:8080/yuyue/deleteUserdynamic';
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json', 'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                dynamicIds: state.selectedRowKeys
-            })
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                if (!data.code) {
-                    message.success('删除成功');
-                    this.requestList();
-                    this.setState({
-                        selectedRowKeys: [],
+        confirm({
+            title: `确定删除第${state.selectedRowKeys}条动态？`,
+            content: `点击确定删除第${state.selectedRowKeys}条动态`,
+            okText: '确定',
+            cancelText: '取消',
+            onOk: () => {
+                fetch(`${URL}/deleteUserdynamic`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json', 'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        dynamicIds: state.selectedRowKeys
                     })
-                } else {
-                    message.error(`${data.message}`);
-                }
-            })
+                })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        if (!data.code) {
+                            message.success('删除成功');
+                            this.requestList();
+                            this.setState({
+                                selectedRowKeys: [],
+                            })
+                        } else {
+                            message.error(`${data.message}`);
+                        }
+                    })
+                    .catch(err => {
+                        console.log('fetch error', err)
+                    });
+            },
+            onCancel: () => {
+                console.log('Cancel');
+            }
+        });
     }
 
     render() {
 
         const { dynamic, selectedRowKeys, input1Value, input2Value, input3Value } = this.state;
+        console.log(selectedRowKeys)
         const rowSelection = {
-            selectedRowKeys1: selectedRowKeys.sort(),
+            selectedRowKeys: selectedRowKeys.sort(),
             onChange: this.onSelectChange,
             // onSelection: this.onSelection,
         };
@@ -171,7 +187,7 @@ class Dynamic extends React.Component {
             dataIndex: 'action',
             render: (text, record) => (
                 <span>
-                    <a href="javascript:;">编辑评论</a>
+                    <Link to={`./commentM/dynamicCmnt/${record.dynamicId}`}>编辑评论</Link>
                 </span>
             )
         }];
@@ -183,18 +199,24 @@ class Dynamic extends React.Component {
                     style={{ width: '200px' }}
                     value={input1Value}
                     onChange={this.input1Change}
+                    onBlur={this.dynamicSearch}
+                    onPressEnter={this.dynamicSearch}
                 />
                 <Input
                     placeholder="内容模糊查询"
                     style={{ width: '200px', marginLeft: '10px' }}
                     value={input2Value}
                     onChange={this.input2Change}
+                    onBlur={this.dynamicSearch}
+                    onPressEnter={this.dynamicSearch}
                 />
                 <Input
                     placeholder="发布人"
                     style={{ width: '150px', marginLeft: '10px' }}
                     value={input3Value}
                     onChange={this.input3Change}
+                    onBlur={this.dynamicSearch}
+                    onPressEnter={this.dynamicSearch}
                 />
                 <RangePicker
                     style={{ marginLeft: '10px' }}
@@ -209,7 +231,8 @@ class Dynamic extends React.Component {
                     查询
 				</Button><br />
                 <Button
-                    type="primary"
+                    type="danger"
+                    disabled={!selectedRowKeys.length}
                     style={{ marginTop: '10px' }}
                     onClick={this.dynamicDelete}
                 >

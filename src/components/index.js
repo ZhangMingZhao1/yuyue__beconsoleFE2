@@ -29,6 +29,7 @@ import ModifyBookLib from './bookM/bookLib/modifyBookLib.js';
 import PublisherM from './bookM/publisherM/index.js';
 import GoodsM from './bookM/goodsM/index.js';
 import CommentM from './fishM/commentM/index.js';
+import DynamicCmnt from './fishM/commentM/dynamicCmnt.js';
 import BorrowO from './orderM/borrowO/index.js';
 import DonateO from './orderM/donateO/index.js';
 import CheckO from './orderM/checkO/index.js';
@@ -63,7 +64,7 @@ export default {
     InfoDetail,
     BookLib, AddBookLib, ModifyBookLib, PublisherM, GoodsM,
     BorrowO, DonateO, CheckO, BorrowH,
-    CommentM, SensitiveWordsM,
+    CommentM, SensitiveWordsM, DynamicCmnt,
 
     OrganizationM, CabinetM, AddCabinet, ChangeCabinet, WarehouseM, AddWarehouse, ChangeWarehouse, StaffM, AddStaff, ChangeStaff,
     StoreQuery, InStoreData, InStoreInfo, OutStoreData, OutStoreInfo, MvStoreData, MvStoreInfo,
