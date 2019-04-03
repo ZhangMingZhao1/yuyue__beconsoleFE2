@@ -178,7 +178,7 @@ class DynamicCmnt extends React.Component {
                 <Card title={`动态评论管理：${this.props.match.params.id}`} >
                     <Input
                         placeholder="内容模糊查询"
-                        style={{ width: '200px' }}
+                        style={{ width: '200px', marginTop: '10px' }}
                         value={input1Value}
                         onChange={this.input1Change}
                         onBlur={this.dynamicCmntSearch}
@@ -186,20 +186,20 @@ class DynamicCmnt extends React.Component {
                     />
                     <Input
                         placeholder="发布人"
-                        style={{ width: '150px', marginLeft: '10px' }}
+                        style={{ width: '150px', marginLeft: '10px', marginTop: '10px' }}
                         value={input2Value}
                         onChange={this.input2Change}
                         onBlur={this.dynamicCmntSearch}
                         onPressEnter={this.dynamicCmntSearch}
                     />
                     <RangePicker
-                        style={{ marginLeft: '10px' }}
+                        style={{ marginLeft: '10px', marginTop: '10px' }}
                         placeholder={['起始时间', '结束时间']}
                         onChange={this.rangePickerChange}
                     />
                     <Button
                         type="primary"
-                        style={{ marginLeft: '10px' }}
+                        style={{ marginLeft: '10px', marginTop: '10px' }}
                         onClick={this.dynamicCmntSearch}
                     >
                         查询
