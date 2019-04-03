@@ -62,7 +62,7 @@ class BookLib extends React.Component {
     }
 
     requestList = () => {
-        fetch(`${Url.ceshiURL}/listBookinfo?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`)
+        fetch(`${Url}/listBookinfo?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`)
             .then((res) => res.json()).then(data => {
                 this.setState({
                     pagination: pagination(data, (current) => {//改变页码

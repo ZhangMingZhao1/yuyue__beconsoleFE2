@@ -16,7 +16,7 @@ export const logout = () => ({
 export const login = (userName, password) => {
 	return (dispatch) => {
 		// console.log('`${baseURL}/login`',`${baseURL}/login`);
-		fetch(`${Url.ceshiURL}/login`,{
+		fetch(`${Url}/login`,{
 			method: 'POST',
 			mode: 'cors',
 			headers: {

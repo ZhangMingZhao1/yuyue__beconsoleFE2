@@ -25,7 +25,7 @@ class ThemeControl extends React.Component {
   }
 
   requestList = () => {
-    fetch(`${Url.ceshiURL}/subject?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`)
+    fetch(`${Url}/subject?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`)
       .then((res) => res.json()).then(result => {
         let data = result;
         this.setState({
@@ -67,7 +67,7 @@ class ThemeControl extends React.Component {
   handleAdd = (form) => {
     let values = form.getFieldsValue();
     values = { ...values, isShow: values.isShow ? 1 : 0 }
-    fetch(`${Url.ceshiURL}/addsubject`, {
+    fetch(`${Url}/addsubject`, {
       method: 'POST',
       mode: 'cors',
       headers: {
@@ -92,7 +92,7 @@ class ThemeControl extends React.Component {
   handleModify = (form, key) => {
     let values = form.getFieldsValue();
     values = { ...values, isShow: values.isShow ? 1 : 0 }
-    fetch(`${Url.ceshiURL}/updatesubject`, {
+    fetch(`${Url}/updatesubject`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json'
@@ -115,7 +115,7 @@ class ThemeControl extends React.Component {
 
   //删除专题
   handleDel = (key) => {
-    fetch(`${Url.ceshiURL}/deletesubject?booksubjectId=${key}`)
+    fetch(`${Url}/deletesubject?booksubjectId=${key}`)
       .then((res) => res.json()).then(result => {
         if (result.code === 0) {
           console.log(result.data)

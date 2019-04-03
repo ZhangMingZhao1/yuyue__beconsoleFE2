@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Form, Select, DatePicker, Switch, Upload, Button, Icon, InputNumber, Radio } from "antd";
+import { Input, Form, Select, DatePicker, Switch, Upload, Icon, InputNumber, Radio, Modal } from "antd";
 
 const Option = Select.Option;
 export const getOptionList = (data) => {
@@ -146,17 +146,7 @@ export const getFormItem = (form, formList) => {
                     break;
                 case "UPLOAD":
                     formItemList.push(
-                        <FormItem label={label} key={name} {...formItemLayout}>
-                            {getFieldDecorator(name, {
-                                valuePropName: 'fileList',
-                            })(
-                                <Upload action="/upload.do" listType="picture">
-                                    <Button>
-                                        <Icon type="upload" /> Click to upload
-                                    </Button>
-                                </Upload>
-                            )}
-                        </FormItem>
+                        <MyUpload form={form} label={label} name={name} formItemLayout={formItemLayout} initialValue={initialValue} />
                     );
                     break;
                 default:
@@ -164,7 +154,7 @@ export const getFormItem = (form, formList) => {
                     formItemList.push(
                         Component ? <FormItem label={label} key={name} {...formItemLayout}>
                             {getFieldDecorator(name, {
-                                
+
                             })(
                                 Component
                             )}
@@ -175,3 +165,55 @@ export const getFormItem = (form, formList) => {
         return formItemList;
     }
 }
+
+class MyUpload extends React.Component {
+    //hasFile 是否已有图片，保证只能上传一张图片
+    state = { previewVisible: false, previewImage: '', hasFile: this.props.initialValue ? true : false }
+    //预览
+    handlePreview = (file) => {
+        this.setState({
+            previewImage: file.url || file.thumbUrl,
+            previewVisible: true,
+        });
+    }
+    //取消模态框
+    handleCancel = () => this.setState({ previewVisible: false })
+    //上传文件改变时调用
+    handleChange = ({ fileList }) => {
+        this.setState({hasFile: fileList.length>0? true:false})
+    }
+    render() {
+        const { previewVisible, previewImage } = this.state;
+        const { form, label, name, formItemLayout, initialValue } = this.props;
+        return <Form.Item label={label} key={name} {...formItemLayout}>
+            {form.getFieldDecorator(name, {
+                valuePropName: 'fileList',
+                initialValue: initialValue,
+                getValueFromEvent: (e) => {
+                    if (Array.isArray(e)) {
+                        return e;
+                    }
+                    return e && e.fileList;
+                }
+            })(
+                <Upload
+                    beforeUpload={() => false}
+                    listType="picture-card"
+                    onPreview={this.handlePreview}
+                    onChange={this.handleChange}
+                    onRemove={() => { this.setState({ hasFile: null }) }}
+                >
+                    {
+                        this.state.hasFile ?
+                            null :
+                            <Icon type="plus" />
+                    }
+                </Upload>
+            )}
+            <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+                <img style={{ width: '100%' }} src={previewImage} />
+            </Modal>
+        </Form.Item>
+    }
+}
+
