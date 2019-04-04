@@ -23,7 +23,7 @@ class Dynamic extends React.Component {
     }
 
     requestList = () => {
-        fetch(`${URL}/listBUserdynamic`)
+        fetch(`${URL}/bUserdynamics`)
             .then((res) => res.json())
             .then((data) => {
                 console.log(data);
@@ -55,7 +55,7 @@ class Dynamic extends React.Component {
 
     dynamicSearch = () => {
         const state = this.state;
-        fetch(`${URL}/listBUserdynamic` +
+        fetch(`${URL}/bUserdynamics` +
             '?bookName=' + state.input1Value +
             '&content=' + state.input2Value +
             '&userName=' + state.input3Value +
@@ -151,7 +151,6 @@ class Dynamic extends React.Component {
     render() {
 
         const { dynamic, selectedRowKeys, input1Value, input2Value, input3Value } = this.state;
-        console.log(selectedRowKeys)
         const rowSelection = {
             selectedRowKeys: selectedRowKeys.sort(),
             onChange: this.onSelectChange,

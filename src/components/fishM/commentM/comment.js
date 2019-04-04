@@ -21,7 +21,7 @@ class Comment extends React.Component {
     }
 
     requestList = () => {
-        fetch(`${URL}/listPUserdynamic`)
+        fetch(`${URL}/pUserdynamic`)
             .then((res) => res.json())
             .then((data) => {
                 console.log(data)
@@ -70,7 +70,7 @@ class Comment extends React.Component {
 
     commentSearch = () => {
         const state = this.state;
-        fetch(`${URL}/listPUserdynamic` +
+        fetch(`${URL}/pUserdynamic` +
             '?content=' + state.input1Value +
             '&userName=' + state.input2Value +
             '&starttime=' + state.dateRange[0] +
