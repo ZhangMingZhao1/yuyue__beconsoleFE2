@@ -4,36 +4,27 @@
  */
 import Loadable from 'react-loadable';
 import Loading from './widget/Loading';
-import BasicForm from './forms/BasicForm';
-import BasicTable from './tables/BasicTables';
-import AdvancedTable from './tables/AdvancedTables';
-import AsynchronousTable from './tables/AsynchronousTable';
-import Echarts from './charts/Echarts';
-import Recharts from './charts/Recharts';
-import ThemeControl from './ui/webcontrol/ThemeControl.js'
-import BannerControl from './ui/webcontrol/BannerControl.js';
-import Icons from './ui/Icons';
-import Buttons from './ui/Buttons';
-import Spins from './ui/Spins';
-import Modals from './ui/Modals';
-import Notifications from './ui/Notifications';
-import Tabs from './ui/Tabs';
-import Banners from './ui/banners';
-import Drags from './ui/Draggable';
+import ThemeControl from './webC/themeControl/index.js'
+import ThemeContent from './webC/themeControl/themeContent.js'
+import BannerControl from './webC/bannerC/index.js';
+import AdvertiseM from './webC/advertiseM/index.js';
 import Dashboard from './dashboard/Dashboard';
-import Gallery from './ui/Gallery';
+
 import BasicAnimations from './animation/BasicAnimations';
 import ExampleAnimations from './animation/ExampleAnimations';
 import AuthBasic from './auth/Basic';
 import RouterEnter from './auth/RouterEnter';
 import Cssmodule from './cssmodule';
-import MapUi from './ui/map';
+
 
 import InfoC from './memberM/infoC/index.js';
-import PayO from './memberM/payO.js';
-import PointC from './memberM/pointC.js';
-import PointRule from './memberM/pointRule.js';
-import MemberLevel from './memberM/memberLevel.js';
+import PayO from './memberM/payO/payO.js';
+import InvitationCode from './memberM/invitationCode/index.js';
+import AddInvCode from './memberM/invitationCode/addInvCode.js';
+import ChangeInvCode from './memberM/invitationCode/changeInvCode.js';
+import PointC from './memberM/pointC/pointC.js';
+import PointRule from './memberM/pointRule/pointRule.js';
+import MemberLevel from './memberM/memberLevel/memberLevel.js';
 import InfoDetail from './memberM/infodetail';
 import BookLib from './bookM/bookLib/index.js';
 import AddBookLib from './bookM/bookLib/addBookLib.js';
@@ -41,6 +32,7 @@ import ModifyBookLib from './bookM/bookLib/modifyBookLib.js';
 import PublisherM from './bookM/publisherM/index.js';
 import GoodsM from './bookM/goodsM/index.js';
 import CommentM from './fishM/commentM/index.js';
+import DynamicCmnt from './fishM/commentM/dynamicCmnt.js';
 import BorrowO from './orderM/borrowO/index.js';
 import DonateO from './orderM/donateO/index.js';
 import CheckO from './orderM/checkO/index.js';
@@ -48,24 +40,36 @@ import BorrowH from './orderM/borrowH/index.js';
 import SensitiveWordsM from './fishM/sensitiveWordsM/index.js';
 import OrganizationM from './systemM/organizationM/index.js';
 import CabinetM from './systemM/cabinetM/index.js';
+import AddCabinet from './systemM/cabinetM/addCabinet.js';
+import ChangeCabinet from './systemM/cabinetM/changeCabinet.js';
 import WarehouseM from './systemM/warehouseM/index.js';
+import AddWarehouse from './systemM/warehouseM/addWarehouse.js';
+import ChangeWarehouse from './systemM/warehouseM/changeWarehouse.js';
+import StaffM from './systemM/staffM/index.js';
+import roleAuth from './systemM/staffM/roleAuth'
+import AddStaff from './systemM/staffM/addStaff.js';
+import ChangeStaff from './systemM/staffM/changeStaff.js';
+import StoreQuery from './storehouseM/storequery/storequery.js';
+import InStoreData from './storehouseM/instoredata/index.js';
+import InStoreInfo from './storehouseM/instoredata/inStoreInfo.js';
+import OutStoreData from './storehouseM/outStoreData/index.js';
+import OutStoreInfo from './storehouseM/outStoreData/outStoreInfo.js';
+import MvStoreData from './storehouseM/mvStoreData/index.js';
+import MvStoreInfo from './storehouseM/mvStoreData/mvStoreInfo';
 
-const WysiwygBundle = Loadable({ // 按需加载富文本配置
-    loader: () => import('./ui/Wysiwyg'),
-    loading: Loading,
-});
 
 export default {
-    ThemeControl,BannerControl,
-    BasicForm, BasicTable, AdvancedTable, AsynchronousTable,
-    Echarts, Recharts, Icons, Buttons, Spins, Modals, Notifications,
-    Tabs, Banners, Drags, Dashboard, Gallery, BasicAnimations,
-    ExampleAnimations, AuthBasic, RouterEnter, WysiwygBundle,
-    Cssmodule, MapUi,
-    InfoC,PayO,PointC,PointRule,MemberLevel,
+    ThemeControl, ThemeContent, BannerControl, AdvertiseM,
+    Dashboard, BasicAnimations,
+    ExampleAnimations, AuthBasic, RouterEnter,
+    Cssmodule,
+    InfoC, PayO, InvitationCode, AddInvCode, ChangeInvCode, PointC, PointRule, MemberLevel,
     InfoDetail,
-    BookLib,AddBookLib,ModifyBookLib,PublisherM,GoodsM,
-    BorrowO,DonateO,CheckO,BorrowH,
-    CommentM,SensitiveWordsM,
-    OrganizationM, CabinetM, WarehouseM,
+    BookLib, AddBookLib, ModifyBookLib, PublisherM, GoodsM,
+    BorrowO, DonateO, CheckO, BorrowH,
+    CommentM, SensitiveWordsM, DynamicCmnt,
+
+    OrganizationM, CabinetM, AddCabinet, ChangeCabinet, WarehouseM, AddWarehouse, ChangeWarehouse, StaffM, AddStaff, ChangeStaff,
+    StoreQuery, InStoreData, InStoreInfo, OutStoreData, OutStoreInfo, MvStoreData, MvStoreInfo,
+    roleAuth
 }

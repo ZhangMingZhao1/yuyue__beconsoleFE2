@@ -11,13 +11,14 @@ export default class CRouter extends Component {
         const { auth } = this.props;
         const { permissions } = auth.data;
         // const { auth } = store.getState().httpData;
+        console.log('dddddddddddd',(!permissions || !permissions.includes(permission)))
         if (!permissions || !permissions.includes(permission)) return <Redirect to={'404'} />;
         return component;
     };
     requireLogin = (component, permission) => {
         const { auth } = this.props;
         const { permissions } = auth.data;
-        if (process.env.NODE_ENV === 'production' && !permissions) { // 线上环境判断是否登录
+        if (!permissions) { // 线上环境判断是否登录
             return <Redirect to={'/login'} />;
         }
         return permission ? this.requireAuth(permission, component) : component;
@@ -30,14 +31,16 @@ export default class CRouter extends Component {
                         routesConfig[key].map(r => {
                             const route = r => {
                                 const Component = AllComponents[r.component];
+                                // console.log('rrrrr',r,r.login);
                                 return (
                                     <Route
                                         key={r.route || r.key}
                                         exact
                                         path={r.route || r.key}
-                                        render={props => r.login ? 
-                                            <Component {...props} />
-                                            : this.requireLogin(<Component {...props} />, r.auth)}
+                                        // render={props => r.login ? 
+                                            // <Component {...props} />
+                                            // : this.requireLogin(<Component {...props} />, r.auth)}
+                                            render={props=><Component {...props} />}
                                     />
                                 )
                             }

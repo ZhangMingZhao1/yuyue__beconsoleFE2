@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Layout, notification, Icon } from 'antd';
 import SiderCustom from './components/SiderCustom';
-import HeaderCustom from './components/HeaderCustom';
-import { receiveData } from './action';
+import HeaderCustom from './components/HeaderCustom/HeaderCustom';
+// import { receiveData } from './action';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Routes from './routes';
@@ -15,44 +15,20 @@ class App extends Component {
         collapsed: false,
     };
     componentWillMount() {
-        const { receiveData } = this.props;
-        const user = JSON.parse(localStorage.getItem('user'));
-        user && receiveData(user, 'auth');
-        // receiveData({a: 213}, 'auth');
-        // fetchData({funcName: 'admin', stateName: 'auth'});
         this.getClientWidth();
         window.onresize = () => {
             console.log('屏幕变化了');
             this.getClientWidth();
         }
     }
-    componentDidMount() {
-        const openNotification = () => {
-            notification.open({
-              message: '博主-yezihaohao',
-              description: (
-                  <div>
-                      <p>
-                          GitHub地址： <a href="https://github.com/yezihaohao" target="_blank" rel="noopener noreferrer">https://github.com/yezihaohao</a>
-                      </p>
-                      <p>
-                          博客地址： <a href="https://yezihaohao.github.io/" target="_blank" rel="noopener noreferrer">https://yezihaohao.github.io/</a>
-                      </p>
-                  </div>
-              ),
-              icon: <Icon type="smile-circle" style={{ color: 'red' }} />,
-              duration: 0,
-            });
-            localStorage.setItem('isFirst', JSON.stringify(true));
-        };
-        const isFirst = JSON.parse(localStorage.getItem('isFirst'));
-        !isFirst && openNotification();
-    }
+
     getClientWidth = () => { // 获取当前浏览器宽度并设置responsive管理响应式
-        const { receiveData } = this.props;
+        // const { receiveData } = this.props;
         const clientWidth = window.innerWidth;
         console.log(clientWidth);
-        receiveData({isMobile: clientWidth <= 992}, 'responsive');
+        if(clientWidth <= 992) {
+            this.setState({collapsed:true});
+        }
     };
     toggle = () => {
         this.setState({
@@ -60,43 +36,46 @@ class App extends Component {
         });
     };
     render() {
-        const { auth, responsive } = this.props;
-        return (
-            <Layout>
-                {!responsive.data.isMobile && <SiderCustom collapsed={this.state.collapsed} />}
-                <ThemePicker />
-                <Layout style={{flexDirection: 'column'}}>
-                    <HeaderCustom toggle={this.toggle} collapsed={this.state.collapsed} user={auth.data || {}} />
-                    <Content style={{ margin: '0 16px', overflow: 'initial', flex: '1 1 0' }}>
-                        <Routes auth={auth} />
-                    </Content>
-                    <Footer style={{ textAlign: 'center' }}>
-                    React-Admin ©{new Date().getFullYear()} Created by 865470087@qq.com
-                    </Footer>
+        let user = this.props.auth;
+        console.log('1111user',user);
+        console.log('this.props',this.props);
+        // console.log('11111111user',auth);
+        // console.log(auth1.data);
+        // const auth = {
+        //     isFetching: false,
+        //     data: {
+        //         uid: 1, permissions: ["auth", "auth/testPage", "auth/authPage", "auth/authPage/edit", "auth/authPage/visit"],
+        //         role: "系统管理员", roleType: 1, userName: "张三"}
+        // }
+
+        const auth = user?user:{data:{}};
+        // if(auth!='null') {
+            return (     
+                <Layout>
+                    <SiderCustom collapsed={this.state.collapsed} />
+                    <ThemePicker />
+                    <Layout style={{flexDirection: 'column'}}>
+                        <HeaderCustom toggle={this.toggle} collapsed={this.state.collapsed} user={auth.data|| {}} />
+                        <Content style={{ margin: '0 16px', overflow: 'initial', flex: '1 1 0' }}>
+                            <Routes auth={auth} />
+                        </Content>
+                        <Footer style={{ textAlign: 'center' }}>
+                       111
+                        </Footer>
+                    </Layout>
                 </Layout>
-                
-                {/* {
-                    responsive.data.isMobile && (   // 手机端对滚动很慢的处理
-                        <style>
-                        {`
-                            #root{
-                                height: auto;
-                            }
-                        `}
-                        </style>
-                    )
-                } */}
-            </Layout>
-        );
+            );
+        // }
     }
 }
 
 const mapStateToProps = state => {
-    const { auth = {data: {}}, responsive = {data: {}} } = state.httpData;
-    return {auth, responsive};
-};
-const mapDispatchToProps = dispatch => ({
-    receiveData: bindActionCreators(receiveData, dispatch)
-});
+    let auth = state.getIn(['login', 'user']);
+    console.log('App111',auth);
+    // return tmp=='null'?{user:{}}:tmp;
+    return {auth};
+    // user: state.getIn(['login', 'user'])
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+
+export default connect(mapStateToProps, null)(App);

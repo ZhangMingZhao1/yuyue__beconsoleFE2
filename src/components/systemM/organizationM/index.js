@@ -69,6 +69,9 @@ class OrganizationM extends React.Component {
         expandedKeys: [],
         searchValue: '',
         autoExpandParent: true,
+        input1Value: '',
+        input2Value: '',
+        input3Value: ''
     }
 
     onExpand = (expandedKeys) => {
@@ -121,8 +124,26 @@ class OrganizationM extends React.Component {
         });
     }
 
+    handleInput2Change = (e) => {
+        this.setState({
+            input2Value: e.target.value
+        });
+    }
+
+    handleInput3Change = (e) => {
+        this.setState({
+            input3Value: e.target.value
+        });
+    }
+
+    handleInput1Change = (e) => {
+        this.setState({
+            input1Value: e.target.value
+        });
+    }
+
     render() {
-        const { searchValue, expandedKeys, autoExpandParent } = this.state;
+        const { searchValue, expandedKeys, autoExpandParent, input1Value, input2Value, input3Value } = this.state;
         const loop = data => data.map((item) => {
             const index = item.key.search(searchValue);
             const beforeStr = item.key.substr(0, index);
@@ -182,16 +203,17 @@ class OrganizationM extends React.Component {
                                 <div style={{ margin: '10px' }}>
                                     机构代码：
                                     <Input
-                                        disabled="true"
-                                        value="0023"
+                                        // eslint-disable-next-line
+                                        disabled={true}
+                                        value={input1Value}
                                         style={{ width: '200px' }}
-                                        onChange={this.handleInput1Change}
+                                    // onChange={this.handleInput1Change}
                                     />
                                 </div>
                                 <div style={{ margin: '10px' }}>
                                     上级名称：
                                     <Input
-                                        value="海淀区"
+                                        value={input2Value}
                                         style={{ width: '200px' }}
                                         onChange={this.handleInput2Change}
                                     />
@@ -199,7 +221,7 @@ class OrganizationM extends React.Component {
                                 <div style={{ margin: '10px' }}>
                                     机构名称：
                                     <Input
-                                        value="XXX社区"
+                                        value={input3Value}
                                         style={{ width: '400px' }}
                                         onChange={this.handleInput3Change}
                                     />

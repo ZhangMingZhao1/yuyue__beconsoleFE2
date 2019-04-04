@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Input, Button, Card, Table, Divider } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import './index.less';
+import { fetchGet } from '../../../axios/tools';
 
 const PublisherSearchForm = Form.create()(
     (props) => {
@@ -22,6 +23,29 @@ const PublisherSearchForm = Form.create()(
 );
 
 class BookLib extends React.Component {
+    state = {}
+
+    componentDidMount() {
+        this.requestList();
+    }
+
+    requestList = () => {
+        fetchGet({
+            url: '/bookM/publisherM',
+            params: {
+                page: 1
+            }
+        }).then((res) => {
+            if (res.code == 0) {
+                res.result.list.map((item, index) => {
+                    item.key = index;
+                })
+                this.setState({
+                    dataSource: res.result.list,
+                })
+            }
+        })
+    }
 
     render() {
         const columns = [{
@@ -42,13 +66,6 @@ class BookLib extends React.Component {
             ),
         }];
 
-        const data = [{
-            publisherId: 1,
-            name: '信息出版社'
-        }];
-
-        data.map(i => i.key = i.publisherId);
-
         return (
             <div className="">
                 <BreadcrumbCustom first="书籍管理" second="出版社" />
@@ -60,7 +77,7 @@ class BookLib extends React.Component {
                     <Table 
                         className="publisherM-Table"
                         columns={columns}
-                        dataSource={data}
+                        dataSource={this.state.dataSource}
                         pagination={{
                             showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
                             showSizeChanger: true,

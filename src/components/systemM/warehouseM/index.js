@@ -1,6 +1,7 @@
 import React from 'react';
-import { Select, Input, Button, Row, Col, Card, Table, Modal } from 'antd';
+import { Select, Input, Button, Card, Table, Divider, Modal } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
+import { Link } from 'react-router-dom';
 
 const Option = Select.Option;
 const confirm = Modal.confirm;
@@ -10,113 +11,69 @@ class WarehouseM extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            count: 3,
-            editable: true,
-            departmentData: [],
             searchInputValue: '',
-            selectedRowKeys: [], // Check here to configure the default column
-            warehouseData: [{
-                key: 1,
-                number: 1,
-                warehouseNumber: 1,
-                warehouseName: '北京分公司XX区XX仓库',
-                department: 'XXX',
-                people: '胡晓雪',
-                phoneNumber: 18888888888,
-                address: '北京市XX区XX街道XX号',
-                remark: 'XXXXXX',
-                operator: '妈妈送旺仔牛奶的那个李子明',
-                changeDate: '2018-02-26'
-            },
-            {
-                key: 2,
-                number: 2,
-                warehouseNumber: 2,
-                warehouseName: '北京分公司XX区XX仓库',
-                department: 'XXX',
-                people: '胡晓雪',
-                phoneNumber: 18888888888,
-                address: '北京市XX区XX街道XX号',
-                remark: 'XXXXXX',
-                operator: '妈妈送旺仔牛奶的那个李子明',
-                changeDate: '2018-03-08'
-            }
-            ]
+            warehouseData: []
         }
-        this.handleSelectChange = this.handleSelectChange.bind(this);
-        this.searchInputChange = this.searchInputChange.bind(this);
-        this.searchBtnClick = this.searchBtnClick.bind(this);
-        this.addBtnClick = this.addBtnClick.bind(this);
-        this.editBtnClick = this.editBtnClick.bind(this);
-        this.deleteBtnClick = this.deleteBtnClick.bind(this);
     }
 
-    handleSelectChange() {
+    componentDidMount() {
+        this.requestList();
+    }
+
+    handleSelectChange = () => {
 
     }
 
-    searchInputChange(e) {
+    searchInputChange = (e) => {
         const value = e.target.value;
         this.setState(() => ({
             searchInputValue: value
         }));
     }
 
-    searchBtnClick() {
+    searchBtnClick = () => {
         console.log('searchBtnClicked');
     }
 
-    onSelectChange = (selectedRowKeys) => {
-        console.log('selectedRowKeys changed: ', selectedRowKeys);
-        this.setState({ selectedRowKeys });
-    };
-
-    addBtnClick() {
-        const { count, warehouseData } = this.state;
-        const newData = {
-            key: count,
-            number: count,
-            warehouseNumber: count,
-            warehouseName: '北京分公司XX区XX仓库',
-            department: 'XXX',
-            people: '胡晓雪',
-            phoneNumber: 18888888888,
-            address: '北京市XX区XX街道XX号',
-            remark: 'XXXXXX',
-            operator: '妈妈送旺仔牛奶的那个李子明',
-            changeDate: '2018-02-26'
-        }
-        this.setState(() => ({
-            warehouseData: [...warehouseData, newData],
-            count: count + 1
-        }));
+    requestList = () => {
+        const url = 'https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/staffM/organizationM';
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json', 'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                data: this.state.data
+            })
+        })
+            .then((res) => res.json())
+            .then(data => {
+                // eslint-disable-next-line
+                data.data.warehouseData.map((item, index) => {
+                    item.key = index;
+                });
+                this.setState({
+                    warehouseData: data.data.warehouseData
+                });
+                console.log(this.state.warehouseData);
+            })
+            .catch(err => {
+                console.log('fetch error', err);
+            });
     }
 
-    editBtnClick() {
-
-    }
-
-    deleteBtnClick() {
+    deleteBtnClick = (key) => {
         confirm({
-            okText: '删除',
-            cancelText: '取消',
-            content: `是否确定删除序号为 ${this.state.selectedRowKeys} 的仓库信息`,
+            title: 'Want to delete these items?',
+            content: 'some descriptions',
             onOk: () => {
-                let tmp = this.state.selectedRowKeys;
-                let data = this.state.warehouseData;
-                while (tmp.length !== 0) {
-                    for (let i = 0; i < data.length; i++) {
-                        if (data[i].key === tmp[0]) {
-                            data.splice(i, 1);
-                            tmp.splice(0, 1);
-                            break;
-                        }
-                        console.log(data);
-                        console.log('selectedRowKeys changed: ', tmp);
-                    }
-                }
-                this.setState({ selectedRowKeys: [], warehouseData: data })
-                console.log(data);
+                console.log('OK');
+                console.log(key);
+                const data = this.state.warehouseData;
+                data.splice(key, 1);
+                this.setState({
+                    warehouseData: data
+                });
             },
             onCancel: () => {
                 console.log('Cancel');
@@ -126,17 +83,7 @@ class WarehouseM extends React.Component {
 
     render() {
 
-        const { selectedRowKeys, warehouseData } = this.state;
-        const rowSelection = {
-            selectedRowKeys,
-            onChange: this.onSelectChange,
-            // onSelection: this.onSelection,
-        };
-        const hasSelected = selectedRowKeys.length > 0;
         const columns = [{
-            title: '序号',
-            dataIndex: 'number',
-        }, {
             title: '仓库编号',
             dataIndex: 'warehouseNumber',
         }, {
@@ -163,76 +110,71 @@ class WarehouseM extends React.Component {
         }, {
             title: '修改日期',
             dataIndex: 'changeDate'
-        }
-        ];
+        }, {
+            title: '操作',
+            dataIndex: 'option',
+            render: (text, record, key) => (
+                <span>
+                    <Link to={`${this.props.match.url}/changeWarehouse/${record.warehouseNumber}`}>修改</Link>
+                    <Divider type="vertical" />
+                    {/* eslint-disable-next-line */}
+                    <a href="javascript:;" onClick={() => this.deleteBtnClick(key)}>删除</a>
+                </span>
+            )
+        }];
 
         return (
             <React.Fragment>
                 <BreadcrumbCustom first="系统管理" second="仓库维护" />
-                <div>
-                    所属部门：
-                    <Select
-                        style={{ width: 120, marginLeft: '10px' }}
-                        onChange={this.handleSelectChange}
-                    >
-                        <Option value="1">1</Option>
-                    </Select>
-                    <Input
-                        style={{ width: '400px', marginLeft: '10px' }}
-                        placeholder="仓库名称，编号，联系人，地址模糊查询"
-                        onChange={this.searchInputChange}
-                        value={this.state.searchInputValue}
-                    />
-                    <Button
-                        type="primary"
-                        onClick={this.searchBtnClick}
-                        style={{ marginLeft: '10px' }}
-                    >
-                        查询
-                    </Button>
-                </div>
-                <div>
-                    <Row gutter={16}>
-                        <Col className="gutter-row" md={24}>
-                            <div className="gutter-box">
-                                <Card bordered={false}>
-                                    <div>
-                                        <Button
-                                            type="primary"
-                                            style={{ marginTop: '10px' }}
-                                            onClick={this.addBtnClick}
-                                        >
-                                            新建
-                                            </Button>
-                                        <Button
-                                            type="primary"
-                                            style={{ marginTop: '10px' }}
-                                            disabled={!hasSelected}
-                                            onClick={this.editBtnClick}
-                                        >
-                                            修改
-                                            </Button>
-                                        <Button
-                                            type="primary"
-                                            style={{ marginTop: '10px' }}
-                                            disabled={!hasSelected}
-                                            onClick={this.deleteBtnClick}
-                                        >
-                                            删除
-                                            </Button>
-                                    </div>
-                                    <Table
-                                        rowSelection={rowSelection}
-                                        columns={columns}
-                                        dataSource={this.state.warehouseData}
-                                        style={{ marginTop: '24px' }}
-                                    />
-                                </Card>
+                <Card title="仓库维护">
+                    <div>
+                        所属部门：
+                        <Select
+                            style={{ width: 120, marginLeft: '10px' }}
+                            onChange={this.handleSelectChange}
+                        >
+                            <Option placeholder="全部" value="1">1</Option>
+                        </Select>
+                        <Input
+                            style={{ width: '400px', marginLeft: '10px' }}
+                            placeholder="仓库名称，编号，联系人，地址模糊查询"
+                            onChange={this.searchInputChange}
+                            value={this.state.searchInputValue}
+                        />
+                        <Button
+                            type="primary"
+                            onClick={this.searchBtnClick}
+                            style={{ marginLeft: '10px' }}
+                        >
+                            查询
+                        </Button>
+                    </div>
+                    <div>
+                        <div className="gutter-box">
+                            <div style={{ marginTop: '24px' }}>
+                                <Button
+                                    type="primary"
+                                >
+                                    <Link to={`${this.props.match.url}/addWarehouse`}>
+                                        新建
+                                    </Link>
+                                </Button>
                             </div>
-                        </Col>
-                    </Row>
-                </div>
-            </React.Fragment>
+                            <Table
+                                bordered
+                                columns={columns}
+                                dataSource={this.state.warehouseData}
+                                style={{ marginTop: '10px' }}
+                                pagination={{
+                                    showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
+                                    showSizeChanger: true,
+                                    pageSizeOptions: ['10', '20', '50']
+                                }}
+                            />
+                        </div>
+                    </div>
+                </Card>
+            </React.Fragment >
         );
     }
 }
