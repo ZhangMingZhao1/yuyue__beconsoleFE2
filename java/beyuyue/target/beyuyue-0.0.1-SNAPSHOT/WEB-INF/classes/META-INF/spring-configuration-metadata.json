@@ -1,0 +1,28 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.yuyue.properties.FileUploadProperteis",
+      "name": "file",
+      "type": "com.yuyue.properties.FileUploadProperteis"
+    },
+    {
+      "sourceType": "com.yuyue.config.DruidConfig",
+      "name": "spring.datasource",
+      "sourceMethod": "druidDataSource()",
+      "type": "javax.sql.DataSource"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.yuyue.properties.FileUploadProperteis",
+      "name": "file.static-access-path",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.yuyue.properties.FileUploadProperteis",
+      "name": "file.upload-folder",
+      "type": "java.lang.String"
+    }
+  ]
+}
