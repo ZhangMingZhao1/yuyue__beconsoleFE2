@@ -2,11 +2,30 @@ import React from 'react';
 import { Card, Button, Input, Select, Form, Table, Divider, Modal } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import { Link } from 'react-router-dom';
+import URL from '../../../api/config';
 
 const Option = Select.Option;
 const confirm = Modal.confirm;
 const StaffSearchForm = Form.create()(
     (props) => {
+        function handleSubmit(e){
+            e.preventDefault();
+            props.form.validateFields((err, values) => {
+                if (!err) {
+                  console.log('2323232Received values of form: ', values);
+                }
+              });
+            let options = {
+                method:"GET",
+            }
+            fetch(`${URL}`,options)
+                .then((res)=>{
+                    res.json();
+                })
+                .then((data)=>{
+                    props.toF(data);
+                })
+        }
         const { getFieldDecorator } = props.form;
         const selectData = [{
             label: "所属机构",
@@ -25,10 +44,17 @@ const StaffSearchForm = Form.create()(
             value: ['全部', '正常', '停用']
         }];
         return (
-            <Form layout="inline">
-                <Form.Item>
-                    <label>姓名：</label>
-                    <Input placeholder="姓名" style={{ width: 120 }} />
+            <Form onSubmit={handleSubmit} layout="inline">
+                <Form.Item label="姓名">     
+                    {getFieldDecorator('username', {
+                            rules: [{
+                                required: false, message: '',
+                            }, {
+                                // validator: this.validateUserName,
+                            }],
+                        })(
+                            <Input placeholder="姓名" style={{ width: 120 }} />
+                        )}
                 </Form.Item>
                 {selectData.map(i => (
                     <Form.Item key={i.name} label={i.label}>
@@ -50,7 +76,7 @@ const StaffSearchForm = Form.create()(
 class StaffM extends React.Component {
 
     state = {
-        data: []
+        tableData: []
     }
 
     componentDidMount() {
@@ -69,28 +95,27 @@ class StaffM extends React.Component {
             },
         });
     }
-
+    tableFatherDataChange = (data)=>{
+        this.setState({tableData:data})
+    }
     requestList = () => {
-        const url = 'http://119.3.231.11:8080/yuyue/listUser';
+        const url = `${URL}/listUsers`;
         fetch(url, {
-            method: 'POST',
+            method: 'GET',
             headers: {
                 'Accept': 'application/json', 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                data: this.state.data
-            })
         })
             .then((res) => res.json())
             .then(data => {
-                console.log(data);
+                console.log('2121212121data'+data);
                 // eslint-disable-next-line
-                data.map((item, index) => {
-                    item.key = index;
-                });
-                this.setState({
-                    data: data
-                });
+                // data.map((item, index) => {
+                //     item.key = index;
+                // });
+                // this.setState({
+                //     tableData: data
+                // });
             })
             .catch(err => {
                 console.log('fetch error', err)
@@ -110,10 +135,10 @@ class StaffM extends React.Component {
             dataIndex: 'telephone',
         }, {
             title: '所属机构',
-            dataIndex: 'beDepartment.name',
+            dataIndex: 'beInstitution',
         }, {
             title: '所属部门',
-            dataIndex: 'beInstitution.name',
+            dataIndex: 'beDepartment',
         }, {
             title: '角色',
             dataIndex: 'role',
@@ -139,7 +164,7 @@ class StaffM extends React.Component {
             ),
         }];
 
-        const { data } = this.state;
+        const { tableData } = this.state;
 
         return (
             <React.Fragment>
@@ -147,13 +172,13 @@ class StaffM extends React.Component {
                 <Card
                     title="员工管理"
                 >
-                    <StaffSearchForm /><br />
+                    <StaffSearchForm tableChildDataChange={this.tableFatherDataChange}/><br />
                     <div style={{ marginBottom: '10px' }}>
                         <Button type="primary"><Link to={`${this.props.match.url}/addStaff`}>新增</Link></Button>
                     </div>
                     <Table className="infoC-table"
                         columns={columns}
-                        dataSource={data}
+                        dataSource={tableData}
                         pagination={{
                             showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
                             showSizeChanger: true,

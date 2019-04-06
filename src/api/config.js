@@ -10,4 +10,9 @@ const baseURL = base+SK;
 
 const ceshiIP = 'http://119.3.231.11:8080';
 const ceshiURL = ceshiIP+'/yuyue';
+
+const localIP = "http://localhost:8080"
+const localURL = localIP + '/yuyue';
+
 export default ceshiURL;
+
