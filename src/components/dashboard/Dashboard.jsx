@@ -11,7 +11,11 @@ import URL from '../../api/config';
 class Dashboard extends React.Component {
     state={data:{}};
     componentDidMount(){
-        fetch(`${URL}/home`,{method:'GET'})
+        fetch(`${URL}/home`,{
+            method:'GET',
+            // mode: 'cors',
+            credentials: 'include', // 请求带上cookies，是每次请求保持会话一直
+            })
             .then((res)=>res.json())
             .then(data=>{
                 this.setState({data:data.data})
