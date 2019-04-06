@@ -70,7 +70,7 @@ class PayO extends React.Component {
     }
 
     requestList = () => {
-        fetch(`${Url}/vipplanorders?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`)
+        fetch(`${Url}/vipplanorders?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`, { credentials: 'include' })
             .then((res) => res.json()).then(result => {
                 let data = result;
                 this.setState({

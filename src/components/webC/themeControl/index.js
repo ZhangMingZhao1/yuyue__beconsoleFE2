@@ -22,7 +22,7 @@ class ThemeControl extends React.Component {
   }
 
   requestList = () => {
-    fetch(`${Url}/booksubjects?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`)
+    fetch(`${Url}/booksubjects?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`, { credentials: 'include' })
       .then((res) => res.json()).then(result => {
         let data = result;
         this.setState({
@@ -70,6 +70,7 @@ class ThemeControl extends React.Component {
       headers: {
         'Content-Type': 'application/json;'
       },
+      credentials: 'include',
       body: JSON.stringify(values)
     }).then((res) => res.json()).then(result => {
       if (result.code === 0) {
@@ -94,6 +95,7 @@ class ThemeControl extends React.Component {
       headers: {
         'Content-Type': 'application/json'
       },
+      credentials: 'include',
       body: JSON.stringify({ booksubjectId: key, ...values })
     }).then((res) => res.json()).then(result => {
       if (result.code === 0) {
@@ -114,6 +116,7 @@ class ThemeControl extends React.Component {
   handleDel = (key) => {
     fetch(`${Url}/booksubjects/${key}`, {
       method: 'DELETE',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json'
       }

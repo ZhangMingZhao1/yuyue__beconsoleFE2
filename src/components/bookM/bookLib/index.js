@@ -6,7 +6,7 @@ import Url from '../../../api/config';
 import pagination from '../../pagination';
 import { getFormItem } from '../../baseFormItem';
 
-const BookSearchForm = Form.create()(  
+const BookSearchForm = Form.create()(
     class extends React.Component {
         handleSubmit = (e) => {
             e.preventDefault();
@@ -47,7 +47,7 @@ class BookLib extends React.Component {
     }
 
     requestList = () => {
-        fetch(`${Url}/bookinfos?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`)
+        fetch(`${Url}/bookinfos?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`, { credentials: 'include' })
             .then((res) => res.json()).then(data => {
                 this.setState({
                     pagination: pagination(data, (current) => {//改变页码

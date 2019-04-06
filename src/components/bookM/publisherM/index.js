@@ -163,7 +163,7 @@ class BookLib extends React.Component {
     }
 
     requestList = () => {
-        fetch(`${Url}/publishinfos?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`)
+        fetch(`${Url}/publishinfos?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`, { credentials: 'include' })
             .then((res) => res.json()).then(data => {
                 this.setState({
                     pagination: pagination(data, (current) => {//改变页码
@@ -192,6 +192,7 @@ class BookLib extends React.Component {
             headers: {
                 'Content-Type': 'application/json'
             },
+            credentials: 'include',
             body: JSON.stringify(value)
         }).then((res) => res.json()).then(result => {
             if (result.code === 0) {
@@ -206,9 +207,13 @@ class BookLib extends React.Component {
         })
     }
 
+    /**
+     * 删除出版社信息
+     */
     handleDel = (key) => {
         fetch(`${Url}/publishinfos/${key}`, {
             method: 'DELETE',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -233,25 +238,26 @@ class BookLib extends React.Component {
             method: 'Post',
             mode: 'cors',
             headers: {
-              'Content-Type': 'application/json'
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify({pubName: this.state.addPubName})
-          }).then((res) => res.json()).then(result => {
+            credentials: 'include',
+            body: JSON.stringify({ pubName: this.state.addPubName })
+        }).then((res) => res.json()).then(result => {
             if (result.code === 0) {
-              message.success("新增成功 " + JSON.stringify(result.data))
-              this.setState({addPubName: ''})
-              this.requestList();//刷新页面
+                message.success("新增成功 " + JSON.stringify(result.data))
+                this.setState({ addPubName: '' })
+                this.requestList();//刷新页面
             } else {
-              message.error(result.message)
+                message.error(result.message)
             }
-          }).catch((err) => {
+        }).catch((err) => {
             console.log(err)
-          })
+        })
     }
 
     render() {
         const AddInput = <span>
-            <font style={{lineHeight: '50px'}}>出版社名称：</font>
+            <font style={{ lineHeight: '50px' }}>出版社名称：</font>
             <Input value={this.state.addPubName} onChange={(e) => { this.setState({ addPubName: e.target.value }) }} />
         </span>
         return (

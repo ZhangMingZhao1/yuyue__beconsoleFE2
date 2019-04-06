@@ -59,7 +59,7 @@ class BannerC extends React.Component {
     }
 
     requestList = () => {
-        fetch(`${Url}/pictures?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`)
+        fetch(`${Url}/pictures?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`,{credentials: 'include'})
             .then((res) => {console.log(res); return res.json()}).then(result => {
                 let data = result;
                 this.setState({
@@ -101,6 +101,7 @@ class BannerC extends React.Component {
             headers: {
                 "Content-Type": "multipart/form-data",
             },
+            credentials: 'include',
             body: formData
         }).then((res) => res.json()).then(result => {
             message.success(result)
