@@ -1,13 +1,29 @@
 import React from 'react';
-import { Form, Select, Input, Button, Card, DatePicker, Table} from 'antd';
+import { Form, Select, Input, Button, Card, DatePicker, Table } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import './index.less';
 import OrderDet from './orderDet';
-import { fetchGet } from '../../../axios/tools';
+import Url from '../../../api/config';
+import pagination from '../../pagination';
+import moment from 'moment';
 
 const { Option } = Select;
 const InputGroup = Input.Group;
 const { RangePicker } = DatePicker;
+
+//捐书方式
+const deliverTypeConfig = {
+    "1": "书柜",
+    "2": "快递"
+}
+//订单状态
+const statusConfig = {
+    "-1": "待入柜",
+    "0": "待审核",
+    "1": "污损",
+    "2": "盗版",
+    "9": "已完成"
+}
 
 const DonateOSearchForm = Form.create()(
     (props) => {
@@ -62,25 +78,39 @@ class DonateO extends React.Component {
             modal1: false,
         }
     }
-    componentDidMount(){
+    params = {
+        currentPage: 1,//当前页面
+        pageSize: 10,//每页大小
+    }
+    componentDidMount() {
         this.requestList();
     }
     requestList = () => {
-        fetchGet({
-            url: '/orderO/donateO',
-            params: {
-                page: 1
-            }
-        }).then((res) => {
-            if (res.code == 0) {
-                res.result.list.map((item, index) => {
-                    item.key = index;
-                })
+        fetch(`${Url}/curdonaterecords?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`)
+            .then((res) => res.json()).then(result => {
+                let data = result;
                 this.setState({
-                    dataSource: res.result.list,
+                    pagination: pagination(data, (current) => {//改变页码
+                        this.params.currentPage = current;
+                        this.requestList();
+                    }, (size) => {//pageSize 变化的回调
+                        this.params.pageSize = size;
+                        this.requestList();
+                    }),
+                    dataSource: data.content.map(i => ({
+                        key: i.donateId,
+                        donateId: i.donateId,
+                        userId: i.bsUserinfo.userId,
+                        nickname: i.bsUserinfo.nickname,
+                        deliverType: i.deliverType,
+                        donateTime: moment(i.donateTime).format("YYYY-MM-DD HH:mm:ss"),
+                        createTime: moment(i.createTime).format("YYYY-MM-DD HH:mm:ss"),
+                        status: i.status,
+                    }))
                 })
-            }
-        })
+            }).catch((err) => {
+                console.log(err);
+            })
     }
     showModal(key) {
         this.setState({ [key]: true });
@@ -90,20 +120,19 @@ class DonateO extends React.Component {
     }
 
     render() {
-        const { dataSource } = this.state;
         const columns = [
-            { title: '订单编号', dataIndex: 'orderId' },
-            { title: '会员账号', dataIndex: 'account' },
-            { title: '会员昵称', dataIndex: 'nickName' },
+            { title: '订单编号', dataIndex: 'donateId' },
+            { title: '会员账号', dataIndex: 'userId' },
+            { title: '会员昵称', dataIndex: 'nickname' },
             { title: '书籍名称', dataIndex: 'bookName' },
-            { title: '捐书方式', dataIndex: 'donateWay' },
+            { title: '捐书方式', dataIndex: 'deliverType', render: (type) => deliverTypeConfig[type] },
             { title: '捐书时间', dataIndex: 'donateTime' },
             { title: '创建时间', dataIndex: 'createTime' },
-            { title: '订单状态', dataIndex: 'orderState' },
+            { title: '订单状态', dataIndex: 'status', render: (status) => statusConfig[status] },
             {
                 title: '操作',
                 dataIndex: 'action',
-                render: (text, record) => <span><a onClick={()=>{this.showModal('modal1')}}>详情</a></span>
+                render: (text, record) => <span><a onClick={() => { this.showModal('modal1') }}>详情</a></span>
             }];
 
         return (
@@ -117,18 +146,14 @@ class DonateO extends React.Component {
                     <Table
                         className="donateO-table"
                         columns={columns}
-                        dataSource={dataSource}
-                        pagination={{
-                            showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
-                            showSizeChanger: true,
-                            pageSizeOptions: ['10', '20', '50']
-                        }}
+                        dataSource={this.state.dataSource}
+                        pagination={this.state.pagination}
                         bordered
                     />
                     <OrderDet
                         visible={this.state.modal1}
-                        onCancel={()=>{this.closeModal('modal1')}}
-                        donateWay = 'post'
+                        onCancel={() => { this.closeModal('modal1') }}
+                        donateWay='post'
                     />
                 </Card>
 

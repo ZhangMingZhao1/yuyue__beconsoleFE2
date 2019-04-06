@@ -1,6 +1,3 @@
-/**
- * Created by hao.cheng on 2017/5/3.
- */
 import React from 'react';
 import { Card, Table, Divider, Tag, Input, Button, Icon, Modal, Switch, message, Popconfirm } from 'antd';
 import './index.less';
@@ -25,7 +22,7 @@ class ThemeControl extends React.Component {
   }
 
   requestList = () => {
-    fetch(`${Url}/subject?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`)
+    fetch(`${Url}/booksubjects?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`)
       .then((res) => res.json()).then(result => {
         let data = result;
         this.setState({
@@ -67,7 +64,7 @@ class ThemeControl extends React.Component {
   handleAdd = (form) => {
     let values = form.getFieldsValue();
     values = { ...values, isShow: values.isShow ? 1 : 0 }
-    fetch(`${Url}/addsubject`, {
+    fetch(`${Url}/booksubjects`, {
       method: 'POST',
       mode: 'cors',
       headers: {
@@ -92,8 +89,8 @@ class ThemeControl extends React.Component {
   handleModify = (form, key) => {
     let values = form.getFieldsValue();
     values = { ...values, isShow: values.isShow ? 1 : 0 }
-    fetch(`${Url}/updatesubject`, {
-      method: 'post',
+    fetch(`${Url}/booksubject`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -115,18 +112,22 @@ class ThemeControl extends React.Component {
 
   //删除专题
   handleDel = (key) => {
-    fetch(`${Url}/deletesubject?booksubjectId=${key}`)
-      .then((res) => res.json()).then(result => {
-        if (result.code === 0) {
-          console.log(result.data)
-          message.success("删除" + JSON.stringify(result.data) + "成功")
-          this.requestList();//刷新页面
-        } else {
-          message.error(result.message)
-        }
-      }).catch((err) => {
-        console.log(err)
-      })
+    fetch(`${Url}/booksubjects/${key}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then((res) => res.json()).then(result => {
+      if (result.code === 0) {
+        console.log(result.data)
+        message.success("删除" + JSON.stringify(result.data) + "成功")
+        this.requestList();//刷新页面
+      } else {
+        message.error(result.message)
+      }
+    }).catch((err) => {
+      console.log(err)
+    })
   }
 
   handleSearch = (selectedKeys, confirm) => () => {

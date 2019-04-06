@@ -30,7 +30,7 @@ class ThemeContent extends React.Component {
      * 专题书籍查询
      */
     requestList() {
-        fetch(`${Url}/getBooks?booksubjectId=${this.props.match.params.id}`)
+        fetch(`${Url}/bookinsubjects/${this.props.match.params.id}`)
             .then((res) => res.json()).then(data => {
                 this.setState({
                     booksubjectId: data.subject.booksubjectId,
@@ -49,7 +49,7 @@ class ThemeContent extends React.Component {
      * 书籍目录获取
      */
     requestCategory() {
-        fetch(`${Url}/listBookcategory`)
+        fetch(`${Url}/bookcategories`)
             .then((res) => res.json()).then(data => {
                 this.setState({
                     treeData: [{
@@ -67,7 +67,7 @@ class ThemeContent extends React.Component {
      * 书名&目录 查询
      */
     requestQuery() {
-        fetch(`${Url}/getByCategoryAndBookName?bsBookcategory=${this.state.searchCategory}&bookName=${this.state.searchValue}`)
+        fetch(`${Url}/bookinfo/${this.state.searchCategory}?bookName=${this.state.searchValue}`)
             .then((res) => res.json()).then(data => {
                 this.setState({
                     radioData: data.map(i => ({
@@ -87,7 +87,7 @@ class ThemeContent extends React.Component {
      */
     requestAdd(value) {
         console.log(JSON.stringify({ bsBookinfo: value, bsBooksubject: this.state.booksubjectId }))
-        fetch(`${Url}/addbookinsubject`, {
+        fetch(`${Url}/bookinsubjects`, {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -97,7 +97,7 @@ class ThemeContent extends React.Component {
         }).then((res) => res.json()).then(result => {
             if (result.code === 0) {
                 message.success("新增成功 " + JSON.stringify(result.data))
-                this.setState({ visible: false, Adding: false});
+                this.setState({ visible: false, Adding: false });
                 this.requestList();//刷新页面
             } else {
                 message.error(result.message)
@@ -118,11 +118,15 @@ class ThemeContent extends React.Component {
 
     /**
      * 删除专题书籍
-     * @param {*} key Bookidinsubjeck
+     * @param {*} key Bookidinsubject
      */
     handleDel(key) {
-        fetch(`${Url}/deletebookinsubject?bookinsubjectId=${key}`)
-            .then((res) => res.json()).then(result => {
+        fetch(`${Url}/bookinsubjects/${key}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((res) => res.json()).then(result => {
                 if (result.code === 0) {
                     console.log(result.data)
                     message.success("删除" + JSON.stringify(result.data) + "成功")
@@ -194,8 +198,8 @@ class ThemeContent extends React.Component {
     onChange = (e) => {
         this.setState({
             Adding: true
-        },()=>{this.requestAdd(e.target.value)})
-        
+        }, () => { this.requestAdd(e.target.value) })
+
     }
 
     render() {

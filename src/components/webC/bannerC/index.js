@@ -59,8 +59,8 @@ class BannerC extends React.Component {
     }
 
     requestList = () => {
-        fetch(`${Url}/listPicture?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`)
-            .then((res) => res.json()).then(result => {
+        fetch(`${Url}/pictures?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`)
+            .then((res) => {console.log(res); return res.json()}).then(result => {
                 let data = result;
                 this.setState({
                     pagination: pagination(data, (current) => {//改变页码
@@ -91,31 +91,33 @@ class BannerC extends React.Component {
     //新增banner
     handleAdd = (form) => {
         let values = form.getFieldsValue();
-        values = { ...values, status: values.status ? 1 : 0, image: values.image[0]}
-        console.log(values)
-        fetch(`${Url}/addPicture`, {
+        console.log(values.file[0])
+        const formData = new FormData();
+        formData.append('fileType', "other_img");
+        formData.append('file', values.file[0]);
+        fetch('http://47.104.92.91:8081/file/upload/uploadFile', {
             method: 'POST',
-            mode: 'cors',
+            mode: 'no-cors',
             headers: {
-                'Content-Type': 'application/json;'
+                "Content-Type": "multipart/form-data",
             },
-            body: JSON.stringify(values)
+            body: formData
         }).then((res) => res.json()).then(result => {
-            console.log(result)
-            if (result.code === 0) {
+            message.success(result)
+            if (result.suc === true) {
                 message.success("新增成功 " + JSON.stringify(result.data))
-                form.resetFields();//重置表单
-                this.setState({ visible: false });
                 this.requestList();//刷新页面
             } else {
-                message.error(result.message)
+                message.error(result.msg)
             }
         }).catch((err) => {
             console.log(err)
         })
     }
 
-
+    /**
+     * 删除banner
+     */
     handleDelete = () => {
         confirm({
             title: '是否确定删除？',

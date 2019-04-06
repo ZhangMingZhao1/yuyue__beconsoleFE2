@@ -4,48 +4,33 @@ import BreadcrumbCustom from '../../BreadcrumbCustom';
 import { Link } from 'react-router-dom';
 import Url from '../../../api/config';
 import pagination from '../../pagination';
+import { getFormItem } from '../../baseFormItem';
 
-const { Option } = Select;
-const BookSearchForm = Form.create()(
-    (props) => {
-        const { getFieldDecorator } = props.form;
-        const selectData = [{
-            label: "分类",
-            placeholder: "全部",
-            name: "category",
-            value: ['1', '2']
-        }, {
-            label: "是否精选",
-            placeholder: "全部",
-            name: "isSelected",
-            value: ['是', '否'],
-        }, {
-            label: "出版社",
-            placeholder: "全部",
-            name: "publisher",
-            value: ['1', '2']
-        }];
-        return (
-            <Form layout="inline">
-                {selectData.map(i => (
-                    <Form.Item key={i.name} label={i.label}>
-                        {getFieldDecorator(i.name)(
-                            <Select placeholder={i.placeholder} style={{ width: 120 }}>
-                                {i.value.map(v => (<Option key={v} value={v}>{v}</Option>))}
-                            </Select>
-                        )}
+const BookSearchForm = Form.create()(  
+    class extends React.Component {
+        handleSubmit = (e) => {
+            e.preventDefault();
+            let fieldsValue = this.props.form.getFieldsValue();
+            console.log(fieldsValue);
+        }
+
+        render() {
+            const { form } = this.props;
+            const formList = [
+                { type: 'SELECT', label: '分类', name: 'categoryName', width: '100px', list: [] },
+                { type: 'SELECT', label: '是否精选', name: 'recommend', width: '100px', list: [{ id: "2", name: "全部" }, { id: "0", name: "否" }, { id: "1", name: "是" }] },
+                { type: 'RANGPICKER', label: '出版社', name: 'pubName', width: '300px' },
+                { type: 'INPUT', placeholder: '名称/ISBN/作者模糊查询', name: 'fuzzyQuery', width: '300px' },
+            ];
+            return (
+                <Form layout="inline" onSubmit={this.handleSubmit}>
+                    {getFormItem(form, formList)}
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit">查询</Button>
                     </Form.Item>
-                ))}
-                <Form.Item>
-                    {getFieldDecorator('fuzzyQuery')(
-                        <Input placeholder="名称/ISBN/作者模糊查询" style={{ width: 200 }} />
-                    )}
-                </Form.Item>
-                <Form.Item>
-                    <Button type="primary" htmlType="submit">查询</Button>
-                </Form.Item>
-            </Form>
-        );
+                </Form>
+            );
+        }
     }
 );
 
@@ -62,7 +47,7 @@ class BookLib extends React.Component {
     }
 
     requestList = () => {
-        fetch(`${Url}/listBookinfo?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`)
+        fetch(`${Url}/bookinfos?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`)
             .then((res) => res.json()).then(data => {
                 this.setState({
                     pagination: pagination(data, (current) => {//改变页码

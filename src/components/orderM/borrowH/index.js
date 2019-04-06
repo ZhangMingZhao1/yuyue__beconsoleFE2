@@ -2,17 +2,25 @@ import React from 'react';
 import { Form, Select, Input, Button, Card, DatePicker, Table } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import './index.less';
-import { fetchGet } from '../../../axios/tools';
+import Url from '../../../api/config';
+import pagination from '../../pagination';
+import moment from 'moment';
 
 const { Option } = Select;
 const InputGroup = Input.Group;
 const { RangePicker } = DatePicker;
 
+//借书/还书方式
+const deliverTypeConfig = {
+    "1": "书柜",
+    "2": "快递"
+}
+
 const DonateOSearchForm = Form.create()(
     (props) => {
         const { getFieldDecorator } = props.form;
         const stateSelect = ['全部', '1', '2'];
-        const timeSelect = ['借书时间','还书时间', '创建时间'];
+        const timeSelect = ['借书时间', '还书时间', '创建时间'];
         const borrowWay = ['全部',];
         const returnWay = ['全部',];
         return (
@@ -81,25 +89,42 @@ class BorrowH extends React.Component {
             modal1: false,
         }
     }
-    componentDidMount(){
+    params = {
+        currentPage: 1,//当前页面
+        pageSize: 10,//每页大小
+    }
+    componentDidMount() {
         this.requestList();
     }
     requestList = () => {
-        fetchGet({
-            url: '/orderO/borrowH',
-            params: {
-                page: 1
-            }
-        }).then((res) => {
-            if (res.code == 0) {
-                res.result.list.map((item, index) => {
-                    item.key = index;
-                })
+        fetch(`${Url}/hisborrowrecords?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`)
+            .then((res) => res.json()).then(result => {
+                let data = result;
                 this.setState({
-                    dataSource: res.result.list,
+                    pagination: pagination(data, (current) => {//改变页码
+                        this.params.currentPage = current;
+                        this.requestList();
+                    }, (size) => {//pageSize 变化的回调
+                        this.params.pageSize = size;
+                        this.requestList();
+                    }),
+                    dataSource: data.content.map(i => ({
+                        key: i.borrowId,
+                        borrowId: i.borrowId,
+                        userId: i.bsUserinfo.userId,
+                        nickname: i.bsUserinfo.nickname,
+                        bookName: i.bsBookinfo.bookName,
+                        isbn: i.bsBookinfo.isbn,
+                        rfid: i.bsBookinstore.rfid,
+                        deliverType: i.deliverType,
+                        returnWay: i.returnWay,
+                        finishTime: moment(i.finishTime).format("YYYY-MM-DD HH:mm:ss"),
+                        createTime: moment(i.createTime).format("YYYY-MM-DD HH:mm:ss")
+                    }))
                 })
-            }
-        })
+            }).catch((err) => {
+                console.log(err);
+            })
     }
     showModal(key) {
         this.setState({ [key]: true });
@@ -109,18 +134,17 @@ class BorrowH extends React.Component {
     }
 
     render() {
-        const { dataSource } = this.state;
         const columns = [
-            { title: '订单编号', dataIndex: 'orderId' },
-            { title: '会员账号', dataIndex: 'account' },
-            { title: '会员昵称', dataIndex: 'nickName' },
+            { title: '订单编号', dataIndex: 'borrowId' },
+            { title: '会员账号', dataIndex: 'userId' },
+            { title: '会员昵称', dataIndex: 'nickname' },
             { title: '书籍名称', dataIndex: 'bookName' },
             { title: 'ISBN', dataIndex: 'isbn' },
-            { title: '电子标签', dataIndex: 'tag' },
-            { title: '借书方式', dataIndex: 'borrowStyle' },
-            { title: '借书时间', dataIndex: 'borrowTime' },
-            { title: '还书方式', dataIndex: 'returnStyle' },
-            { title: '还书时间', dataIndex: 'returnTime' },
+            { title: '电子标签', dataIndex: 'rfid' },
+            { title: '借书方式', dataIndex: 'deliverType', render: (type)=>deliverTypeConfig[type] },
+            // { title: '借书时间', dataIndex: 'createTime' },
+            { title: '还书方式', dataIndex: 'returnWay', render: (type)=>deliverTypeConfig[type] },
+            { title: '还书时间', dataIndex: 'finishTime' },
             { title: '创建时间', dataIndex: 'createTime' },
             {
                 title: '操作',
@@ -139,12 +163,8 @@ class BorrowH extends React.Component {
                     <Table
                         className="borrowH-table"
                         columns={columns}
-                        dataSource={dataSource}
-                        pagination={{
-                            showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
-                            showSizeChanger: true,
-                            pageSizeOptions: ['10', '20', '50']
-                        }}
+                        dataSource={this.state.dataSource}
+                        pagination={this.state.pagination}
                         bordered
                     />
                 </Card>

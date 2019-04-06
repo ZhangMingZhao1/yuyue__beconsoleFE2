@@ -22,7 +22,7 @@ const BannerInfoForm = Form.create()(
                 { type: 'SWITCH', label: '状态', name: 'status', formItemLayout },
                 { type: 'SELECT', label: '位置', name: 'type', width: '150px', list: typeList, formItemLayout },
                 { type: 'INPUTNUMBER', label: '排序', name: 'sort', width: '100px', formItemLayout },
-                { type: 'UPLOAD', label: '图片', name: 'image', width: '100px', formItemLayout },
+                { type: 'UPLOAD', label: '图片', name: 'file', width: '100px', formItemLayout },
             ];
             return (
                 <Form >
