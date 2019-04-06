@@ -1,5 +1,5 @@
 import React from 'react';
-import { Select, Input, Button, Card, Table, Divider, Modal, Popover } from 'antd';
+import { Select, Input, Button, Card, Table, Divider, Modal, Popover, message } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
@@ -15,7 +15,8 @@ class WarehouseM extends React.Component {
         this.state = {
             selectValue: '',
             searchInputValue: '',
-            warehouseData: []
+            warehouseData: [],
+            selectData: []
         }
     }
 
@@ -38,7 +39,7 @@ class WarehouseM extends React.Component {
 
     searchBtnClick = () => {
         const state = this.state;
-        fetch(`${URL}/listWarehouse?id=${state.selectValue}&keyword=${state.searchInputValue}`)
+        fetch(`${URL}/warehouses?id=${state.selectValue ? state.selectValue : ''}&keyword=${state.searchInputValue}`)
             .then(res => res.json())
             .then(data => {
                 data.content.map((i) => {
@@ -63,10 +64,11 @@ class WarehouseM extends React.Component {
     }
 
     requestList = () => {
-        fetch(`${URL}/listWarehouse`)
+        // 获取表格内容
+        fetch(`${URL}/warehouses`)
             .then((res) => res.json())
             .then(data => {
-                console.log(data)
+                // console.log(data)
                 data.content.map((i) => {
                     i.key = i.warehouseId;
                     i.updateTime = moment(i.updateTime).format('YYYY-MM-DD');
@@ -86,6 +88,17 @@ class WarehouseM extends React.Component {
             .catch(err => {
                 console.log('fetch error', err);
             });
+        // 获取部门信息
+        fetch(`${URL}/departments`)
+            .then(res => res.json())
+            .then(data => {
+                this.setState({
+                    selectData: data
+                })
+            })
+            .catch(err => {
+                console.log('fetch error', err);
+            });
     }
 
     deleteBtnClick = (id) => {
@@ -95,11 +108,21 @@ class WarehouseM extends React.Component {
             okText: '确定',
             cancelText: '取消',
             onOk: () => {
-                fetch(`${URL}/deleteWarehouse?warehouse=${id}`)
+                fetch(`${URL}/warehouses/${id}`, {
+                    method: 'DELETE'
+                })
                     .then(res => res.json())
                     .then(data => {
-                        console.log(data);
+                        if (!data.code) {
+                            message.success('删除成功');
+                            this.requestList();
+                        } else {
+                            message.error(`${data.message}`);
+                        }
                     })
+                    .catch(err => {
+                        console.log('fetch error', err);
+                    });
             },
             onCancel: () => {
                 console.log('Cancel');
@@ -110,8 +133,11 @@ class WarehouseM extends React.Component {
     render() {
 
         const columns = [{
+            title: '序号',
+            dataIndex: 'warehouseId'
+        }, {
             title: '仓库编号',
-            dataIndex: 'warehouseId',
+            dataIndex: 'warehouseCode',
         }, {
             title: '仓库名称',
             dataIndex: 'warehouseName',
@@ -166,19 +192,21 @@ class WarehouseM extends React.Component {
                     <div>
                         所属部门：
                         <Select
-                            defaultValue="全部"
+                            placeholder="全部"
                             style={{ width: 120, marginLeft: '10px' }}
                             onChange={this.selectChange}
+                            allowClear
                         >
-                            <Option value="" >全部</Option>
-                            <Option value="1" >运维部</Option>
-                            <Option value="2" >财务部</Option>
-                            <Option value="3" >产品部</Option>
+                            {this.state.selectData.map(i => (
+                                <Option key={i.id} value={i.id}>{i.name}</Option>
+                            ))}
                         </Select>
                         <Input
                             style={{ width: '400px', marginLeft: '10px' }}
                             placeholder="仓库名称，编号，联系人，地址模糊查询"
                             onChange={this.searchInputChange}
+                            onBlur={this.searchBtnClick}
+                            onPressEnter={this.searchBtnClick}
                             value={this.state.searchInputValue}
                         />
                         <Button

@@ -16,13 +16,14 @@ class ChangeWarehouse extends React.Component {
     }
 
     requestList = () => {
-        fetch(`${URL}/getWarehouse?warehouseId=${this.props.match.params.id}`)
+        fetch(`${URL}/warehouses/${this.props.match.params.id}`)
             .then(res => res.json())
             .then(data => {
                 console.log(data)
                 data.warehouseId = `${data.warehouseId}`;
                 data.operatorId = `${data.operatorId}`;
                 data.departmentId = data.beDepartment ? `${data.beDepartment.id}` : null;
+                data.createTime = moment(data.createTime).format('YYYY-MM-DD');
                 data.updateTime = moment(data.updateTime).format('YYYY-MM-DD');
                 this.setState({
                     warehouseData: data
