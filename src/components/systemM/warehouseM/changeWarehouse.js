@@ -1,51 +1,36 @@
 import React from 'react';
 import WarehouseForm from './warehouseForm';
 import { Card } from 'antd';
+import moment from 'moment';
+import URL from '../../../api/config';
 
 class ChangeWarehouse extends React.Component {
 
     state = {
-        data: []
+        warehouseData: {}
     }
 
     componentDidMount() {
         this.requestList();
-    }
-
-    CabinetFormRef = (formRef) => {
-        this.cabinet_formRef = formRef;
+        console.log(this.props)
     }
 
     requestList = () => {
-        const url = 'https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/staffM/organizationM';
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json', 'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                data: this.state.data
-            })
-        })
-            .then((res) => {
-                if (res.status === 200) {//http请求成功
-                    return res.json()
-                } else {
-                    Promise.reject(res);
-                }
-            })
+        fetch(`${URL}/warehouses/${this.props.match.params.id}`)
+            .then(res => res.json())
             .then(data => {
-                data.data.warehouseData.map((item) => {
-                    // eslint-disable-next-line
-                    if (item.warehouseNumber == this.props.match.params.id) {
-                        this.setState({
-                            data: [item]
-                        });
-                    }
+                console.log(data)
+                data.warehouseId = `${data.warehouseId}`;
+                data.operatorId = `${data.operatorId}`;
+                data.departmentId = data.beDepartment ? `${data.beDepartment.id}` : null;
+                data.createTime = moment(data.createTime).format('YYYY-MM-DD');
+                data.updateTime = moment(data.updateTime).format('YYYY-MM-DD');
+                this.setState({
+                    warehouseData: data
                 });
             })
             .catch(err => {
-                console.log('fetch error', err)
+                console.log('fetch error', err);
             });
     }
 
@@ -54,18 +39,16 @@ class ChangeWarehouse extends React.Component {
     }
 
     render() {
-        const { data } = this.state;
+        const { warehouseData } = this.state;
         return (
             <div className="">
                 <Card
-                    title="修改仓库"
+                    title={`修改仓库：${this.props.match.params.id}`}
                 >
                     <WarehouseForm
                         wrappedComponentRef={this.WarehouseFormRef}
                         type="change"
-                        initialValues={data[0]}
-                        onSubmit={() => { console.log(this.warehouse_formRef.form.getFieldsValue()) }}
-                        onCancel={() => { }}
+                        initialValues={warehouseData}
                     />
                 </Card>
             </div>

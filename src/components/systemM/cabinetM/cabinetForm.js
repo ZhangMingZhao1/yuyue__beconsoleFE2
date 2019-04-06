@@ -6,22 +6,12 @@ const Option = Select.Option;
 const CabinetForm = Form.create()(
     class extends React.Component {
 
-        state = {
-            value: ''
-        }
-
-        onChange = (e) => {
-            const { value } = e.target;
-            const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
-            if ((!isNaN(value) && reg.test(value)) || value === '') {
-                this.setState({
-                    value: value
-                });
-            }
-        }
-
-        inputChange = (e) => {
-            this.props.initialValues.name = e.target.value;
+        handleSubmitClick = (e) => {
+            this.props.form.validateFields((err, values) => {
+                if (!err) {
+                    console.log('Received values of form: ', values);
+                }
+            });
         }
 
         render() {
@@ -32,7 +22,7 @@ const CabinetForm = Form.create()(
                 wrapperCol: { span: 20 },
             };
             const formItem = [
-                { type: 3, label: '柜子编号', name: 'ID', width: '150px' },
+                { type: 3, label: '柜子编号', name: 'ID', width: '150px', required: true },
                 { type: 1, label: '柜子名称', name: 'name', width: '150px', },
                 { type: 1, label: '所属仓库', name: 'wareHouse', width: '150px' },
                 { type: 1, label: '容量', name: 'capacity', width: '150px' },
@@ -47,21 +37,32 @@ const CabinetForm = Form.create()(
                     {formItem.map(i => (
                         <Col key={i.name} span={i.span ? i.span : 12}>
                             <Form.Item {...formItemLayout} label={i.label} help={i.help}>
-                                {getFieldDecorator(i.name, { initialValue: initial ? initial[i.name] : null })((() => {
-                                    console.log(i.name)
+                                {getFieldDecorator(i.name, {
+                                    initialValue: initial ? initial[i.name] : null,
+                                    rules: [
+                                        {
+                                            required: i.name === 'ID' ? true : false,
+                                            message: '柜子编号不能为空'
+                                        },
+                                        {
+                                            pattern: i.name === 'ID' || 'capacity' || 'phoneNum' ? new RegExp('[0-9]+', 'g') : null,
+                                            message: '请输入数字'
+                                        }
+                                    ]
+                                })((() => {
                                     switch (i.type) {
                                         case 1:
-                                            return <span>
-                                                <Input value={initial ? initial[i.name] : null} style={{ width: `${i.width}` }} onChange={this.inputChange} />
-                                            </span>
+                                            return <div>
+                                                <Input defaultValue={initial ? initial[i.name] : null} style={{ width: `${i.width}` }} />
+                                            </div>
                                         case 2:
                                             return <Select style={{ width: `${i.width}` }}>
                                                 {i.value.map(v => (<Option key={v} value={v}>{v}</Option>))}
                                             </Select>
                                         case 3:
-                                            return <span>
-                                                <Input value={initial ? initial[i.name] : null} style={{ width: `${i.width}` }} onChange={this.onChange} />
-                                            </span>
+                                            return <div>
+                                                <Input defaultValue={initial ? initial[i.name] : null} style={{ width: `${i.width}` }} />
+                                            </div>
                                         default:
                                             return null
                                     }
@@ -96,7 +97,7 @@ const CabinetForm = Form.create()(
                         </Col>
                     </Row>
                     <div style={{ textAlign: "center" }}>
-                        <Button type="primary" htmlType="submit">提交</Button>
+                        <Button type="primary" htmlType="submit" onClick={this.handleSubmitClick}>提交</Button>
                         <Button type="primary" onClick={() => { this.props.onCancel() }}>取消</Button>
                     </div>
                 </Form>

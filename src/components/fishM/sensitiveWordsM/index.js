@@ -21,7 +21,7 @@ class SensitiveWordsM extends React.Component {
   requestList = () => {
     const words = [];
     const id = [];
-    fetch(`${URL}/listSensitive`)
+    fetch(`${URL}/sensitives`)
       .then((res) => res.json())
       .then(data => {
         data.map((i) => {
@@ -47,8 +47,9 @@ class SensitiveWordsM extends React.Component {
       cancelText: '取消',
       onOk: () => {
         const id = this.state.id;
-        const url = 'http://119.3.231.11:8080/yuyue/deleteSensitive';
-        fetch(url + '?id=' + id[index])
+        fetch(`${URL}/sensitives/${id[index]}`, {
+          method: 'DELETE'
+        })
           .then((res) => res.json())
           .then(data => {
             if (!data.code) {
@@ -82,8 +83,7 @@ class SensitiveWordsM extends React.Component {
     let tags = state.tags;
     if (inputValue && tags.indexOf(inputValue) === -1) {
       tags = [...tags, inputValue];
-      const url = 'http://119.3.231.11:8080/yuyue/addSensitive';
-      fetch(url, {
+      fetch(`${URL}/sensitives`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -96,10 +96,7 @@ class SensitiveWordsM extends React.Component {
         .then(data => {
           if (!data.code) {
             message.success('添加成功');
-            this.setState({
-              tags,
-              id: [...state.id, data.data],
-            });
+            this.requestList();
           } else {
             message.error(`${data.message}`);
           }
@@ -107,7 +104,7 @@ class SensitiveWordsM extends React.Component {
         .catch(err => {
           console.log('fetch error', err);
         });
-    } else if (inputValue === '') {
+    } else if (!inputValue) {
       message.error('请输入敏感词');
     } else {
       message.error('该敏感词已存在');

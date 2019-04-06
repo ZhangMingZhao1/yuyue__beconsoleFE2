@@ -1,7 +1,9 @@
 import React from 'react';
-import { Select, Input, Button, Card, Table, Divider, Modal } from 'antd';
+import { Select, Input, Button, Card, Table, Divider, Modal, Popover, message } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
+import URL from '../../../api/config';
 
 const Option = Select.Option;
 const confirm = Modal.confirm;
@@ -11,8 +13,10 @@ class WarehouseM extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            selectValue: '',
             searchInputValue: '',
-            warehouseData: []
+            warehouseData: [],
+            selectData: []
         }
     }
 
@@ -20,8 +24,10 @@ class WarehouseM extends React.Component {
         this.requestList();
     }
 
-    handleSelectChange = () => {
-
+    selectChange = (v) => {
+        this.setState({
+            selectValue: v
+        });
     }
 
     searchInputChange = (e) => {
@@ -32,48 +38,91 @@ class WarehouseM extends React.Component {
     }
 
     searchBtnClick = () => {
-        console.log('searchBtnClicked');
-    }
-
-    requestList = () => {
-        const url = 'https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/staffM/organizationM';
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json', 'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                data: this.state.data
-            })
-        })
-            .then((res) => res.json())
+        const state = this.state;
+        fetch(`${URL}/warehouses?id=${state.selectValue ? state.selectValue : ''}&keyword=${state.searchInputValue}`)
+            .then(res => res.json())
             .then(data => {
-                // eslint-disable-next-line
-                data.data.warehouseData.map((item, index) => {
-                    item.key = index;
+                data.content.map((i) => {
+                    i.key = i.warehouseId;
+                    i.updateTime = moment(i.updateTime).format('YYYY-MM-DD');
+                    i.department = i.beDepartment ? i.beDepartment.name : null;
+                    i.allRemarks = i.remarks;
+                    i.remarks =
+                        i.remarks.length > 30
+                            ?
+                            i.remarks.slice(0, 30) + '······'
+                            :
+                            i.remarks
                 });
                 this.setState({
-                    warehouseData: data.data.warehouseData
+                    warehouseData: data.content
                 });
-                console.log(this.state.warehouseData);
             })
             .catch(err => {
                 console.log('fetch error', err);
             });
     }
 
-    deleteBtnClick = (key) => {
-        confirm({
-            title: 'Want to delete these items?',
-            content: 'some descriptions',
-            onOk: () => {
-                console.log('OK');
-                console.log(key);
-                const data = this.state.warehouseData;
-                data.splice(key, 1);
-                this.setState({
-                    warehouseData: data
+    requestList = () => {
+        // 获取表格内容
+        fetch(`${URL}/warehouses`)
+            .then((res) => res.json())
+            .then(data => {
+                // console.log(data)
+                data.content.map((i) => {
+                    i.key = i.warehouseId;
+                    i.updateTime = moment(i.updateTime).format('YYYY-MM-DD');
+                    i.department = i.beDepartment ? i.beDepartment.name : null;
+                    i.allRemarks = i.remarks;
+                    i.remarks =
+                        i.remarks.length > 30
+                            ?
+                            i.remarks.slice(0, 30) + '······'
+                            :
+                            i.remarks
                 });
+                this.setState({
+                    warehouseData: data.content
+                })
+            })
+            .catch(err => {
+                console.log('fetch error', err);
+            });
+        // 获取部门信息
+        fetch(`${URL}/departments`)
+            .then(res => res.json())
+            .then(data => {
+                this.setState({
+                    selectData: data
+                })
+            })
+            .catch(err => {
+                console.log('fetch error', err);
+            });
+    }
+
+    deleteBtnClick = (id) => {
+        confirm({
+            title: `确定删除${id}号仓库？`,
+            content: `点击确定删除${id}号仓库`,
+            okText: '确定',
+            cancelText: '取消',
+            onOk: () => {
+                fetch(`${URL}/warehouses/${id}`, {
+                    method: 'DELETE'
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (!data.code) {
+                            message.success('删除成功');
+                            this.requestList();
+                        } else {
+                            message.error(`${data.message}`);
+                        }
+                    })
+                    .catch(err => {
+                        console.log('fetch error', err);
+                    });
             },
             onCancel: () => {
                 console.log('Cancel');
@@ -84,8 +133,11 @@ class WarehouseM extends React.Component {
     render() {
 
         const columns = [{
+            title: '序号',
+            dataIndex: 'warehouseId'
+        }, {
             title: '仓库编号',
-            dataIndex: 'warehouseNumber',
+            dataIndex: 'warehouseCode',
         }, {
             title: '仓库名称',
             dataIndex: 'warehouseName',
@@ -94,31 +146,41 @@ class WarehouseM extends React.Component {
             dataIndex: 'department',
         }, {
             title: '联系人',
-            dataIndex: 'people'
+            dataIndex: 'contacts'
         }, {
             title: '联系方式',
-            dataIndex: 'phoneNumber'
+            dataIndex: 'telephone'
         }, {
             title: '地址',
-            dataIndex: 'address'
+            dataIndex: 'warehouseAddress'
         }, {
             title: '备注',
-            dataIndex: 'remark'
+            dataIndex: 'remarks',
+            render: (text, record) => (
+                <Popover
+                    content={record.allRemarks}
+                    title="备注"
+                    trigger="hover"
+                    mouseEnterDelay={.3}
+                >
+                    {text}
+                </Popover>
+            )
         }, {
             title: '操作员',
-            dataIndex: 'operator'
+            dataIndex: 'operatorId'
         }, {
             title: '修改日期',
-            dataIndex: 'changeDate'
+            dataIndex: 'updateTime'
         }, {
             title: '操作',
             dataIndex: 'option',
-            render: (text, record, key) => (
+            render: (text, record) => (
                 <span>
-                    <Link to={`${this.props.match.url}/changeWarehouse/${record.warehouseNumber}`}>修改</Link>
+                    <Link to={`${this.props.match.url}/changeWarehouse/${record.warehouseId}`}>修改</Link>
                     <Divider type="vertical" />
                     {/* eslint-disable-next-line */}
-                    <a href="javascript:;" onClick={() => this.deleteBtnClick(key)}>删除</a>
+                    <a href="javascript:;" onClick={() => this.deleteBtnClick(record.warehouseId)}>删除</a>
                 </span>
             )
         }];
@@ -130,15 +192,21 @@ class WarehouseM extends React.Component {
                     <div>
                         所属部门：
                         <Select
+                            placeholder="全部"
                             style={{ width: 120, marginLeft: '10px' }}
-                            onChange={this.handleSelectChange}
+                            onChange={this.selectChange}
+                            allowClear
                         >
-                            <Option placeholder="全部" value="1">1</Option>
+                            {this.state.selectData.map(i => (
+                                <Option key={i.id} value={i.id}>{i.name}</Option>
+                            ))}
                         </Select>
                         <Input
                             style={{ width: '400px', marginLeft: '10px' }}
                             placeholder="仓库名称，编号，联系人，地址模糊查询"
                             onChange={this.searchInputChange}
+                            onBlur={this.searchBtnClick}
+                            onPressEnter={this.searchBtnClick}
                             value={this.state.searchInputValue}
                         />
                         <Button
