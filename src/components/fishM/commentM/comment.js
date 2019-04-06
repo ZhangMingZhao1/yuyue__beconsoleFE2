@@ -21,7 +21,10 @@ class Comment extends React.Component {
     }
 
     requestList = () => {
-        fetch(`${URL}/pUserdynamic`)
+        fetch(`${URL}/pUserdynamic`, {
+            method: 'GET',
+            credentials: 'include'
+        })
             .then((res) => res.json())
             .then((data) => {
                 console.log(data)
@@ -75,6 +78,10 @@ class Comment extends React.Component {
             '&userName=' + state.input2Value +
             '&starttime=' + state.dateRange[0] +
             '&endtime=' + state.dateRange[1]
+            , {
+                method: 'GET',
+                credentials: 'include'
+            }
         )
             .then((res) => res.json())
             .then((data) => {
@@ -113,6 +120,7 @@ class Comment extends React.Component {
                     headers: {
                         'Accept': 'application/json', 'Content-Type': 'application/json',
                     },
+                    credentials: 'include',
                     body: JSON.stringify({
                         dynamicIds: state.selectedRowKeys
                     })

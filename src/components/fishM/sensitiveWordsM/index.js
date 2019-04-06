@@ -21,7 +21,10 @@ class SensitiveWordsM extends React.Component {
   requestList = () => {
     const words = [];
     const id = [];
-    fetch(`${URL}/sensitives`)
+    fetch(`${URL}/sensitives`, {
+      method: 'GET',
+      credentials: 'include'
+    })
       .then((res) => res.json())
       .then(data => {
         data.map((i) => {
@@ -48,7 +51,8 @@ class SensitiveWordsM extends React.Component {
       onOk: () => {
         const id = this.state.id;
         fetch(`${URL}/sensitives/${id[index]}`, {
-          method: 'DELETE'
+          method: 'DELETE',
+          credentials: 'include'
         })
           .then((res) => res.json())
           .then(data => {
@@ -88,6 +92,7 @@ class SensitiveWordsM extends React.Component {
         headers: {
           'Content-Type': 'application/json'
         },
+        credentials: 'include',
         body: JSON.stringify({
           word: inputValue
         })

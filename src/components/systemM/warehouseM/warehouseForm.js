@@ -15,7 +15,10 @@ const WarehouseForm = Form.create()(
 
         componentDidMount() {
             // 获取部门信息
-            fetch(`${URL}/departments`)
+            fetch(`${URL}/departments`, {
+                method: 'GET',
+                credentials: 'include'
+            })
                 .then(res => res.json())
                 .then(data => {
                     this.setState({
@@ -45,6 +48,7 @@ const WarehouseForm = Form.create()(
                             headers: {
                                 'Accept': 'application/json', 'Content-Type': 'application/json',
                             },
+                            credentials: 'include',
                             body:
                                 JSON.stringify({
                                     warehouseId: this.props.initialValues ? this.props.initialValues.warehouseId : null,
