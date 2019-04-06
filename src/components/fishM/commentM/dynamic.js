@@ -23,7 +23,13 @@ class Dynamic extends React.Component {
     }
 
     requestList = () => {
-        fetch(`${URL}/bUserdynamics`)
+        fetch(`${URL}/bUserdynamics`,
+        {
+            method:'GET',
+            mode: 'cors',
+            credentials: 'include', // 请求带上cookies，是每次请求保持会话一直
+        }
+        )
             .then((res) => res.json())
             .then((data) => {
                 console.log(data);
@@ -60,7 +66,12 @@ class Dynamic extends React.Component {
             '&content=' + state.input2Value +
             '&userName=' + state.input3Value +
             '&starttime=' + state.dateRange[0] +
-            '&endtime=' + state.dateRange[1]
+            '&endtime=' + state.dateRange[1],
+            {
+                method:'GET',
+                mode: 'cors',
+                credentials: 'include', // 请求带上cookies，是每次请求保持会话一直
+            }
         )
             .then((res) => res.json())
             .then((data) => {

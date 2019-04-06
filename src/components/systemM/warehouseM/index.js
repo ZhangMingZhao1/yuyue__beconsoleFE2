@@ -39,7 +39,10 @@ class WarehouseM extends React.Component {
 
     searchBtnClick = () => {
         const state = this.state;
-        fetch(`${URL}/warehouses?id=${state.selectValue ? state.selectValue : ''}&keyword=${state.searchInputValue}`)
+        fetch(`${URL}/warehouses?id=${state.selectValue ? state.selectValue : ''}&keyword=${state.searchInputValue}`, {
+            method: 'GET',
+            credentials: 'include'
+        })
             .then(res => res.json())
             .then(data => {
                 data.content.map((i) => {
@@ -65,7 +68,10 @@ class WarehouseM extends React.Component {
 
     requestList = () => {
         // 获取表格内容
-        fetch(`${URL}/warehouses`)
+        fetch(`${URL}/warehouses`, {
+            method: 'GET',
+            credentials: 'include'
+        })
             .then((res) => res.json())
             .then(data => {
                 // console.log(data)
@@ -89,7 +95,10 @@ class WarehouseM extends React.Component {
                 console.log('fetch error', err);
             });
         // 获取部门信息
-        fetch(`${URL}/departments`)
+        fetch(`${URL}/departments`, {
+            method: 'GET',
+            credentials: 'include'
+        })
             .then(res => res.json())
             .then(data => {
                 this.setState({
@@ -109,7 +118,8 @@ class WarehouseM extends React.Component {
             cancelText: '取消',
             onOk: () => {
                 fetch(`${URL}/warehouses/${id}`, {
-                    method: 'DELETE'
+                    method: 'DELETE',
+                    credentials: 'include'
                 })
                     .then(res => res.json())
                     .then(data => {

@@ -16,7 +16,10 @@ class ChangeWarehouse extends React.Component {
     }
 
     requestList = () => {
-        fetch(`${URL}/warehouses/${this.props.match.params.id}`)
+        fetch(`${URL}/warehouses/${this.props.match.params.id}`, {
+            method: 'GET',
+            credentials: 'include'
+        })
             .then(res => res.json())
             .then(data => {
                 console.log(data)
