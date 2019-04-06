@@ -17,6 +17,7 @@ const StaffSearchForm = Form.create()(
               });
             let options = {
                 method:"GET",
+                credentials: 'include', // 请求带上cookies，是每次请求保持会话一直
             }
             fetch(`${URL}`,options)
                 .then((res)=>{
@@ -105,6 +106,7 @@ class StaffM extends React.Component {
             headers: {
                 'Accept': 'application/json', 'Content-Type': 'application/json',
             },
+            credentials: 'include', // 请求带上cookies，是每次请求保持会话一直
         })
             .then((res) => res.json())
             .then(data => {
