@@ -22,7 +22,10 @@ class DynamicCmnt extends React.Component {
     }
 
     requestList = () => {
-        fetch(`${URL}/userdynamiccmnts/${this.props.match.params.id}`)
+        fetch(`${URL}/userdynamiccmnts/${this.props.match.params.id}`, {
+            method: 'GET',
+            credentials: 'include'
+        })
             .then((res) => res.json())
             .then((data) => {
                 console.log(data);
@@ -77,7 +80,11 @@ class DynamicCmnt extends React.Component {
             '&content=' + state.input1Value +
             '&userName=' + state.input2Value +
             '&starttime=' + state.dateRange[0] +
-            '&endtime=' + state.dateRange[1]
+            '&endtime=' + state.dateRange[1],
+            {
+                method: 'GET',
+                credentials: 'include'
+            }
         )
             .then((res) => res.json())
             .then((data) => {
@@ -114,6 +121,7 @@ class DynamicCmnt extends React.Component {
                     headers: {
                         'Accept': 'application/json', 'Content-Type': 'application/json',
                     },
+                    credentials: 'include',
                     body: JSON.stringify({
                         commentIds: state.selectedRowKeys
                     })
