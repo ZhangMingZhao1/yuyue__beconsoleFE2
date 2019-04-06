@@ -97,7 +97,7 @@ class BannerC extends React.Component {
         formData.append('file', values.file[0]);
         fetch('http://47.104.92.91:8081/file/upload/uploadFile', {
             method: 'POST',
-            mode: 'no-cors',
+            mode: 'cors',
             headers: {
                 "Content-Type": "multipart/form-data",
             },
