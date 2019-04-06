@@ -30,7 +30,7 @@ class ThemeContent extends React.Component {
      * 专题书籍查询
      */
     requestList() {
-        fetch(`${Url}/bookinsubjects/${this.props.match.params.id}`)
+        fetch(`${Url}/bookinsubjects/${this.props.match.params.id}`, { credentials: 'include' })
             .then((res) => res.json()).then(data => {
                 this.setState({
                     booksubjectId: data.subject.booksubjectId,
@@ -49,7 +49,7 @@ class ThemeContent extends React.Component {
      * 书籍目录获取
      */
     requestCategory() {
-        fetch(`${Url}/bookcategories`)
+        fetch(`${Url}/bookcategories`, { credentials: 'include' })
             .then((res) => res.json()).then(data => {
                 this.setState({
                     treeData: [{
@@ -67,7 +67,7 @@ class ThemeContent extends React.Component {
      * 书名&目录 查询
      */
     requestQuery() {
-        fetch(`${Url}/bookinfo/${this.state.searchCategory}?bookName=${this.state.searchValue}`)
+        fetch(`${Url}/bookinfo/${this.state.searchCategory}?bookName=${this.state.searchValue}`, { credentials: 'include' })
             .then((res) => res.json()).then(data => {
                 this.setState({
                     radioData: data.map(i => ({
@@ -93,6 +93,7 @@ class ThemeContent extends React.Component {
             headers: {
                 'Content-Type': 'application/json;'
             },
+            credentials: 'include',
             body: JSON.stringify({ bookinfoId: value, booksubjectId: this.state.booksubjectId })
         }).then((res) => res.json()).then(result => {
             if (result.code === 0) {
@@ -123,20 +124,21 @@ class ThemeContent extends React.Component {
     handleDel(key) {
         fetch(`${Url}/bookinsubjects/${key}`, {
             method: 'DELETE',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             }
         }).then((res) => res.json()).then(result => {
-                if (result.code === 0) {
-                    console.log(result.data)
-                    message.success("删除" + JSON.stringify(result.data) + "成功")
-                    this.requestList();//刷新页面
-                } else {
-                    message.error(result.message)
-                }
-            }).catch((err) => {
-                console.log(err)
-            })
+            if (result.code === 0) {
+                console.log(result.data)
+                message.success("删除" + JSON.stringify(result.data) + "成功")
+                this.requestList();//刷新页面
+            } else {
+                message.error(result.message)
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
     }
 
     showModal = () => {

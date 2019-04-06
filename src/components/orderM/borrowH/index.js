@@ -97,7 +97,7 @@ class BorrowH extends React.Component {
         this.requestList();
     }
     requestList = () => {
-        fetch(`${Url}/hisborrowrecords?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`)
+        fetch(`${Url}/hisborrowrecords?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`, { credentials: 'include' })
             .then((res) => res.json()).then(result => {
                 let data = result;
                 this.setState({
@@ -141,9 +141,9 @@ class BorrowH extends React.Component {
             { title: '书籍名称', dataIndex: 'bookName' },
             { title: 'ISBN', dataIndex: 'isbn' },
             { title: '电子标签', dataIndex: 'rfid' },
-            { title: '借书方式', dataIndex: 'deliverType', render: (type)=>deliverTypeConfig[type] },
+            { title: '借书方式', dataIndex: 'deliverType', render: (type) => deliverTypeConfig[type] },
             // { title: '借书时间', dataIndex: 'createTime' },
-            { title: '还书方式', dataIndex: 'returnWay', render: (type)=>deliverTypeConfig[type] },
+            { title: '还书方式', dataIndex: 'returnWay', render: (type) => deliverTypeConfig[type] },
             { title: '还书时间', dataIndex: 'finishTime' },
             { title: '创建时间', dataIndex: 'createTime' },
             {

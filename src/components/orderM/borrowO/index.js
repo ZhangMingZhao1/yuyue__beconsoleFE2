@@ -128,7 +128,7 @@ class BorrowO extends React.Component {
         this.requestList();
     }
     requestList = () => {
-        fetch(`${Url}/curborrowrecords?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`)
+        fetch(`${Url}/curborrowrecords?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`, { credentials: 'include' })
             .then((res) => res.json()).then(result => {
                 let data = result;
                 this.setState({

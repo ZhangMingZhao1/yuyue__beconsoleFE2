@@ -8,10 +8,10 @@ import { getFormItem } from '../../baseFormItem';
 
 //书籍状态
 const bookStatusConfig = {
-    "0":"库存中/空闲可借",
-    "1":"已预定",
-    "2":"上架",
-    "9":"已经借出"
+    "0": "库存中/空闲可借",
+    "1": "已预定",
+    "2": "上架",
+    "9": "已经借出"
 }
 
 const GoodsSearchForm = Form.create()(
@@ -59,7 +59,7 @@ class GoodsM extends React.Component {
     }
 
     requestList = () => {
-        fetch(`${Url}/bookinstores?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`)
+        fetch(`${Url}/bookinstores?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`, { credentials: 'include' })
             .then((res) => res.json()).then(data => {
                 this.setState({
                     pagination: pagination(data, (current) => {//改变页码
@@ -144,7 +144,7 @@ class GoodsM extends React.Component {
                 <Card
                     title="商品管理"
                 >
-                    <GoodsSearchForm /><br/>
+                    <GoodsSearchForm /><br />
                     <Table
                         className="goodsM-table"
                         columns={columns}
