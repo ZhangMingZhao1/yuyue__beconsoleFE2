@@ -16,7 +16,8 @@ export const logout = () => ({
 export const login = (userName, password) => {
 	return (dispatch) => {
 		// console.log('`${baseURL}/login`',`${baseURL}/login`);
-		fetch(`${Url}/login`,{
+		// fetch(`${Url}/login`,{
+		fetch(`http://localhost:8080/yuyue/login`,{
 			method: 'POST',
 			mode: 'cors',
 			headers: {

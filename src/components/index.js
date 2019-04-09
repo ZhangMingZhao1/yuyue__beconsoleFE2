@@ -56,7 +56,8 @@ import OutStoreData from './storehouseM/outStoreData/index.js';
 import OutStoreInfo from './storehouseM/outStoreData/outStoreInfo.js';
 import MvStoreData from './storehouseM/mvStoreData/index.js';
 import MvStoreInfo from './storehouseM/mvStoreData/mvStoreInfo';
-
+import FranRank from './franchisee/franchiseeRank';
+import FranInfo from './franchisee/franinfo';
 
 export default {
     ThemeControl, ThemeContent, BannerControl, AdvertiseM,
@@ -71,5 +72,7 @@ export default {
 
     OrganizationM, CabinetM, AddCabinet, ChangeCabinet, WarehouseM, AddWarehouse, ChangeWarehouse, StaffM, AddStaff, ChangeStaff,
     StoreQuery, InStoreData, InStoreInfo, OutStoreData, OutStoreInfo, MvStoreData, MvStoreInfo,
-    roleAuth
+    roleAuth,
+
+    FranRank,FranInfo
 }
