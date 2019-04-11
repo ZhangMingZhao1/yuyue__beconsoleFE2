@@ -153,6 +153,11 @@ export default {
         { key: '/app/systemM/staffM/addStaff', title: '新增', component: 'AddStaff' },
         { key: '/app/systemM/staffM/changeStaff/:id', title: '修改', component: 'ChangeStaff' },
       ]
+    }, {
+      key: '/app/franchiseeM/franinfodetail', title: '加盟商信息',
+      subs: [
+        { key: '/app/franchiseeM/info/franinfodetail/:id', title: '加盟山查看', component: 'FranInfoDetail' },
+      ]
     },
     {
       key: '/app/franchiseeM/tables', title: '加盟商管理/统计专表',

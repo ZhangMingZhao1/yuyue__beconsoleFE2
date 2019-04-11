@@ -58,6 +58,7 @@ import MvStoreData from './storehouseM/mvStoreData/index.js';
 import MvStoreInfo from './storehouseM/mvStoreData/mvStoreInfo';
 import FranRank from './franchisee/franchiseeRank';
 import FranInfo from './franchisee/franinfo';
+import FranInfoDetail from './franchisee/frandetail';
 
 export default {
     ThemeControl, ThemeContent, BannerControl, AdvertiseM,
@@ -74,5 +75,5 @@ export default {
     StoreQuery, InStoreData, InStoreInfo, OutStoreData, OutStoreInfo, MvStoreData, MvStoreInfo,
     roleAuth,
 
-    FranRank,FranInfo
+    FranRank,FranInfo,FranInfoDetail
 }

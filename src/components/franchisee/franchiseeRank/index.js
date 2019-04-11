@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Table,Divider,Card} from 'antd';
+import {Table,Divider,Card,Button} from 'antd';
 
 class FranRank extends Component {
     constructor(props) {
@@ -59,6 +59,7 @@ class FranRank extends Component {
             <div>
                  
                 <Card>
+                    <Button type="primary">新建</Button>
                     <Table dataSource={this.state.tableData} columns={columns} />
                 </Card>
             </div>
