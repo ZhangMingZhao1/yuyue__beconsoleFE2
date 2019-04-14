@@ -24,6 +24,7 @@ class DynamicCmnt extends React.Component {
     requestList = () => {
         fetch(`${URL}/userdynamiccmnts/${this.props.match.params.id}`, {
             method: 'GET',
+            mode: 'cors',
             credentials: 'include'
         })
             .then((res) => res.json())
@@ -83,6 +84,7 @@ class DynamicCmnt extends React.Component {
             '&endtime=' + state.dateRange[1],
             {
                 method: 'GET',
+                mode: 'cors',
                 credentials: 'include'
             }
         )
@@ -118,6 +120,7 @@ class DynamicCmnt extends React.Component {
             onOk: () => {
                 fetch(`${URL}/userdynamiccmnts`, {
                     method: 'POST',
+                    mode: 'cors',
                     headers: {
                         'Accept': 'application/json', 'Content-Type': 'application/json',
                     },

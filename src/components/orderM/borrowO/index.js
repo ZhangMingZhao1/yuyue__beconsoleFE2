@@ -35,7 +35,7 @@ const BorrowOSearchForm = Form.create()(
         const styleSelect = ['全部', '1', '2'];
         return (
             <Form layout="inline">
-                <Form.Item label='状态'>
+                <Form.Item label="状态">
                     {getFieldDecorator('state', { initialValue: stateSelect[0] })(
                         <Select style={{ width: 120 }}>
                             {stateSelect.map(i => (
@@ -56,7 +56,7 @@ const BorrowOSearchForm = Form.create()(
                         </InputGroup>
                     )}
                 </Form.Item>
-                <Form.Item label='借书方式'>
+                <Form.Item label="借书方式">
                     {getFieldDecorator('style', { initialValue: stateSelect[0] })(
                         <Select style={{ width: 120 }}>
                             {styleSelect.map(i => (
@@ -65,7 +65,7 @@ const BorrowOSearchForm = Form.create()(
                         </Select>
                     )}
                 </Form.Item>
-                <Form.Item label='快递编号'>
+                <Form.Item label="快递编号">
                     {getFieldDecorator('postID')(
                         <Input />
                     )}
@@ -116,7 +116,10 @@ class BorrowO extends React.Component {
             modal1Loading: false,
             modal2: false,//详情
             modal3: false,//发快递
-            modal3: false,//发书柜
+            modal4: false,//发书柜
+            modal5: false,//接单
+            modal6: false,//上柜
+            modal7: false,//重新审核
         }
         this.params = {
             currentPage: 1,//当前页面
@@ -315,7 +318,7 @@ class BorrowO extends React.Component {
                     onConfirm={() => { console.log('确定发货') }}
                 />
                 <DeliveryModal
-                    type='case'
+                    type="case"
                     visible={this.state.modal4}
                     onCancel={() => { this.closeModal('modal4') }}
                     onSave={() => { console.log('保存') }}

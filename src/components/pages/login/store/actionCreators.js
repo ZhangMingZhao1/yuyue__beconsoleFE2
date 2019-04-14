@@ -23,9 +23,14 @@ export const login = (userName, password) => {
 				'Content-Type': 'application/json'
 			},
 			credentials: 'include', // 请求带上cookies，是每次请求保持会话一直
+			// 关闭登录验证
+			// body: JSON.stringify({
+			// 	userName: userName,
+			// 	password: password
+			// })
 			body: JSON.stringify({
-				userName: userName,
-				password: password
+				userName: 'admin',
+				password: 'admin'
 			})
 		}).then((res) => res.json()).then(data=>{
 			console.log('loginData',data);

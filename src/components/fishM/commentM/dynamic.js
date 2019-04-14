@@ -24,11 +24,11 @@ class Dynamic extends React.Component {
 
     requestList = () => {
         fetch(`${URL}/bUserdynamics`,
-        {
-            method:'GET',
-            mode: 'cors',
-            credentials: 'include', // 请求带上cookies，是每次请求保持会话一直
-        }
+            {
+                method: 'GET',
+                mode: 'cors',
+                credentials: 'include', // 请求带上cookies，是每次请求保持会话一直
+            }
         )
             .then((res) => res.json())
             .then((data) => {
@@ -68,7 +68,7 @@ class Dynamic extends React.Component {
             '&starttime=' + state.dateRange[0] +
             '&endtime=' + state.dateRange[1],
             {
-                method:'GET',
+                method: 'GET',
                 mode: 'cors',
                 credentials: 'include', // 请求带上cookies，是每次请求保持会话一直
             }
@@ -128,11 +128,13 @@ class Dynamic extends React.Component {
             okText: '确定',
             cancelText: '取消',
             onOk: () => {
-                fetch(`${URL}/deleteUserdynamic`, {
+                fetch(`${URL}/userdynamic`, {
                     method: 'POST',
+                    mode: 'cors',
                     headers: {
                         'Accept': 'application/json', 'Content-Type': 'application/json',
                     },
+                    credentials: 'include',
                     body: JSON.stringify({
                         dynamicIds: state.selectedRowKeys
                     })

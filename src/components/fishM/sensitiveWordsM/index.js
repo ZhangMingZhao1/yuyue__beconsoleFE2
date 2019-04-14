@@ -124,13 +124,14 @@ class SensitiveWordsM extends React.Component {
 
   render() {
     const { tags, inputVisible, inputValue } = this.state;
+    const tagss = tags.sort((a, b) => (a - b));
     return (
       <React.Fragment>
         <BreadcrumbCustom first="鱼群管理" second="敏感词管理" />
         <div>
           <Card title="敏感词库">
             <div>
-              {tags.map((tag, index) => {
+              {tagss.map((tag, index) => {
                 const isLongTag = tag.length > 20;
                 const tagElem = (
                   <Tag key={tag}
