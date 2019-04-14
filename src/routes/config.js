@@ -58,10 +58,8 @@ export default {
     {
       key: '/app/franchiseeM', title: '加盟商管理', icon: 'rocket',
       subs: [
-        { key: '/app/franchiseeM/level', title: '等级维护', component: 'BannerControl' },
-        { key: '/app/franchiseeM/info', title: '信息管理', component: 'BannerControl' },
-        { key: '/app/franchiseeM/financial', title: '财务结算', component: 'BannerControl' },
-        { key: '/app/franchiseeM/tables', title: '统计专表', component: 'BannerControl' },
+        { key: '/app/franchiseeM/level', title: '加盟商等级', component: 'FranRank' },
+        { key: '/app/franchiseeM/info', title: '加盟商资料', component: 'FranInfo' },
       ],
     },
     {
@@ -154,6 +152,11 @@ export default {
       subs: [
         { key: '/app/systemM/staffM/addStaff', title: '新增', component: 'AddStaff' },
         { key: '/app/systemM/staffM/changeStaff/:id', title: '修改', component: 'ChangeStaff' },
+      ]
+    }, {
+      key: '/app/franchiseeM/franinfodetail', title: '加盟商信息',
+      subs: [
+        { key: '/app/franchiseeM/info/franinfodetail/:id', title: '加盟山查看', component: 'FranInfoDetail' },
       ]
     },
     {

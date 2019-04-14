@@ -37,10 +37,12 @@ export default class CRouter extends Component {
                                         key={r.route || r.key}
                                         exact
                                         path={r.route || r.key}
-                                        // 关闭登录界面
+                                        // render={props => r.login ? 
+                                        //     <Component {...props} />
+                                        //     : this.requireLogin(<Component {...props} />, r.auth)}
                                         render={props => r.login ? 
                                             <Component {...props} />
-                                            : this.requireLogin(<Component {...props} />, r.auth)}
+                                            : <Component {...props} />}
                                     />
                                 )
                             }

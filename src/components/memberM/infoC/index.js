@@ -3,7 +3,7 @@ import React from 'react';
 import { Form, Select, Input, Button, Card, DatePicker, Table, Divider, Pagination } from 'antd';
 import './index.less';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import { fetchGet } from '../../../axios/tools';
 
 const { Option } = Select;
