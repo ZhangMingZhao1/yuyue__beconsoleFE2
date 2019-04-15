@@ -154,19 +154,19 @@ export default {
         { key: '/app/systemM/staffM/changeStaff/:id', title: '修改', component: 'ChangeStaff' },
       ]
     }, {
-      key: '/app/franchiseeM/franinfodetail', title: '加盟商信息',
+      key: '/app/franchiseeM/info', title: '加盟商信息',
       subs: [
         { key: '/app/franchiseeM/info/franinfodetail/:id', title: '加盟山查看', component: 'FranInfoDetail' },
       ]
     },
-    {
-      key: '/app/franchiseeM/tables', title: '加盟商管理/统计专表',
-      subs: [
-        { key: '/app/franchiseeM/tables/summary', title: '总表', component: 'BannerControl' },
-        { key: '/app/franchiseeM/tables/business', title: '业绩报表', component: 'BannerControl' },
-        { key: '/app/franchiseeM/tables/expenses', title: '费用报表', component: 'BannerControl' },
-        { key: '/app/franchiseeM/tables/stock', title: '库存统计表', component: 'BannerControl' },
-      ]
-    }
+    // {
+    //   key: '/app/franchiseeM/tables', title: '加盟商管理/统计专表',
+    //   subs: [
+    //     { key: '/app/franchiseeM/tables/summary', title: '总表', component: 'BannerControl' },
+    //     { key: '/app/franchiseeM/tables/business', title: '业绩报表', component: 'BannerControl' },
+    //     { key: '/app/franchiseeM/tables/expenses', title: '费用报表', component: 'BannerControl' },
+    //     { key: '/app/franchiseeM/tables/stock', title: '库存统计表', component: 'BannerControl' },
+    //   ]
+    // }
   ] // 非菜单相关路由
 }

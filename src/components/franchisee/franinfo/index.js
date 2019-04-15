@@ -73,11 +73,11 @@ class FranInfo extends Component {
           }, {
             title: '联系人',
             key: 'contact',
-            dataIndex: 'contact',
+            dataIndex: 'contact_name',
           }, {
             title: '电话',
             key: 'phone',
-            dataIndex: 'phone',
+            dataIndex: 'contact_phone',
           },
           {
             title: '状态',
