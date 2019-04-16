@@ -1,5 +1,6 @@
 import React from 'react';
-import { Form, Card, Row,Col} from 'antd';
+import { Form, Card, Row,Col, Divider} from 'antd';
+import { RFC_2822 } from 'moment';
 
 
 const FormItem = Form.Item;
@@ -31,7 +32,7 @@ const infoDetailData = [
 ];
 class FranInfoDetail extends React.Component {
     state = {
-        infoDetailState:[],
+        infoDetailState:{},
     };
 
     fetchFranInfoDetailData=()=>{
@@ -39,13 +40,13 @@ class FranInfoDetail extends React.Component {
         fetch(`http://localhost:8080/yuyue/frandetail/${id}`)
             .then((res)=>res.json())
             .then(data=>{
-                    console.log(data[0]);
-                    let tmpArr = [];
+                    console.log('data[0])',data[0]);
+                    let tmpArr = {};
                    Object.values(data[0]).map((v,k)=>{
-                        console.log('infoDetailData[k] v',infoDetailData[k],v);
+                        // console.log('infoDetailData[k] v',infoDetailData[k],v);
                         tmpArr[infoDetailData[k]] = v;
                     })
-                    console.log(tmpArr);
+                    console.log('tmpArr',tmpArr);
                     this.setState({infoDetailState:tmpArr});
                 })  
             }
@@ -57,14 +58,25 @@ class FranInfoDetail extends React.Component {
     render() {
 
         console.log('this.props.match.params.memberId;',this.props.match.params.id);
+        let dataA = Object.keys(this.state.infoDetailState);  
+        let dataB = Object.values(this.state.infoDetailState);
+        let len = dataA.length;
+        let resDom = [];
+        for(let i = 0; i < len; i++) {
+            resDom.push(<Col>{dataA[i]}:{dataB[i]}</Col>)
+        }
+        console.log('dataA dataB',dataA , dataB);
+        console.log('resDom ',resDom);
         return(
             <div>
                 <Card>
                     <Row type="flex" justify="center">
                         <Col>查看</Col>
                     </Row> 
+                   <Divider></Divider>
+                   <Col >1</Col>
+                    {resDom}
                    
-
                 </Card>
             </div>
         )
