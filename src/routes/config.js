@@ -156,7 +156,8 @@ export default {
     }, {
       key: '/app/franchiseeM/info', title: '加盟商信息',
       subs: [
-        { key: '/app/franchiseeM/info/franinfodetail/:id', title: '加盟山查看', component: 'FranInfoDetail' },
+        { key: '/app/franchiseeM/info/franinfodetail/:id', title: '加盟商查看', component: 'FranInfoDetail' },
+        { key: '/app/franchiseeM/info/franmodify/:id', title: '加盟商修改', component: 'FranModify' }
       ]
     },
     // {

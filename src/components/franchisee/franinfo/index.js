@@ -91,7 +91,7 @@ class FranInfo extends Component {
               <span>
                 <Link to={`${this.props.match.url}/franinfodetail/${record.id}`}>查看</Link>
                 <Divider type="vertical" />
-                <a href="javascript:;">修改</a>
+                <Link to={`${this.props.match.url}/franmodify/${record.id}`}>修改</Link>
                 <Divider type="vertical" />
                 <a href="javascript:;">删除</a>
               </span>

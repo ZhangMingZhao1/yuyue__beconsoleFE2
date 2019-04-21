@@ -74,9 +74,7 @@ class FranInfoDetail extends React.Component {
                         <Col>查看</Col>
                     </Row> 
                    <Divider></Divider>
-                   <Col >1</Col>
-                    {resDom}
-                   
+                    {resDom}   
                 </Card>
             </div>
         )
