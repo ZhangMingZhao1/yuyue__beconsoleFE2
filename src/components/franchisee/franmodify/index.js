@@ -118,11 +118,11 @@ class FranModify extends Component{
                                 >
                                 {getFieldDecorator('id_type', {
                                     rules: [{  required: true,message: '' }],
-                                    initialValue:"yingyezhizhao"
+                                    initialValue:"营业执照"
                                 })(
                                     <Select>
-                                        <Option value="yingyezhizhao">营业执照</Option>
-                                        <Option value="wu">无</Option>
+                                        <Option value="营业执照">营业执照</Option>
+                                        <Option value="无">无</Option>
                                     </Select>
                                 )}
                             </Form.Item>
