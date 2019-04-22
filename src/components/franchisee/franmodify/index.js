@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Card,Row,Col,Divider,Form, Select,Input,Button} from 'antd' ;
+import {Card,Row,Col,Divider,Form, Select,Input,Button,message} from 'antd' ;
 
 const { Option } = Select;
 
@@ -15,16 +15,31 @@ class FranModify extends Component{
      
 
     }
-    handleFranModifyData = ()=>{
+    handleFranModifyData = (data)=>{
         let id = this.props.match.params.id;
-        fetch(`http://localhost:8080/yuyue/modifyfran/${id}`)
-            .then()
+        let options = {
+            method:"POST",
+            credentials: "include",
+            headers: {
+                'Accept': 'application/json', 
+                'Content-Type': 'application/json' 
+            },
+            body:JSON.stringify(data)
+        }
+        fetch(`http://localhost:8080/yuyue/modifyfran/${id}`,options)
+            .then(res=>res.json())
+            .then(data=>{
+                console.log('data1212 ',data);
+                if(data===true)
+                    message.success('修改成功');
+            })
     }
     handleSubmit = (e)=>{
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
               console.log('修改1111', values);
+              this.handleFranModifyData(values);
             }
           });
     }

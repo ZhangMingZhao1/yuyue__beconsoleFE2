@@ -15,6 +15,7 @@ class FranInfo extends Component {
     fetchFranInfoData=()=> {
       fetch('http://localhost:8080/yuyue/franinfo',{
           method: 'GET',
+          credentials: "include",
           headers: {
             'Content-Type': 'application/json'
           },
