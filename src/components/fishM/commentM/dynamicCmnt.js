@@ -118,7 +118,7 @@ class DynamicCmnt extends React.Component {
             onOk: () => {
                 fetch(`${URL}/userdynamiccmnts`, {
                     method: 'POST',
-                    mode:"cors",
+                    mode: "cors",
                     headers: {
                         'Accept': 'application/json', 'Content-Type': 'application/json',
                     },
@@ -222,6 +222,7 @@ class DynamicCmnt extends React.Component {
                         批量删除
 				    </Button>
                     <Table
+                        className="tables"
                         bordered
                         columns={columns}
                         dataSource={dynamicCmnt}
