@@ -58,10 +58,8 @@ export default {
     {
       key: '/app/franchiseeM', title: '加盟商管理', icon: 'rocket',
       subs: [
-        { key: '/app/franchiseeM/level', title: '等级维护', component: 'BannerControl' },
-        { key: '/app/franchiseeM/info', title: '信息管理', component: 'BannerControl' },
-        { key: '/app/franchiseeM/financial', title: '财务结算', component: 'BannerControl' },
-        { key: '/app/franchiseeM/tables', title: '统计专表', component: 'BannerControl' },
+        { key: '/app/franchiseeM/level', title: '加盟商等级', component: 'FranRank' },
+        { key: '/app/franchiseeM/info', title: '加盟商资料', component: 'FranInfo' },
       ],
     },
     {
@@ -155,15 +153,21 @@ export default {
         { key: '/app/systemM/staffM/addStaff', title: '新增', component: 'AddStaff' },
         { key: '/app/systemM/staffM/changeStaff/:id', title: '修改', component: 'ChangeStaff' },
       ]
-    },
-    {
-      key: '/app/franchiseeM/tables', title: '加盟商管理/统计专表',
+    }, {
+      key: '/app/franchiseeM/info', title: '加盟商信息',
       subs: [
-        { key: '/app/franchiseeM/tables/summary', title: '总表', component: 'BannerControl' },
-        { key: '/app/franchiseeM/tables/business', title: '业绩报表', component: 'BannerControl' },
-        { key: '/app/franchiseeM/tables/expenses', title: '费用报表', component: 'BannerControl' },
-        { key: '/app/franchiseeM/tables/stock', title: '库存统计表', component: 'BannerControl' },
+        { key: '/app/franchiseeM/info/franinfodetail/:id', title: '加盟商查看', component: 'FranInfoDetail' },
+        { key: '/app/franchiseeM/info/franmodify/:id', title: '加盟商修改', component: 'FranModify' }
       ]
-    }
+    },
+    // {
+    //   key: '/app/franchiseeM/tables', title: '加盟商管理/统计专表',
+    //   subs: [
+    //     { key: '/app/franchiseeM/tables/summary', title: '总表', component: 'BannerControl' },
+    //     { key: '/app/franchiseeM/tables/business', title: '业绩报表', component: 'BannerControl' },
+    //     { key: '/app/franchiseeM/tables/expenses', title: '费用报表', component: 'BannerControl' },
+    //     { key: '/app/franchiseeM/tables/stock', title: '库存统计表', component: 'BannerControl' },
+    //   ]
+    // }
   ] // 非菜单相关路由
 }

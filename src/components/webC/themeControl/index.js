@@ -117,6 +117,7 @@ class ThemeControl extends React.Component {
     fetch(`${Url}/booksubjects/${key}`, {
       method: 'DELETE',
       credentials: 'include',
+      mode:"cors",
       headers: {
         'Content-Type': 'application/json'
       }
