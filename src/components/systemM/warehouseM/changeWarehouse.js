@@ -12,7 +12,7 @@ class ChangeWarehouse extends React.Component {
 
     componentDidMount() {
         this.requestList();
-        console.log(this.props)
+        // console.log(this.props)
     }
 
     requestList = () => {

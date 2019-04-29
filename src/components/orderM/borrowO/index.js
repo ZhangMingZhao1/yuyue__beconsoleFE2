@@ -1,7 +1,8 @@
 import React from 'react';
-import { Card, Input, Form, Select, DatePicker, Button, Table } from 'antd';
+import { Card, Input, Form, Select, DatePicker, Button, Table, Divider } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import './index.less';
+import moment from 'moment';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -18,7 +19,6 @@ const SearchForm = Form.create()(
                 }
             })
         }
-
 
         render() {
 
@@ -98,19 +98,104 @@ const SearchForm = Form.create()(
 class TableOption extends React.Component {
 
     render() {
-        console.log(this.props);
-        return (
-            <div>
-                {this.props.orderStatusId}
-            </div>
-        );
-    }
+        // 后端有数据后还需要传递订单编号
+        // 路由到别的界面
+        const id = this.props.orderStatusId
 
+        switch (id) {
+            case 1:
+                return <div>
+                    <a href='javascript:;'>详情</a>
+                    <Divider type="vertical" />
+                    <a href='javascript:;'>发快递</a>
+                </div>
+            case 2:
+                return <div>
+                    <a herf='javascipt:;'>详情</a>
+                    <Divider type="vertical" />
+                    <a href='javascript:;'>发书柜</a>
+                    <Divider type="vertical" />
+                    <a href='javascript:;'>关闭订单</a>
+                </div>
+            case 3:
+                return <div>
+                    <a herf='javascipt:;'>详情</a>
+                    <Divider type="vertical" />
+                    <a herf='javascipt:;'>接单</a>
+                    <Divider type="vertical" />
+                    <a herf='javascipt:;'>关闭订单</a>
+                </div>
+            case 4:
+                return <div>
+                    <a href='javascript:;'>详情</a>
+                    <Divider type="vertical" />
+                    <a href='javascript:;'>上柜</a>
+                </div>
+            case 5:
+                return <div>
+                    <a href='javascript:;'>详情</a>
+                    <Divider type="vertical" />
+                    <a href='javascript:;'>关闭订单</a>
+                </div>
+            case 6:
+                return <div>
+                    <a href='javascript:;'>详情</a>
+                    <Divider type="vertical" />
+                    <a href='javascript:;'>关闭订单</a>
+                </div>
+            case 7:
+                return <div>
+                    <a href='javascript:;'>详情</a>
+                </div>
+            case 8:
+                return <div>
+                    <a href='javascript:;'>详情</a>
+                </div>
+            case 9:
+                return <div>
+                    <a href='javascript:;'>详情</a>
+                    <Divider type="vertical" />
+                    <a href='javascript:;'>重新审核</a>
+                </div>
+            default:
+                return null;
+        }
+    }
 }
 
 class BorrowO extends React.Component {
 
+    state = {
+        dataSource: []
+    }
+
+    componentDidMount() {
+        this.requestList();
+    }
+
+    requestList = () => {
+        const url = 'https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/borrowO'
+        fetch(url, {
+            method: 'GET',
+            // credentials: 'include'
+        })
+            .then(res => res.json())
+            .then(data => {
+                // console.log(data);
+                data.data.map((i, index) => {
+                    i.key = index// 后端有数据后改为订单编号
+                    i.createTime = moment(i.createTime).format('YYYY-MM-DD');
+                });
+                this.setState({
+                    dataSource: data.data
+                });
+            })
+            .catch(err => console.log(err));
+    }
+
     render() {
+
+        const { dataSource } = this.state;
 
         const col = [
             { title: '订单编号', dataIndex: 'orderId' },
@@ -125,26 +210,14 @@ class BorrowO extends React.Component {
             { title: '还书方式', dataIndex: 'backWay' },
             { title: '还书时间', dataIndex: 'backTime' },
             { title: '创建时间', dataIndex: 'createTime' },
-            { title: '订单状态', dataIndex: 'orderStatus' },
+            { title: '订单状态', dataIndex: 'orderStatus.status' },
             {
                 title: '操作', dataIndex: 'option',
                 render: (text, record) => (
-                    <TableOption orderStatus={record.orderStatus} />
+                    // 还需传递订单编号
+                    <TableOption orderStatusId={record.orderStatus.id} />
                 )
             },
-        ];
-
-        const orderStatus = [
-            { status: '待发货' },// 快递借书发货
-            { status: '待发货' },// 书柜借书发货
-            { status: '待出库' },// 书柜借书出库
-            { status: '配送中' },// 书柜借书配送
-            { status: '待收书' },// 书柜借书收书
-            // 待完善
-        ];
-
-        const dataSource = [
-            { orderId: 123, VIPAccount: 123, VIPName: 123, bookName: '《钢铁》', ISBN: '1231231231', location: 3, eLabel: '312312312312313', borWay: '快递', borTime: '2018-08-01', backWay: '快递', backTime: '2019-01-01', createTime: '2018-01-01', orderStatus: orderStatus[0] }
         ];
 
         return (
