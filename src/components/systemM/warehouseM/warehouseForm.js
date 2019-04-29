@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row, Col, Form, Button, Input, Select, message } from 'antd';
 import { Link } from 'react-router-dom';
+import { withRouter } from "react-router-dom";
 import URL from '../../../api/config';
 
 const TextArea = Input.TextArea;
@@ -67,9 +68,10 @@ const WarehouseForm = Form.create()(
                             .then(res => res.json())
                             .then(data => {
                                 if (!data.code) {
-                                    message.success(`${type === 'change' ? '更新' : '新增'}成功`)
+                                    message.success(`${type === 'change' ? '更新' : '新增'}成功`);
+                                    this.props.history.push('/app/systemM/warehouseM');
                                 } else {
-                                    message.error(`${data.message}`)
+                                    message.error(`${data.message}`);
                                 }
                             })
                             .catch(err => {
@@ -126,17 +128,17 @@ const WarehouseForm = Form.create()(
                                 })((() => {
                                     switch (i.type) {
                                         case 1:
-                                            return <span>
-                                                <Input placeholder={i.placeholder} defaultValue={initial ? initial[i.name] : null} style={{ width: `${i.width}` }} />
-                                            </span>
+                                            return (
+                                                <Input placeholder={i.placeholder} style={{ width: `${i.width}` }} />
+                                            )
                                         case 2:
                                             return <Select placeholder={i.placeholder} style={{ width: `${i.width}` }}>
                                                 {i.values.map((v) => (<Option key={v.id} value={`${v.id}`}>{v.name}</Option>))}
                                             </Select>
                                         case 3:
-                                            return <span>
-                                                <Input placeholder={i.placeholder} defaultValue={initial ? initial[i.name] : null} style={{ width: `${i.width}` }} />
-                                            </span>
+                                            return (
+                                                <Input placeholder={i.placeholder} style={{ width: `${i.width}` }} />
+                                            )
                                         default:
                                             return null
                                     }
@@ -180,4 +182,4 @@ const WarehouseForm = Form.create()(
     }
 );
 
-export default WarehouseForm;
+export default withRouter(WarehouseForm);

@@ -137,6 +137,7 @@ class StaffM extends React.Component {
         }];
 
         const { data } = this.state;
+        console.log(data)
 
         return (
             <React.Fragment>
