@@ -43,7 +43,7 @@ const WarehouseForm = Form.create()(
                 myGeo.getPoint(values.warehouseAddress, (point) => {
                     if (point) {
                         //这个point就是解析地址获得的百度地图坐标系
-                        console.log(point); //{lat: xx, lng: xx}
+                        // console.log(point); //{lat: xx, lng: xx}
                         fetch(`${URL}/warehouses`, {
                             method: `${type === 'change' ? 'PUT' : 'POST'}`,
                             headers: {
