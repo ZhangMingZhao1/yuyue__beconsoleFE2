@@ -3,6 +3,7 @@ import { Card, Tabs } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import Dynamic from './dynamic';
 import Comment from './comment';
+import './index.less';
 
 const TabPane = Tabs.TabPane;
 

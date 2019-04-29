@@ -24,11 +24,11 @@ class Dynamic extends React.Component {
 
     requestList = () => {
         fetch(`${URL}/bUserdynamics`,
-        {
-            method:'GET',
-            mode: 'cors',
-            credentials: 'include', // 请求带上cookies，是每次请求保持会话一直
-        }
+            {
+                method: 'GET',
+                mode: 'cors',
+                credentials: 'include', // 请求带上cookies，是每次请求保持会话一直
+            }
         )
             .then((res) => res.json())
             .then((data) => {
@@ -68,7 +68,7 @@ class Dynamic extends React.Component {
             '&starttime=' + state.dateRange[0] +
             '&endtime=' + state.dateRange[1],
             {
-                method:'GET',
+                method: 'GET',
                 mode: 'cors',
                 credentials: 'include', // 请求带上cookies，是每次请求保持会话一直
             }
@@ -130,7 +130,7 @@ class Dynamic extends React.Component {
             onOk: () => {
                 fetch(`${URL}/deleteUserdynamic`, {
                     method: 'POST',
-                    credentials:"include",
+                    credentials: "include",
                     headers: {
                         'Accept': 'application/json', 'Content-Type': 'application/json',
                     },
@@ -250,6 +250,7 @@ class Dynamic extends React.Component {
                     批量删除
 				</Button>
                 <Table
+                    className="tables"
                     bordered
                     columns={columns}
                     dataSource={dynamic}

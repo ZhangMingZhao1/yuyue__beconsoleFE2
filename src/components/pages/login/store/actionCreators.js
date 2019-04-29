@@ -1,6 +1,6 @@
 // import axios from 'axios';
 import * as constants from './constants';
-import Url from '../../../../api/config'; 
+import Url from '../../../../api/config';
 import { message } from 'antd';
 
 const changeLogin = (data) => ({
@@ -16,8 +16,8 @@ export const logout = () => ({
 export const login = (userName, password) => {
 	return (dispatch) => {
 		// console.log('`${baseURL}/login`',`${baseURL}/login`);
-		fetch(`${Url}/login`,{
-		// fetch(`http://localhost:8080/yuyue/login`,{
+		fetch(`${Url}/login`, {
+			// fetch(`http://localhost:8080/yuyue/login`,{
 			method: 'POST',
 			mode: 'cors',
 			headers: {
@@ -28,24 +28,28 @@ export const login = (userName, password) => {
 				userName: userName,
 				password: password
 			})
-		}).then((res) => res.json()).then(data=>{
-			console.log('loginData',data);
+			// body: JSON.stringify({
+			// 	userName: 'admin',
+			// 	password: 'admin'
+			// })
+		}).then((res) => res.json()).then(data => {
+			console.log('loginData', data);
 			const result = data;
-			console.log('result.data:',result.data);
+			console.log('result.data:', result.data);
 			if (result.data) {
 				message.success('登陆成功');
 				dispatch(changeLogin(result))
-			}else {
+			} else {
 				message.error(`${result.message}`);
 			}
-		}).catch((err)=>{
+		}).catch((err) => {
 			console.log(err);
 		})
 	}
 }
 
-export const doLogout = ()=>{
-	return (dispatch)=> {
+export const doLogout = () => {
+	return (dispatch) => {
 		dispatch(logout())
 	}
 } 
