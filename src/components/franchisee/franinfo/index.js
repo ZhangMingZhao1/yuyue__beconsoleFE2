@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Table, Card, Divider, Form, Select, Input, Button } from 'antd';
+import {Table, Card, Divider, Form, Select, Input, Button, message } from 'antd';
 import { Link } from 'react-router-dom'
 import URL from '../../../api/config';
 const { Option } = Select;
@@ -7,7 +7,7 @@ const { Option } = Select;
 class FranInfo extends Component {
     constructor(props) {
         super(props)
-      
+        // this.deleFranInfo = this.deleFranInfo.bind(this);
         this.state = {
            tableData:[],
         }
@@ -47,6 +47,17 @@ class FranInfo extends Component {
       //   })
       // };
       // fetch("")
+    }
+    deleFranInfo(id){
+      fetch(`http://localhost:8080/yuyue/franinfo/${id}`,
+      {method:"DELETE",credentials: "include"})
+        .then(res=>res.json())
+        .then(data=>{
+          if(data===true) {
+            message.success(`删除第${id}条成功`);
+            this.fetchFranInfoData();
+          }
+        })
     }
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -94,7 +105,7 @@ class FranInfo extends Component {
                 <Divider type="vertical" />
                 <Link to={`${this.props.match.url}/franmodify/${record.id}`}>修改</Link>
                 <Divider type="vertical" />
-                <a href="javascript:;">删除</a>
+                <a href="javascript:" onClick={this.deleFranInfo.bind(this,record.id)}>删除</a>
               </span>
             ),
           }];
