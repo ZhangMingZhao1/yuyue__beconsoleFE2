@@ -142,7 +142,7 @@ class WarehouseM extends React.Component {
     }
 
     render() {
-        console.log(this.state.dataSource)
+        // console.log(this.state.dataSource)
 
         const columns = [{
             title: '序号',
