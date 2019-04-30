@@ -2,7 +2,7 @@
  * Created by hao.cheng on 2017/4/13.
  */
 import React, { Component } from 'react';
-import { Menu, Icon, Layout, Badge, Popover } from 'antd';
+import { Menu, Icon, Layout, Badge, Popover, message } from 'antd';
 import screenfull from 'screenfull';
 import { gitOauthToken, gitOauthInfo } from '../../axios';
 import { queryString } from '../../utils';
@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { PwaInstaller } from '../widget';
 import { actionCreators } from '../pages/login/store'
+import URL from '../../api/config';
 
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -51,7 +52,18 @@ class HeaderCustom extends Component {
         // e.key === 'logout' && this.logout();
     };
     logout = () => {
-        localStorage.removeItem('user');
+        // localStorage.removeItem('user');
+        fetch(`${URL}/logout/${sessionStorage.getItem('session')}`,{
+            credentials: 'include'})
+            .then(res=>res.json())
+            .then(data=>{
+                if(data.code == "OK") {
+                    message.success("退出成功")
+                }
+                else {
+                    message.warning("session删除失败")
+                }
+            })
         this.props.logout();
         this.props.history.push('/login');
     };
@@ -121,7 +133,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => ({
     logout() {
-        console.log("11111111111111logout");
+        // console.log("11111111111111logout");
         dispatch(actionCreators.doLogout());
     }
 });
