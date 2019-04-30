@@ -94,7 +94,7 @@ export const getFormItem = (form, formList) => {
                                 getFieldDecorator(name, {
                                     initialValue: initialValue
                                 })(
-                                    <InputNumber />
+                                    <InputNumber disabled={disabled}/>
                                 )
                             }
                         </FormItem>
@@ -105,7 +105,7 @@ export const getFormItem = (form, formList) => {
                         <FormItem label={label} key={name} {...formItemLayout}>
                             {
                                 getFieldDecorator(name)(
-                                    <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" />
+                                    <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" disabled={disabled}/>
                                 )
                             }
                         </FormItem>
@@ -116,7 +116,7 @@ export const getFormItem = (form, formList) => {
                         <FormItem label={label} key={name} {...formItemLayout}>
                             {
                                 getFieldDecorator(name, { valuePropName: 'checked', initialValue: initialValue })(
-                                    <Switch />
+                                    <Switch disabled={disabled}/>
                                 )
                             }
                         </FormItem>
@@ -126,7 +126,7 @@ export const getFormItem = (form, formList) => {
                     formItemList.push(
                         <FormItem label={label} key={name} {...formItemLayout}>
                             {getFieldDecorator(name, { initialValue: initialValue })(
-                                <Radio.Group>
+                                <Radio.Group disabled={disabled}>
                                     {getRadioList(item.list)}
                                 </Radio.Group>
                             )}
@@ -138,7 +138,7 @@ export const getFormItem = (form, formList) => {
                         <FormItem label={label} key={name} {...formItemLayout}>
                             {
                                 getFieldDecorator(name)(
-                                    <TextArea disabled={disabled} style={{ width: width }} />
+                                    <TextArea disabled={disabled} style={{ width: width }} row={item.width} />
                                 )
                             }
                         </FormItem>
@@ -146,11 +146,11 @@ export const getFormItem = (form, formList) => {
                     break;
                 case "UPLOAD":
                     formItemList.push(
-                        <MyUpload form={form} label={label} name={name} formItemLayout={formItemLayout} initialValue={initialValue} />
+                        <MyUpload form={form} label={label} name={name} disabled={disabled} formItemLayout={formItemLayout} initialValue={initialValue} />
                     );
                     break;
                 default:
-                    const Component = item.component;
+                    let Component = item.component;
                     formItemList.push(
                         Component ? <FormItem label={label} key={name} {...formItemLayout}>
                             {getFieldDecorator(name, {
@@ -184,7 +184,7 @@ class MyUpload extends React.Component {
     }
     render() {
         const { previewVisible, previewImage } = this.state;
-        const { form, label, name, formItemLayout, initialValue } = this.props;
+        const { form, label, name, formItemLayout, initialValue, disabled } = this.props;
         return <Form.Item label={label} key={name} {...formItemLayout}>
             {form.getFieldDecorator(name, {
                 valuePropName: 'fileList',
@@ -201,7 +201,8 @@ class MyUpload extends React.Component {
                     listType="picture-card"
                     onPreview={this.handlePreview}
                     onChange={this.handleChange}
-                    onRemove={() => { this.setState({ hasFile: null }) }}
+                    onRemove={() => { if(disabled) return false; this.setState({ hasFile: null }); }}
+                    disabled={disabled}
                 >
                     {
                         this.state.hasFile ?
