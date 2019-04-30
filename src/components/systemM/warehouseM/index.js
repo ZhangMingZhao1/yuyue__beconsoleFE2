@@ -1,6 +1,7 @@
 import React from 'react';
 import { Select, Input, Button, Card, Table, Divider, Modal, Popover, message } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
+import './index.less';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import URL from '../../../api/config';
@@ -141,6 +142,7 @@ class WarehouseM extends React.Component {
     }
 
     render() {
+        // console.log(this.state.dataSource)
 
         const columns = [{
             title: '序号',
@@ -239,6 +241,7 @@ class WarehouseM extends React.Component {
                                 </Button>
                             </div>
                             <Table
+                                className="warehouseM-table"
                                 bordered
                                 columns={columns}
                                 dataSource={this.state.warehouseData}

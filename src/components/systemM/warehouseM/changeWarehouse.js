@@ -12,7 +12,7 @@ class ChangeWarehouse extends React.Component {
 
     componentDidMount() {
         this.requestList();
-        console.log(this.props)
+        // console.log(this.props)
     }
 
     requestList = () => {
@@ -22,7 +22,6 @@ class ChangeWarehouse extends React.Component {
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data)
                 data.warehouseId = `${data.warehouseId}`;
                 data.operatorId = `${data.operatorId}`;
                 data.departmentId = data.beDepartment ? `${data.beDepartment.id}` : null;

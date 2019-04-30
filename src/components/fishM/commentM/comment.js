@@ -219,6 +219,7 @@ class Comment extends React.Component {
                     批量删除
 				</Button>
                 <Table
+                    className="tables"
                     bordered
                     columns={columns}
                     dataSource={comment}
