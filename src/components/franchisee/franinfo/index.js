@@ -12,6 +12,7 @@ class FranInfo extends Component {
            tableData:[],
         }
       }
+
     fetchFranInfoData=()=> {
       fetch('http://localhost:8080/yuyue/franinfo',{
           method: 'GET',
@@ -131,7 +132,7 @@ class FranInfo extends Component {
                           <Button type="primary" htmlType="submit">查询</Button>
                         </Form.Item>
                      </Form>
-                     <Button type="primary" style={{marginTop:10,marginBottom:10}} onClick={this.addFran}>新建</Button>
+                     <Button type="primary" style={{marginTop:10,marginBottom:10}} onClick={this.addFranInfo}><Link to={`${this.props.match.url}/addFranInfo`}>新增</Link></Button>
                     <Table dataSource={this.state.tableData} columns={columns} />
                 </Card>
             </div>
