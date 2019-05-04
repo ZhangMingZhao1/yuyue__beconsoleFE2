@@ -66,7 +66,7 @@ export const fetchGet = (options) => {
     });
 }
 
-function parseParams(data) {
+export const parseParams = (data) => {
     try {
         let tempArr = [];
         for (let i in data) {
