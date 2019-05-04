@@ -56,6 +56,20 @@ import OutStoreData from './storehouseM/outStoreData/index.js';
 import OutStoreInfo from './storehouseM/outStoreData/outStoreInfo.js';
 import MvStoreData from './storehouseM/mvStoreData/index.js';
 import MvStoreInfo from './storehouseM/mvStoreData/mvStoreInfo';
+import AllocateInCase from './storehouseM/allocateInCase/index.js';
+import AllocateInCaseG from './storehouseM/allocateInCase/generate.js';
+import AllocateInCaseS from './storehouseM/allocateInCase/selectBook.js';
+import AllocateInCaseR from './storehouseM/allocateInCase/receiveOrder.js';
+import AllocateInCaseP from './storehouseM/allocateInCase/putInCase.js';
+import AllocateInCaseC from './storehouseM/allocateInCase/checkList';
+import AllocateInCaseF from './storehouseM/allocateInCase/finished';
+import AllocateOutCase from './storehouseM/allocateOutCase/index.js';
+import AllocateOutCaseG from './storehouseM/allocateOutCase/generate.js';
+import AllocateOutCaseS from './storehouseM/allocateOutCase/selectBook.js';
+import AllocateOutCaseR from './storehouseM/allocateOutCase/receiveOrder.js';
+import AllocateOutCaseP from './storehouseM/allocateOutCase/outCase.js';
+import AllocateOutCaseC from './storehouseM/allocateOutCase/checkList';
+import AllocateOutCaseF from './storehouseM/allocateOutCase/finished';
 import FranRank from './franchisee/franchiseeRank';
 import FranInfo from './franchisee/franinfo';
 import FranInfoDetail from './franchisee/frandetail';
@@ -74,7 +88,9 @@ export default {
     CommentM, SensitiveWordsM, DynamicCmnt,
 
     OrganizationM, CabinetM, AddCabinet, ChangeCabinet, WarehouseM, AddWarehouse, ChangeWarehouse, StaffM, AddStaff, ChangeStaff,
-    StoreQuery, InStoreData, InStoreInfo, OutStoreData, OutStoreInfo, MvStoreData, MvStoreInfo,
+    StoreQuery, InStoreData, InStoreInfo, OutStoreData, OutStoreInfo, MvStoreData, MvStoreInfo, 
+    AllocateInCase, AllocateInCaseG, AllocateInCaseS, AllocateInCaseR, AllocateInCaseP, AllocateInCaseC, AllocateInCaseF,
+    AllocateOutCase, AllocateOutCaseG, AllocateOutCaseS, AllocateOutCaseR, AllocateOutCaseP, AllocateOutCaseC, AllocateOutCaseF,
     roleAuth,
 
     FranRank,FranInfo,FranInfoDetail,FranModify,AddFranInfo
