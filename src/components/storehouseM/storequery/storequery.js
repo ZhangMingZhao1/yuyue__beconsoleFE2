@@ -39,7 +39,7 @@ const StoreQuerySearch = Form.create()(
             return (
                 <Form onSubmit={this.handleSubmit}>
                     <Row>
-                        {getFormItem(form, formList).map(i => <Col span={8}>{i}</Col>)}
+                        {getFormItem(form, formList).map((i,index) => <Col key={index} span={8}>{i}</Col>)}
                     </Row>
                     <div style={{textAlign: "right"}}>
                         <Button style={{marginRight: '50px'}} type="primary" htmlType="submit">查询</Button>
