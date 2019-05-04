@@ -3,6 +3,8 @@ import { Card, Input, Form, Select, DatePicker, Button, Table, Divider } from 'a
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import './index.less';
 import moment from 'moment';
+import Modals from './modals';
+import URL from '../../../api/config';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -97,69 +99,77 @@ const SearchForm = Form.create()(
 // 根据订单状态不同显示不同的action
 class TableOption extends React.Component {
 
-    render() {
-        // 后端有数据后还需要传递订单编号
-        // 路由到别的界面
-        const id = this.props.orderStatusId
+    state = {
+        visible: false
+    }
 
-        switch (id) {
-            case 1:
-                return <div>
-                    <a href='javascript:;'>详情</a>
-                    <Divider type="vertical" />
-                    <a href='javascript:;'>发快递</a>
-                </div>
-            case 2:
-                return <div>
-                    <a herf='javascipt:;'>详情</a>
-                    <Divider type="vertical" />
-                    <a href='javascript:;'>发书柜</a>
-                    <Divider type="vertical" />
-                    <a href='javascript:;'>关闭订单</a>
-                </div>
-            case 3:
-                return <div>
-                    <a herf='javascipt:;'>详情</a>
-                    <Divider type="vertical" />
-                    <a herf='javascipt:;'>接单</a>
-                    <Divider type="vertical" />
-                    <a herf='javascipt:;'>关闭订单</a>
-                </div>
-            case 4:
-                return <div>
-                    <a href='javascript:;'>详情</a>
-                    <Divider type="vertical" />
-                    <a href='javascript:;'>上柜</a>
-                </div>
-            case 5:
-                return <div>
-                    <a href='javascript:;'>详情</a>
-                    <Divider type="vertical" />
-                    <a href='javascript:;'>关闭订单</a>
-                </div>
-            case 6:
-                return <div>
-                    <a href='javascript:;'>详情</a>
-                    <Divider type="vertical" />
-                    <a href='javascript:;'>关闭订单</a>
-                </div>
-            case 7:
-                return <div>
-                    <a href='javascript:;'>详情</a>
-                </div>
-            case 8:
-                return <div>
-                    <a href='javascript:;'>详情</a>
-                </div>
-            case 9:
-                return <div>
-                    <a href='javascript:;'>详情</a>
-                    <Divider type="vertical" />
-                    <a href='javascript:;'>重新审核</a>
-                </div>
-            default:
-                return null;
-        }
+    handleOptClick = () => {
+        this.setState({
+            visible: false
+        });
+    }
+
+    render() {
+
+        const { orderStatusId, orderId, deliverType } = this.props;
+        const { visible } = this.state;
+        const optType = [
+            [
+                [
+                    { name: '详情', next: true },
+                    { name: '发书柜', next: true },
+                    { name: '关闭订单' }
+                ],
+                [
+                    { name: '详情', next: true },
+                    { name: '关闭订单' },
+                ],
+                [
+                    { name: '详情' },
+                ],
+                [
+                    { name: '详情' },
+                ],
+                [
+                    { name: '详情', next: true },
+                    { name: '重新审核' },
+                ]
+            ],
+            [
+                [
+                    { name: '详情', next: true },
+                    { name: '发快递' },
+                ],
+                [
+                    { name: '详情', next: true },
+                    { name: '关闭订单' },
+                ],
+                [
+                    { name: '详情' },
+                ],
+                [
+                    { name: '详情' },
+                ],
+                [
+                    { name: '详情', next: true },
+                    { name: '重新审核' },
+                ]
+            ],
+        ];
+
+        return (
+            optType[deliverType - 1][orderStatusId].map((i, index) => {
+                return (
+                    <div key={index}>
+                        <a href='javascript:;' onClick={this.handleOptClick} > {i.name}</a>
+                        {
+                            i.next ? <Divider type="vertical" /> : null
+                        }
+                        <Modals visible={visible} orderId={orderId} orderStatusId={orderStatusId} deliverType={deliverType} />
+                    </div>
+                );
+            })
+        );
     }
 }
 
@@ -174,20 +184,45 @@ class BorrowO extends React.Component {
     }
 
     requestList = () => {
-        const url = 'https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/borrowO'
-        fetch(url, {
+
+        const orderStatus = [
+            { type: 0, name: '待发货' },
+            { type: 1, name: '待收书/已发货' },
+            { type: 2, name: '待归还' },
+            { type: 3, name: '审核中' },
+            { type: 4, name: '审核未通过' },
+        ];
+
+        // const url = 'https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/borrowO'
+        fetch(`${URL}/curborrowrecords`, {
             method: 'GET',
-            // credentials: 'include'
+            credentials: 'include'
         })
             .then(res => res.json())
             .then(data => {
-                // console.log(data);
-                data.data.map((i, index) => {
-                    i.key = index// 后端有数据后改为订单编号
+                data.content.map((i) => {
+                    i.key = i.borrowId;
+                    i.orderId = i.orderNo;
+                    i.VIPAccount = i.vipNo;
+                    i.VIPName = i.nikeName;
+                    i.bookName = i.bsBookinfo.bookName;
+                    i.ISBN = i.bsBookinfo.isbn;
+                    i.location = i.bsBookinstore.bsBookcaseinfo ? i.bsBookinstore.bsBookcellinfo.bsBookcaseinfo.caseId : null;
+                    i.eLabel = i.bsBookinstore.rfid;
+                    i.borWay = i.deliverType === 1 ? '书柜' : '快递'
+                    i.borTime = moment(i.startTime).format('YYYY-MM-DD');
+                    i.backWay = i.returnWay === 1 ? '书柜' : '快递';
+                    i.backTime = i.finishTime ? moment(i.finishTime).format('YYYY-MM-DD') : null;
                     i.createTime = moment(i.createTime).format('YYYY-MM-DD');
-                });
+                    i.orderStatus = { type: i.stage, name: orderStatus[i.stage].name };
+                })
+                console.log(data.content);
+                // data.data.map((i) => {
+                //     i.key = i.orderId
+                //     i.createTime = moment(i.createTime).format('YYYY-MM-DD');
+                // });
                 this.setState({
-                    dataSource: data.data
+                    dataSource: data.content
                 });
             })
             .catch(err => console.log(err));
@@ -210,13 +245,18 @@ class BorrowO extends React.Component {
             { title: '还书方式', dataIndex: 'backWay' },
             { title: '还书时间', dataIndex: 'backTime' },
             { title: '创建时间', dataIndex: 'createTime' },
-            { title: '订单状态', dataIndex: 'orderStatus.status' },
+            { title: '订单状态', dataIndex: 'orderStatus.name' },
             {
                 title: '操作', dataIndex: 'option',
-                render: (text, record) => (
-                    // 还需传递订单编号
-                    <TableOption orderStatusId={record.orderStatus.id} />
-                )
+                render: (text, record) => {
+                    console.log(record.orderStatus.type)
+                    return (
+                        // 还需传递订单编号
+                        <div>
+                            <TableOption deliverType={record.deliverType} orderStatusId={record.orderStatus.type} orderId={record.orderId} />
+                        </div>
+                    );
+                }
             },
         ];
 
