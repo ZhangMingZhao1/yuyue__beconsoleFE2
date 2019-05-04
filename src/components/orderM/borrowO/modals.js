@@ -5,33 +5,37 @@ class Modals extends React.Component {
 
     // 传入一个id，根据id修改显示不同的Modal
 
-    state = { visible: false }
+    state = {
+        detailModals: false,// 详情
+        expressModals: false,// 发快递
+        toCabModals: false,// 发书柜
+        retrialModals: false,// 重新审核
+        closeModals: false,// 关闭订单
+    }
 
     showModal = () => {
-        this.setState({
-            visible: true,
-        });
+
     }
 
     handleOk = (e) => {
         // console.log(e);
-        this.setState({
-            visible: false,
-        });
+
     }
 
     handleCancel = (e) => {
         // console.log(e);
-        this.setState({
-            visible: false,
-        });
+
     }
 
     render() {
+
+        const { detailModals, expressModals, toCabModals, retrialModals, closeModals } = this.state;
+        console.log(this.props);
+
         return (
             <Modal
-                title="Basic Modal"
-                visible={this.state.visible}
+                title="详情"
+                visible={detailModals}
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
             >
