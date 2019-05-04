@@ -6,6 +6,7 @@ import { getFormItem } from '../../baseFormItem';
 import Url from '../../../api/config';
 import BannerInfoModal from './infoModal';
 import pagination from '../../pagination';
+import { parseParams } from '../../../axios/tools';
 
 const confirm = Modal.confirm;
 
@@ -59,8 +60,8 @@ class BannerC extends React.Component {
     }
 
     requestList = () => {
-        fetch(`${Url}/pictures?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`,{credentials: 'include'})
-            .then((res) => {console.log(res); return res.json()}).then(result => {
+        fetch(`${Url}/pictures?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`, { credentials: 'include' })
+            .then((res) => res.json()).then(result => {
                 let data = result;
                 this.setState({
                     pagination: pagination(data, (current) => {//改变页码
@@ -91,25 +92,63 @@ class BannerC extends React.Component {
     //新增banner
     handleAdd = (form) => {
         let values = form.getFieldsValue();
-        console.log(values.file[0])
         const formData = new FormData();
-        formData.append('fileType', "other_img");
-        formData.append('file', values.file[0]);
-        fetch('http://47.104.92.91:8081/file/upload/uploadFile', {
+        values = { ...values, status: values.status ? "1" : "0" };
+        let image = values.image.imageList[0];
+        if (image && image.originFileObj) {//判断values.image[0].originFileObj是否存在
+            values.image = image.originFileObj;
+        } else {
+            delete values.image;//不存在 删除image属性
+        }
+        for (let v in values) {
+            formData.append(v, values[v]);
+        }
+
+        fetch(`${Url}/pictures`, {
             method: 'POST',
             mode: 'cors',
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
             credentials: 'include',
             body: formData
         }).then((res) => res.json()).then(result => {
-            message.success(result)
-            if (result.suc === true) {
+            if (result.code === 0) {
                 message.success("新增成功 " + JSON.stringify(result.data))
+                form.resetFields();//重置表单
+                this.setState({ visible: false });
                 this.requestList();//刷新页面
             } else {
-                message.error(result.msg)
+                message.error(result.message)
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
+
+    /**
+     * 修改banner
+     */
+    handleModify = (form, key) => {
+        let values = form.getFieldsValue();
+        const formData = new FormData();
+        let image = values.image.imageList[0];
+        if (image && image.originFileObj) {
+            formData.append("image", image.originFileObj);//formDate image
+        }
+        delete values.image;
+        values = { ...values, status: values.status ? "1" : "0", picId: key };
+
+        fetch(`${Url}/pictures?${parseParams(values)}`, {
+            method: 'PUT',
+            mode: 'cors',
+            credentials: 'include',
+            body: formData
+        }).then((res) => res.json()).then(result => {
+            if (result.code === 0) {
+                message.success("更新成功 " + JSON.stringify(result.data))
+                form.resetFields();//重置表单
+                this.setState({ visible: false });
+                this.requestList();//刷新页面
+            } else {
+                message.error(result.message)
             }
         }).catch((err) => {
             console.log(err)
@@ -119,17 +158,31 @@ class BannerC extends React.Component {
     /**
      * 删除banner
      */
-    handleDelete = () => {
+    handleDelete = (key) => {
+        let _this = this;
         confirm({
             title: '是否确定删除？',
             okText: '确定',
             cancelText: '取消',
             onOk() {
-                console.log('删除？');
-            },
-            onCancel() {
-                console.log('Cancel');
-            },
+                fetch(`${Url}/pictures/${key}`, {
+                    method: 'DELETE',
+                    credentials: 'include',
+                    mode: "cors",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then((res) => res.json()).then(result => {
+                    if (result.code === 0) {
+                        message.success("删除" + JSON.stringify(result.data) + "成功")
+                        _this.requestList();//刷新页面
+                    } else {
+                        message.error(result.message)
+                    }
+                }).catch((err) => {
+                    console.log(err)
+                })
+            }
         });
     }
 
@@ -182,9 +235,20 @@ class BannerC extends React.Component {
                 dataIndex: 'action',
                 render: (text, record) => (
                     <span>
-                        <a onClick={() => { this.setState({ modalType: 'modify', visible: true }) }}>修改</a>
+                        <a
+                            onClick={() => {
+                                this.setState({
+                                    modalType: 'modify',
+                                    modalData: { ...record, status: record.status === 0 ? false : true },
+                                    visible: true
+                                })
+                            }
+                            }
+                        >
+                            修改
+                        </a>
                         <Divider type="vertical" />
-                        <a onClick={this.handleDelete}>删除</a>
+                        <a onClick={() => { this.handleDelete(record.picId) }}>删除</a>
                     </span>
                 ),
             }
@@ -210,8 +274,10 @@ class BannerC extends React.Component {
                 <BannerInfoModal
                     type={this.state.modalType}
                     visible={this.state.visible}
+                    data={this.state.modalData}
                     onOk={this.handleOk}
-                    onCancel={() => { this.setState({ visible: false }) }}
+                    onCancel={() => { this.setState({ modalData: null, visible: false }) }}
+                    // onCancel={() => { this.setState({ visible: false }) }}
                 />
             </div>
 

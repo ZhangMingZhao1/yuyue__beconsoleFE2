@@ -94,7 +94,7 @@ export const getFormItem = (form, formList) => {
                                 getFieldDecorator(name, {
                                     initialValue: initialValue
                                 })(
-                                    <InputNumber disabled={disabled}/>
+                                    <InputNumber disabled={disabled} />
                                 )
                             }
                         </FormItem>
@@ -105,7 +105,7 @@ export const getFormItem = (form, formList) => {
                         <FormItem label={label} key={name} {...formItemLayout}>
                             {
                                 getFieldDecorator(name)(
-                                    <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" disabled={disabled}/>
+                                    <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" disabled={disabled} />
                                 )
                             }
                         </FormItem>
@@ -116,7 +116,7 @@ export const getFormItem = (form, formList) => {
                         <FormItem label={label} key={name} {...formItemLayout}>
                             {
                                 getFieldDecorator(name, { valuePropName: 'checked', initialValue: initialValue })(
-                                    <Switch disabled={disabled}/>
+                                    <Switch disabled={disabled} />
                                 )
                             }
                         </FormItem>
@@ -146,7 +146,24 @@ export const getFormItem = (form, formList) => {
                     break;
                 case "UPLOAD":
                     formItemList.push(
-                        <MyUpload form={form} label={label} name={name} disabled={disabled} formItemLayout={formItemLayout} initialValue={initialValue} />
+                        <Form.Item label={label} key={name} {...formItemLayout}>
+                            {form.getFieldDecorator(name, {
+                                valuePropName: 'fileList',
+                                initialValue: {
+                                    imageList: (initialValue ? [{
+                                        uid: '-1',
+                                        name: 'xxx.png',
+                                        status: 'done',
+                                        url: /^(http)/.test(initialValue) ? initialValue : "http://" + initialValue,
+                                    }] : [])
+                                },
+                                getValueFromEvent: (e) => {
+                                    return { imageList: e.imageList };
+                                }
+                            })(
+                                <MyUpload disabled={disabled} />
+                            )}
+                        </Form.Item>
                     );
                     break;
                 default:
@@ -167,8 +184,37 @@ export const getFormItem = (form, formList) => {
 }
 
 class MyUpload extends React.Component {
-    //hasFile 是否已有图片，保证只能上传一张图片
-    state = { previewVisible: false, previewImage: '', hasFile: this.props.initialValue ? true : false }
+    static getDerivedStateFromProps(nextProps) {
+        // Should be a controlled component.
+        if ('fileList' in nextProps) {
+            return {
+                ...(nextProps.fileList || {}),
+            };
+        }
+        return null;
+    }
+    constructor(props) {
+        super(props);
+        const fileList = props.fileList || {};
+        this.state = {
+            imageList: fileList.imageList,
+            previewVisible: false,
+            previewImage: '',
+        };
+    }
+    handleChange = ({ fileList }) => {
+        if (!('fileList' in this.props)) {
+            this.setState({ imageList: fileList });
+        }
+        this.triggerChange({ imageList: fileList });
+    }
+    triggerChange = (changedValue) => {
+        // Should provide an event to pass value to Form.
+        const onChange = this.props.onChange;
+        if (onChange) {
+            onChange(Object.assign({}, { imageList: this.state.imageList }, changedValue));
+        }
+    }
     //预览
     handlePreview = (file) => {
         this.setState({
@@ -178,43 +224,30 @@ class MyUpload extends React.Component {
     }
     //取消模态框
     handleCancel = () => this.setState({ previewVisible: false })
-    //上传文件改变时调用
-    handleChange = ({ fileList }) => {
-        this.setState({hasFile: fileList.length>0? true:false})
-    }
+
     render() {
         const { previewVisible, previewImage } = this.state;
-        const { form, label, name, formItemLayout, initialValue, disabled } = this.props;
-        return <Form.Item label={label} key={name} {...formItemLayout}>
-            {form.getFieldDecorator(name, {
-                valuePropName: 'fileList',
-                initialValue: initialValue,
-                getValueFromEvent: (e) => {
-                    if (Array.isArray(e)) {
-                        return e;
-                    }
-                    return e && e.fileList;
+        const { disabled } = this.props;
+        return <div>
+            <Upload
+                beforeUpload={() => false}
+                listType="picture-card"
+                fileList={this.state.imageList}
+                onPreview={this.handlePreview}
+                onChange={this.handleChange}
+                onRemove={() => { this.handleChange({ fileList: [] }) }}
+                disabled={disabled}
+            >
+                {
+                    this.state.imageList.length > 0 ?
+                        null :
+                        <Icon type="plus" />
                 }
-            })(
-                <Upload
-                    beforeUpload={() => false}
-                    listType="picture-card"
-                    onPreview={this.handlePreview}
-                    onChange={this.handleChange}
-                    onRemove={() => { if(disabled) return false; this.setState({ hasFile: null }); }}
-                    disabled={disabled}
-                >
-                    {
-                        this.state.hasFile ?
-                            null :
-                            <Icon type="plus" />
-                    }
-                </Upload>
-            )}
+            </Upload>
             <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
                 <img style={{ width: '100%' }} src={previewImage} />
             </Modal>
-        </Form.Item>
+        </div>
     }
 }
 
