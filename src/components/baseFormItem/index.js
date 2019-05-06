@@ -104,7 +104,9 @@ export const getFormItem = (form, formList) => {
                     formItemList.push(
                         <FormItem label={label} key={name} {...formItemLayout}>
                             {
-                                getFieldDecorator(name)(
+                                getFieldDecorator(name, {
+                                    initialValue: initialValue
+                                })(
                                     <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" disabled={disabled} />
                                 )
                             }
