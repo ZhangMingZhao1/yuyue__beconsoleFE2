@@ -51,7 +51,7 @@ class BannerInfoModal extends React.Component {
         let form = this.ref.props.form;
         form.validateFields((err, values) => {
             if (!err) {
-                this.props.type === 'add' ? this.props.onOk(form) : this.props.onOk(form, this.props.data.key);
+                this.props.type === 'add' ? this.props.onOk(form) : this.props.onOk(form, this.props.advId);
             }
         })
     }
