@@ -277,7 +277,6 @@ class BannerC extends React.Component {
                     data={this.state.modalData}
                     onOk={this.handleOk}
                     onCancel={() => { this.setState({ modalData: null, visible: false }) }}
-                    // onCancel={() => { this.setState({ visible: false }) }}
                 />
             </div>
 
