@@ -17,7 +17,7 @@ const SearchForm = Form.create()(
             e.preventDefault();
             this.props.form.validateFields((err, values) => {
                 if (!err) {
-                    console.log('Received values of form: ', values);
+                    // console.log('Received values of form: ', values);
                 }
             })
         }
@@ -100,10 +100,27 @@ const SearchForm = Form.create()(
 class TableOption extends React.Component {
 
     state = {
-        visible: false
+        visible: false,
+        optId: 0
     }
 
-    handleOptClick = () => {
+    handleOptClick = (type) => {
+        console.log(type);
+        this.setState({
+            visible: true,
+            optId: type
+        });
+    }
+
+    handleOk = (e) => {
+        console.log(e);
+        this.setState({
+            visible: false
+        });
+    }
+
+    handleCancel = (e) => {
+        console.log(e);
         this.setState({
             visible: false
         });
@@ -112,63 +129,75 @@ class TableOption extends React.Component {
     render() {
 
         const { orderStatusId, orderId, deliverType } = this.props;
-        const { visible } = this.state;
+        const { visible, optId } = this.state;
         const optType = [
             [
                 [
-                    { name: '详情', next: true },
-                    { name: '发书柜', next: true },
-                    { name: '关闭订单' }
+                    { type: 1, name: '详情', next: true },
+                    { type: 2, name: '发书柜', next: true },
+                    { type: 4, name: '关闭订单' }
                 ],
                 [
-                    { name: '详情', next: true },
-                    { name: '关闭订单' },
+                    { type: 1, name: '详情', next: true },
+                    { type: 4, name: '关闭订单' },
                 ],
                 [
-                    { name: '详情' },
+                    { type: 1, name: '详情' },
                 ],
                 [
-                    { name: '详情' },
+                    { type: 1, name: '详情' },
                 ],
                 [
-                    { name: '详情', next: true },
-                    { name: '重新审核' },
+                    { type: 1, name: '详情', next: true },
+                    { type: 3, name: '重新审核' },
                 ]
             ],
             [
                 [
-                    { name: '详情', next: true },
-                    { name: '发快递' },
+                    { type: 1, name: '详情', next: true },
+                    { type: 2, name: '发快递' },
                 ],
                 [
-                    { name: '详情', next: true },
-                    { name: '关闭订单' },
+                    { type: 1, name: '详情', next: true },
+                    { type: 4, name: '关闭订单' },
                 ],
                 [
-                    { name: '详情' },
+                    { type: 1, name: '详情' },
                 ],
                 [
-                    { name: '详情' },
+                    { type: 1, name: '详情' },
                 ],
                 [
-                    { name: '详情', next: true },
-                    { name: '重新审核' },
+                    { type: 1, name: '详情', next: true },
+                    { type: 1, name: '重新审核' },
                 ]
             ],
         ];
 
         return (
-            optType[deliverType - 1][orderStatusId].map((i, index) => {
-                return (
-                    <div key={index}>
-                        <a href='javascript:;' onClick={this.handleOptClick} > {i.name}</a>
-                        {
-                            i.next ? <Divider type="vertical" /> : null
-                        }
-                        <Modals visible={visible} orderId={orderId} orderStatusId={orderStatusId} deliverType={deliverType} />
-                    </div>
-                );
-            })
+            <div>
+                {
+                    optType[deliverType - 1][orderStatusId].map((i, index) => {
+                        return (
+                            <div key={index}>
+                                <a href='javascript:;' onClick={() => this.handleOptClick(i.type)}>{i.name}</a>
+                                {
+                                    i.next ? <Divider type="vertical" /> : null
+                                }
+                            </div>
+                        );
+                    })
+                }
+                <Modals
+                    visible={visible}
+                    optId={optId}
+                    orderId={orderId}
+                    orderStatusId={orderStatusId}
+                    deliverType={deliverType}
+                    handleOk={this.handleOk}
+                    handleCancel={this.handleCancel}
+                />
+            </div>
         );
     }
 }
@@ -216,7 +245,7 @@ class BorrowO extends React.Component {
                     i.createTime = moment(i.createTime).format('YYYY-MM-DD');
                     i.orderStatus = { type: i.stage, name: orderStatus[i.stage].name };
                 })
-                console.log(data.content);
+                // console.log(data.content);
                 // data.data.map((i) => {
                 //     i.key = i.orderId
                 //     i.createTime = moment(i.createTime).format('YYYY-MM-DD');
@@ -249,7 +278,7 @@ class BorrowO extends React.Component {
             {
                 title: '操作', dataIndex: 'option',
                 render: (text, record) => {
-                    console.log(record.orderStatus.type)
+                    // console.log(record.orderStatus.type)
                     return (
                         // 还需传递订单编号
                         <div>
