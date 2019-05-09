@@ -18,19 +18,29 @@ export const typeConfig = {
     '4': '鱼群动态页横幅',
 };
 
+//查询位置映射
+const searchTypeConfig = {
+    '0': '全部',
+    ...typeConfig
+};
+
 const BannerSearch = Form.create()(
     class extends React.Component {
         handleSubmit = (e) => {
             e.preventDefault();
             let fieldsValue = this.props.form.getFieldsValue();
-            console.log(fieldsValue);
+            this.props.onSubmit(fieldsValue);
         }
 
         render() {
             const { form } = this.props;
+            let typeList = [];
+            for (let val in searchTypeConfig) {
+                typeList.push({ id: val, name: searchTypeConfig[val] })
+            }
             const formList = [
-                { type: 'SELECT', label: '投放位置', name: 'location', width: '100px', list: [] },
-                { type: 'INPUT', placeholder: '按名称关键字模糊查询', name: 'fuzzyQuery', width: '300px' },
+                { type: 'SELECT', label: '投放位置', name: 'type', width: '100px', list: typeList },
+                { type: 'INPUT', placeholder: '按名称关键字模糊查询', name: 'keyword', width: '300px' },
             ];
             return (
                 <Form layout="inline" onSubmit={this.handleSubmit}>
@@ -53,6 +63,11 @@ class BannerC extends React.Component {
     params = {
         currentPage: 1,//当前页面
         pageSize: 10,//每页大小
+        /**搜索参数 */
+        search: {
+            type: 0,//投放位置
+            keyword: '',//关键字
+        },
     }
 
     componentDidMount() {
@@ -60,7 +75,12 @@ class BannerC extends React.Component {
     }
 
     requestList = () => {
-        fetch(`${Url}/pictures?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`, { credentials: 'include' })
+        let params = {
+            start: this.params.currentPage - 1,
+            size: this.params.pageSize,
+            ...this.params.search,
+        };
+        fetch(`${Url}/pictures?${parseParams(params)}`, { credentials: 'include' })
             .then((res) => res.json()).then(result => {
                 let data = result;
                 this.setState({
@@ -72,8 +92,9 @@ class BannerC extends React.Component {
                         this.requestList();
                     }),
                     dataSource: data.content.map(i => ({
+                        ...i,
                         key: i.picId,
-                        ...i
+                        type: i.type + '',//转换成字符类型，便于SWITH组件的initial显示
                     }))
                 })
             }).catch((err) => {
@@ -87,6 +108,14 @@ class BannerC extends React.Component {
         } else {//修改banner
             this.handleModify(form, key);
         }
+    }
+
+    /**
+     * 查询
+     */
+    handleSearch = (data) => {
+        this.params.search = { ...data, keyword: data.keyword || '' };
+        this.requestList();
     }
 
     //新增banner
@@ -260,7 +289,7 @@ class BannerC extends React.Component {
                 <Card
                     title="banner管理"
                 >
-                    <BannerSearch />
+                    <BannerSearch onSubmit={this.handleSearch} />
                     <div style={{ textAlign: 'left' }}>
                         <Button type="primary" onClick={() => { this.setState({ modalType: 'add', visible: true }) }}>新增</Button>
                     </div><br />
