@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Table,Divider,Card,Button} from 'antd';
+import {Table,Divider,Card,Button,message} from 'antd';
 import { Link } from 'react-router-dom';
 
 class FranRank extends Component {
@@ -18,7 +18,7 @@ class FranRank extends Component {
             .then((res)=>res.json())
             .then((data)=>{
                 if(data) {
-                    console.log('1111112222'+data);
+                    // console.log('1111112222'+data);
                     this.setState({tableData:data});
                 }
             
@@ -26,6 +26,17 @@ class FranRank extends Component {
     }
     componentDidMount() {
         this.fetchTableData();
+    }
+    deleFranInfo(id){
+      fetch(`http://localhost:8080/yuyue/franrank/${id}`,
+      {method:"DELETE",credentials: "include"})
+        .then(res=>res.json())
+        .then(data=>{
+          if(data===true) {
+            message.success(`删除第${id}条成功`);
+            this.fetchTableData();
+          }
+        })
     }
     render() {
         const columns = [{
@@ -51,7 +62,7 @@ class FranRank extends Component {
               <span>
                 <a href="javascript:;">修改</a>
                 <Divider type="vertical" />
-                <a href="javascript:;">删除</a>
+                <a href="javascript:" onClick={this.deleFranInfo.bind(this,record.id)}>删除</a>
               </span>
             ),
           }];
