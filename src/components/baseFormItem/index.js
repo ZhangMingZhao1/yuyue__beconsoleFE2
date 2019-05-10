@@ -34,6 +34,7 @@ export const getFormItem = (form, formList) => {
     if (formList && formList.length > 0) {
         formList.map(item => {
             let label = item.label || '';
+            let help = item.help || '';
             let name = item.name;
             let initialValue = item.initialValue;
             let placeholder = item.placeholder;
@@ -45,7 +46,7 @@ export const getFormItem = (form, formList) => {
             switch (item.type) {
                 case "INPUT":
                     formItemList.push(
-                        <FormItem label={label} key={name} {...formItemLayout}>
+                        <FormItem label={label} key={name} help={help} {...formItemLayout}>
                             <span style={{ whiteSpace: 'nowrap' }}>
                                 {getFieldDecorator(name, { initialValue: initialValue })(
                                     <Input disabled={disabled} placeholder={placeholder} style={{ width: width }} />
@@ -57,7 +58,7 @@ export const getFormItem = (form, formList) => {
                     break;
                 case "SELECT":
                     formItemList.push(
-                        <FormItem label={label} key={name} {...formItemLayout}>
+                        <FormItem label={label} key={name} help={help} {...formItemLayout}>
                             {
                                 getFieldDecorator(name, {
                                     initialValue: initialValue
@@ -76,7 +77,7 @@ export const getFormItem = (form, formList) => {
                     break;
                 case "RANGPICKER":
                     formItemList.push(
-                        <FormItem label={label} key={name} {...formItemLayout}>
+                        <FormItem label={label} key={name} help={help} {...formItemLayout}>
                             {
                                 getFieldDecorator(name)(
                                     <RangePicker />
@@ -87,7 +88,7 @@ export const getFormItem = (form, formList) => {
                     break;
                 case "INPUTNUMBER":
                     formItemList.push(
-                        <FormItem label={label} key={name} {...formItemLayout}>
+                        <FormItem label={label} key={name} help={help} {...formItemLayout}>
                             {
                                 getFieldDecorator(name, {
                                     initialValue: initialValue
@@ -95,12 +96,13 @@ export const getFormItem = (form, formList) => {
                                     <InputNumber disabled={disabled} />
                                 )
                             }
+                            <span style={{ marginLeft: 10 }}>{extra}</span>
                         </FormItem>
                     );
                     break;
                 case "DATEPICKER":
                     formItemList.push(
-                        <FormItem label={label} key={name} {...formItemLayout}>
+                        <FormItem label={label} key={name} help={help} {...formItemLayout}>
                             {
                                 getFieldDecorator(name, {
                                     initialValue: initialValue
@@ -113,7 +115,7 @@ export const getFormItem = (form, formList) => {
                     break;
                 case "SWITCH":
                     formItemList.push(
-                        <FormItem label={label} key={name} {...formItemLayout}>
+                        <FormItem label={label} key={name} help={help} {...formItemLayout}>
                             {
                                 getFieldDecorator(name, { valuePropName: 'checked', initialValue: initialValue })(
                                     <Switch disabled={disabled} />
@@ -124,7 +126,7 @@ export const getFormItem = (form, formList) => {
                     break;
                 case "RADIO":
                     formItemList.push(
-                        <FormItem label={label} key={name} {...formItemLayout}>
+                        <FormItem label={label} key={name} help={help} {...formItemLayout}>
                             {getFieldDecorator(name, { initialValue: initialValue })(
                                 <Radio.Group disabled={disabled}>
                                     {getRadioList(item.list)}
@@ -135,10 +137,10 @@ export const getFormItem = (form, formList) => {
                     break;
                 case "TEXTAREA":
                     formItemList.push(
-                        <FormItem label={label} key={name} {...formItemLayout}>
+                        <FormItem label={label} key={name} help={help} {...formItemLayout}>
                             {
                                 getFieldDecorator(name)(
-                                    <TextArea disabled={disabled} style={{ width: width }} row={item.width} />
+                                    <TextArea disabled={disabled} style={{ width: width }} row={item.row} />
                                 )
                             }
                         </FormItem>
@@ -146,7 +148,7 @@ export const getFormItem = (form, formList) => {
                     break;
                 case "UPLOAD":
                     formItemList.push(
-                        <Form.Item label={label} key={name} {...formItemLayout}>
+                        <Form.Item label={label} key={name} help={help} {...formItemLayout}>
                             {form.getFieldDecorator(name, {
                                 valuePropName: 'fileList',
                                 initialValue: {
@@ -169,7 +171,7 @@ export const getFormItem = (form, formList) => {
                 default:
                     let Component = item.component;
                     formItemList.push(
-                        Component ? <FormItem label={label} key={name} {...formItemLayout}>
+                        Component ? <FormItem label={label} help={help} key={name} {...formItemLayout}>
                             {getFieldDecorator(name, {
                                 initialValue: initialValue,
                             })(
