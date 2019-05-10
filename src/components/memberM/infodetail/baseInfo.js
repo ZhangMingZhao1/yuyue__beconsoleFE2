@@ -1,35 +1,7 @@
 import React from 'react';
-import { Form, Col, Row, Upload, Button, Icon, message, Input, Cascader } from 'antd';
+import { Form, Col, Row, Button, Input, Cascader } from 'antd';
 import { getFormItem } from '../../baseFormItem';
 const InputGroup = Input.Group;
-const { TextArea } = Input;
-
-function getBase64(img, callback) {
-    const reader = new FileReader();
-    reader.readAsDataURL(img);
-    reader.addEventListener('load', () => callback(reader.result));
-}
-
-function beforeUpload(file) {
-    const isJPG = file.type === 'image/jpeg';
-    if (!isJPG) {
-        message.error('You can only upload JPG file!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-        message.error('Image must smaller than 2MB!');
-    }
-    return isJPG && isLt2M;
-}
-
-const formItemLayout = {
-    labelCol: {
-        span: 24
-    },
-    wrapperCol: {
-        span: 18
-    },
-}
 
 //居住地址输入框
 class AddressInput extends React.Component {
@@ -77,6 +49,7 @@ class AddressInput extends React.Component {
 
     render() {
         const state = this.state;
+        const { disabled } = this.props;
         const options = [{
             value: 'zhejiang',
             label: '浙江省',
@@ -96,12 +69,14 @@ class AddressInput extends React.Component {
         return (
             <InputGroup compact>
                 <Cascader
+                    disabled={disabled}
                     style={{ width: '25%' }}
                     options={options}
                     onChange={this.handleCityChange}
                     displayRender={(label) => (label.join(''))}
                 />
                 <Input
+                    disabled={disabled}
                     style={{ width: '60%' }}
                     defaultValue="Xihu District, Hangzhou"
                     value={state.addrDet}
@@ -112,42 +87,13 @@ class AddressInput extends React.Component {
     }
 }
 
-const formList = [
-    { type: 'INPUT', label: '用户名', name: 'userName', formItemLayout: formItemLayout },
-    { type: 'INPUT', label: '姓名', name: 'name', formItemLayout: formItemLayout },
-    { type: 'RADIO', label: '性别', name: 'sex', list: [{ id: '男', name: '男' }, { id: '女', name: '女' }], initialValue: '男', formItemLayout: formItemLayout },
-    { type: 'INPUT', label: '证件号（身份证）', name: 'idCard', formItemLayout: formItemLayout },
-    { type: 'INPUT', label: '手机号', name: 'phoneName', formItemLayout: formItemLayout },
-    { type: 'INPUT', label: '婚姻', name: 'marriage', formItemLayout: formItemLayout },
-    { type: 'INPUT', label: '邮箱', name: 'eMail', formItemLayout: formItemLayout },
-    { type: 'INPUTNUMBER', label: '年龄', name: 'age', formItemLayout: formItemLayout },
-    { type: 'SELECT', label: '状态', name: 'state', formItemLayout: formItemLayout },
-    { type: 'OTHER', label: '居住地址', name: 'address', component: <AddressInput />, formItemLayout: formItemLayout },
-    { type: 'DATEPICKER', label: '注册时间', name: 'registerTime', formItemLayout: formItemLayout },
-    { type: 'SELECT', label: '所属城市', name: 'city', formItemLayout: formItemLayout },
-    { type: 'SELECT', label: '所属加盟商', name: 'company', formItemLayout: formItemLayout },
-    { type: 'SELECT', label: '所属大客户', name: 'customer', formItemLayout: formItemLayout },
-];
-
-
-const FormItem = Form.Item;
 class BaseInfo extends React.Component {
-    state = {
-        loading: false,
-    };
-
-    handleChange = (info) => {
-        if (info.file.status === 'uploading') {
-            this.setState({ loading: true });
-            return;
-        }
-        if (info.file.status === 'done') {
-            // Get this url from response in real world.
-            getBase64(info.file.originFileObj, imageUrl => this.setState({
-                imageUrl,
-                loading: false,
-            }));
-        }
+    constructor(props) {
+        super(props);
+        this.state = {
+            loading: false,
+            editable: false,
+        };
     }
 
     handleSubmit = (e) => {
@@ -160,60 +106,65 @@ class BaseInfo extends React.Component {
     }
 
     render() {
-        const uploadButton = (
-            <div>
-                <Icon type={this.state.loading ? 'loading' : 'plus'} />
-                <div className="ant-upload-text">Upload</div>
-            </div>
-        );
+        const formItemLayout = {
+            labelCol: {
+                span: 24
+            },
+            wrapperCol: {
+                span: 18
+            },
+        }
+        const formList = [
+            { type: 'INPUT', label: '用户名', name: 'userName' },
+            { type: 'INPUT', label: '姓名', name: 'name', formItemLayout: formItemLayout },
+            { type: 'RADIO', label: '性别', name: 'sex', list: [{ id: '男', name: '男' }, { id: '女', name: '女' }], initialValue: '男' },
+            { type: 'INPUT', label: '证件号（身份证）', name: 'idCard' },
+            { type: 'INPUT', label: '手机号', name: 'phoneName' },
+            { type: 'INPUT', label: '婚姻', name: 'marriage' },
+            { type: 'INPUT', label: '邮箱', name: 'eMail' },
+            { type: 'INPUTNUMBER', label: '年龄', name: 'age' },
+            { type: 'SELECT', label: '状态', name: 'state' },
+            { type: 'OTHER', label: '居住地址', name: 'address', component: <AddressInput disabled={!this.state.editable} /> },
+            { type: 'DATEPICKER', label: '注册时间', name: 'registerTime' },
+            { type: 'SELECT', label: '所属城市', name: 'city' },
+            { type: 'SELECT', label: '所属加盟商', name: 'company' },
+            { type: 'SELECT', label: '所属大客户', name: 'customer' },
+            { type: 'UPLOAD', label: '', name: 'headImg', width: '100px' },
+            { type: 'TEXTAREA', label: '个性签名', name: 'signature', row: 3 },
+        ].map((i, index, arr) => { 
+            i.disabled = !this.state.editable; 
+            if(index<arr.length-2) i.formItemLayout = formItemLayout; 
+            return i; 
+        });
+
         const { form } = this.props;
-        const imageUrl = this.state.imageUrl;
         return (
             <div>
                 <Form layout="horizontal" onSubmit={this.handleSubmit}>
                     <Row>
                         <Col span={18}>
                             <Row>
-                                {getFormItem(form, formList).map((item, index) => (
+                                {getFormItem(form, formList.slice(0, -2)).map((item, index) => (
                                     formList[index].name === 'address' ? <Col key={index} span={16}>{item}</Col> : <Col key={index} span={8}>{item}</Col>
                                 ))}
                             </Row>
                         </Col>
                         <Col span={6}>
                             <Row>
-                                <FormItem label="">
-                                    {form.getFieldDecorator("img", {
-                                        valuePropName: 'fileList',
-                                        getValueFromEvent: (e)=>{
-                                            if (Array.isArray(e)) {
-                                                return e;
-                                              }
-                                              return e && e.fileList;
-                                        },
-                                    })(
-                                        <Upload
-                                            name="avatar"
-                                            listType="picture-card"
-                                            showUploadList={false}
-                                            action="//jsonplaceholder.typicode.com/posts/"
-                                            beforeUpload={beforeUpload}
-                                            onChange={this.handleChange}
-                                        >
-                                            {imageUrl ? <img src={imageUrl} /> : uploadButton}
-                                        </Upload>
-                                    )}
-                                </FormItem>
-                            </Row>
-                            <Row>
-                                <FormItem label="个性签名">
-                                    {form.getFieldDecorator('signature')(
-                                        <TextArea rows={3} />
-                                    )}
-                                </FormItem>
+                                {getFormItem(form, formList.slice(-2)).map((item, index) => (
+                                    <Col key={index}>{item}</Col>
+                                ))}
                             </Row>
                         </Col>
                     </Row>
-                    <div style={{textAlign: 'center'}}><Button type='primary' htmlType="submit">修改</Button></div>
+                    <div style={{ textAlign: 'center' }}>
+                        {
+                            this.state.editable ?
+                                <Button type="primary" onClick={() => { this.setState({ editable: false }) }} htmlType="submit">保存</Button> :
+                                <Button type="primary" onClick={() => { this.setState({ editable: true }) }}>修改</Button>
+                        }
+                    </div>
+
                 </Form>
             </div>
         );
