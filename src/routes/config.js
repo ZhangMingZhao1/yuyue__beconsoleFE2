@@ -158,7 +158,14 @@ export default {
       subs: [
         { key: '/app/franchiseeM/info/franinfodetail/:id', title: '加盟商查看', component: 'FranInfoDetail' },
         { key: '/app/franchiseeM/info/franmodify/:id', title: '加盟商修改', component: 'FranModify' },
-        { key: '/app/franchiseeM/info/addFranInfo', title: '加盟商新增', component: 'AddFranInfo' }
+        { key: '/app/franchiseeM/info/addFranInfo', title: '加盟商新增', component: 'AddFranInfo' },
+        { key: '/app/franchiseeM/info/addFranRank', title: '加盟商新增', component: 'AddFranRank' },
+      ]
+    },
+    {
+      key: '/app/franchiseeM/level', title: '加盟商等级',
+      subs: [
+        { key: '/app/franchiseeM/level/addFranRank', title: '加盟商新增', component: 'AddFranRank' },
       ]
     },
     // {

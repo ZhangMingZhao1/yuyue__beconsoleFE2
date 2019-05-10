@@ -61,6 +61,7 @@ import FranInfo from './franchisee/franinfo';
 import FranInfoDetail from './franchisee/frandetail';
 import FranModify from './franchisee/franmodify';
 import AddFranInfo from './franchisee/addfraninfo';
+import AddFranRank from './franchisee/addfranrank';
 
 export default {
     ThemeControl, ThemeContent, BannerControl, AdvertiseM,
@@ -77,5 +78,5 @@ export default {
     StoreQuery, InStoreData, InStoreInfo, OutStoreData, OutStoreInfo, MvStoreData, MvStoreInfo,
     roleAuth,
 
-    FranRank,FranInfo,FranInfoDetail,FranModify,AddFranInfo
+    FranRank,FranInfo,FranInfoDetail,FranModify,AddFranInfo,AddFranRank
 }

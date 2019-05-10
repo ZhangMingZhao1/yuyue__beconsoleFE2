@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Table,Divider,Card,Button} from 'antd';
+import { Link } from 'react-router-dom';
 
 class FranRank extends Component {
     constructor(props) {
@@ -59,7 +60,7 @@ class FranRank extends Component {
             <div>
                  
                 <Card>
-                    <Button type="primary">新建</Button>
+                    <Button type="primary" style={{marginTop:10,marginBottom:10}} onClick={this.addFranInfo}><Link to={`${this.props.match.url}/addFranRank`}>新增</Link></Button>
                     <Table dataSource={this.state.tableData} columns={columns} />
                 </Card>
             </div>
