@@ -29,6 +29,7 @@ import InfoDetail from './memberM/infodetail';
 import BookLib from './bookM/bookLib/index.js';
 import AddBookLib from './bookM/bookLib/addBookLib.js';
 import ModifyBookLib from './bookM/bookLib/modifyBookLib.js';
+import GeneM from './bookM/geneM/index.js';
 import PublisherM from './bookM/publisherM/index.js';
 import GoodsM from './bookM/goodsM/index.js';
 import CommentM from './fishM/commentM/index.js';
@@ -83,15 +84,15 @@ export default {
     Cssmodule,
     InfoC, PayO, InvitationCode, AddInvCode, ChangeInvCode, PointC, PointRule, MemberLevel,
     InfoDetail,
-    BookLib, AddBookLib, ModifyBookLib, PublisherM, GoodsM,
+    BookLib, AddBookLib, ModifyBookLib, GeneM, PublisherM, GoodsM,
     BorrowO, DonateO, CheckO, BorrowH,
     CommentM, SensitiveWordsM, DynamicCmnt,
 
     OrganizationM, CabinetM, AddCabinet, ChangeCabinet, WarehouseM, AddWarehouse, ChangeWarehouse, StaffM, AddStaff, ChangeStaff,
-    StoreQuery, InStoreData, InStoreInfo, OutStoreData, OutStoreInfo, MvStoreData, MvStoreInfo, 
+    StoreQuery, InStoreData, InStoreInfo, OutStoreData, OutStoreInfo, MvStoreData, MvStoreInfo,
     AllocateInCase, AllocateInCaseG, AllocateInCaseS, AllocateInCaseR, AllocateInCaseP, AllocateInCaseC, AllocateInCaseF,
     AllocateOutCase, AllocateOutCaseG, AllocateOutCaseS, AllocateOutCaseR, AllocateOutCaseP, AllocateOutCaseC, AllocateOutCaseF,
     roleAuth,
 
-    FranRank,FranInfo,FranInfoDetail,FranModify,AddFranInfo
+    FranRank, FranInfo, FranInfoDetail, FranModify, AddFranInfo
 }
