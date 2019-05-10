@@ -48,9 +48,7 @@ export const getFormItem = (form, formList) => {
                         <FormItem label={label} key={name} {...formItemLayout}>
                             <span style={{ whiteSpace: 'nowrap' }}>
                                 {getFieldDecorator(name, { initialValue: initialValue })(
-
                                     <Input disabled={disabled} placeholder={placeholder} style={{ width: width }} />
-
                                 )}
                                 <span style={{ marginLeft: 10 }}>{extra}</span>
                             </span>
@@ -173,7 +171,7 @@ export const getFormItem = (form, formList) => {
                     formItemList.push(
                         Component ? <FormItem label={label} key={name} {...formItemLayout}>
                             {getFieldDecorator(name, {
-
+                                initialValue: initialValue,
                             })(
                                 Component
                             )}
