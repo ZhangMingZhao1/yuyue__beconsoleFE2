@@ -29,11 +29,14 @@ class AddFranInfo extends Component{
             .then(res=>res.json())
             .then(data=>{
                 console.log('dataaddFranInfo ',data);
-                if(data===true)
+                if(data===true){
                     message.success('新增成功');
                     // console.log("this.props",this.props);
                     //在<Route>组件的下一级使用是没问题的，但是在孙子组件，或者redux里面是没法使用的
                     this.props.history.push("/app/franchiseeM/info")
+                }else {
+                    message.error("新增失败")
+                }
             })
     }
     handleSubmit = (e)=>{

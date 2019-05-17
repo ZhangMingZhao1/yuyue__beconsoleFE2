@@ -76,6 +76,7 @@ import FranInfo from './franchisee/franinfo';
 import FranInfoDetail from './franchisee/frandetail';
 import FranModify from './franchisee/franmodify';
 import AddFranInfo from './franchisee/addfraninfo';
+import AddFranRank from './franchisee/addfranrank';
 
 export default {
     ThemeControl, ThemeContent, BannerControl, AdvertiseM,
@@ -94,5 +95,7 @@ export default {
     AllocateOutCase, AllocateOutCaseG, AllocateOutCaseS, AllocateOutCaseR, AllocateOutCaseP, AllocateOutCaseC, AllocateOutCaseF,
     roleAuth,
 
-    FranRank, FranInfo, FranInfoDetail, FranModify, AddFranInfo
+
+    FranRank,FranInfo,FranInfoDetail,FranModify,AddFranInfo,AddFranRank
+
 }
