@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Button, Card, Table, Divider, message, Popconfirm } from 'antd';
+import { Form, Input, Button, Card, Table, Divider, message, Popconfirm, InputNumber } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import './index.less';
 import Url from '../../../api/config';
@@ -7,7 +7,8 @@ import pagination from '../../pagination';
 import { getFormItem } from '../../baseFormItem';
 const EditableContext = React.createContext();
 
-const PublisherSearchForm = Form.create()(
+//顶部查询表单
+const GeneSearchForm = Form.create()(
     (props) => {
         const { getFieldDecorator } = props.form;
         return (
@@ -25,20 +26,25 @@ const PublisherSearchForm = Form.create()(
     }
 );
 
-
+//编辑状态时的单元格
 class EditableCell extends React.Component {
+    getInput = (form) => {
+        let { dataIndex, record } = this.props;
+        if (dataIndex === "name") {//"名称"栏返回input
+            return getFormItem(form, [{ type: 'INPUT', name: dataIndex, initialValue: record && record[dataIndex] }])
+        } else {//"排序"栏返回inputNumber
+            return getFormItem(form, [{ type: 'INPUTNUMBER', name: dataIndex, initialValue: record && record[dataIndex] }])
+        }
+    }
     render() {
-        const { editing, dataIndex, record, ...restProps } = this.props;
-        const formList = [
-            { type: 'INPUT', name: dataIndex, width: '300px', initialValue: record && record[dataIndex] },
-        ];
+        const { editing, dataIndex, ...restProps } = this.props;
         return (
             <EditableContext.Consumer>
                 {(form) => {
                     return (
                         <td {...restProps}>
                             {/* 正在编辑？ */}
-                            {editing ? getFormItem(form, formList) : restProps.children}
+                            {editing ? this.getInput(form) : restProps.children}
                         </td>
                     );
                 }}
@@ -47,13 +53,13 @@ class EditableCell extends React.Component {
     }
 }
 
-const PublisherTable = Form.create()(
+//基因表格
+const GeneTable = Form.create()(
     class extends React.Component {
         state = { editingKey: '' };//编辑中的key
-
         columns = [
-            { title: 'ID', dataIndex: 'pubId', editable: false },
-            { title: '名称', dataIndex: 'pubName', editable: true },//editable 会否可编辑
+            { title: '名称', dataIndex: 'name', editable: true },//editable 会否可编辑
+            { title: '排序', dataIndex: 'sort', editable: true },
             {
                 title: '操作', dataIndex: 'action', editable: false,
                 render: (text, record) => {
@@ -66,7 +72,6 @@ const PublisherTable = Form.create()(
                                     <EditableContext.Consumer>
                                         {form => (
                                             <a
-                                                href="javascript:;"
                                                 onClick={() => this.save(form, record.key)}
                                                 style={{ marginRight: 8 }}
                                             >保存
@@ -86,38 +91,30 @@ const PublisherTable = Form.create()(
                     );
                 },
             }];
-
-
         //判断是否是编辑行
         isEditing = record => record.key === this.state.editingKey;
-
         //取消编辑
         cancel = () => {
             this.setState({ editingKey: '' });
         };
-
         //保存
         save(form, key) {
             form.validateFields((error, row) => {
                 if (error) {
                     return;
                 }
-                this.props.onSave({ pubId: key, ...row })
+                this.props.onSave({ key: key, ...row })
                 this.setState({ editingKey: '' })
             });
         }
-
         //编辑行
         edit(key) {
             this.setState({ editingKey: key });
         }
-
         render() {
             const { dataSource, pagination } = this.props;
             const components = {
-                body: {
-                    cell: EditableCell,
-                },
+                body: {cell: EditableCell},
             };
             const columns = this.columns.map((col) => {
                 if (!col.editable) {
@@ -135,7 +132,7 @@ const PublisherTable = Form.create()(
             return (
                 <EditableContext.Provider value={this.props.form} >
                     <Table
-                        className="publisherM-Table"
+                        className="geneM-Table"
                         components={components}
                         columns={columns}
                         dataSource={dataSource}
@@ -148,9 +145,14 @@ const PublisherTable = Form.create()(
     }
 );
 
-class BookLib extends React.Component {
+class GeneM extends React.Component {
     state = {
-        addPubName: '',//增加出版社名称
+        dataSource: [
+            { key: 0, name: '文艺', sort: 1 },
+            { key: 1, name: '文艺', sort: 1 }
+        ],
+        addGeneName: '',//新增基因名称
+        addGeneSort: '',//新增基因排序
     }
 
     params = {
@@ -158,122 +160,53 @@ class BookLib extends React.Component {
         pageSize: 10,//每页大小
     }
 
-    componentDidMount() {
-        this.requestList();
-    }
-
-    requestList = () => {
-        fetch(`${Url}/publishinfos?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`, { credentials: 'include' })
-            .then((res) => res.json()).then(data => {
-                this.setState({
-                    pagination: pagination(data, (current) => {//改变页码
-                        this.params.currentPage = current;
-                        this.requestList();
-                    }, (size) => {//pageSize 变化的回调
-                        this.params.pageSize = size;
-                        this.requestList();
-                    }),
-                    dataSource: data.content.map(i => ({
-                        ...i,
-                        key: i.pubId
-                    }))
-                })
-            }).catch((err) => {
-                console.log(err);
-            })
-    }
+    componentDidMount() { }
 
     /**
-     * 修改出版社信息
+     * 修改基因信息
      */
     handleUpdate = (value) => {
-        fetch(`${Url}/publishinfos`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include',
-            body: JSON.stringify(value)
-        }).then((res) => res.json()).then(result => {
-            if (result.code === 0) {
-                console.log(result.data)
-                message.success("修改成功 " + JSON.stringify(result.data))
-                this.requestList();//刷新页面
-            } else {
-                message.error(result.message)
-            }
-        }).catch((err) => {
-            console.log(err)
-        })
     }
 
     /**
-     * 删除出版社信息
+     * 删除基因信息
      */
     handleDel = (key) => {
-        fetch(`${Url}/publishinfos/${key}`, {
-            method: 'DELETE',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then((res) => res.json()).then(result => {
-            if (result.code === 0) {
-                console.log(result.data)
-                message.success("删除" + JSON.stringify(result.data) + "成功")
-                this.requestList();//刷新页面
-            } else {
-                message.error(result.message)
-            }
-        }).catch((err) => {
-            console.log(err)
-        })
     }
 
     /**
-     * 新增出版社
+     * 新增基因出版社
      */
     handleAdd = () => {
-        fetch(`${Url}/publishinfos`, {
-            method: 'Post',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include',
-            body: JSON.stringify({ pubName: this.state.addPubName })
-        }).then((res) => res.json()).then(result => {
-            if (result.code === 0) {
-                message.success("新增成功 " + JSON.stringify(result.data))
-                this.setState({ addPubName: '' })
-                this.requestList();//刷新页面
-            } else {
-                message.error(result.message)
-            }
-        }).catch((err) => {
-            console.log(err)
-        })
     }
 
     render() {
+        //新增表单
         const AddInput = <span>
-            <font style={{ lineHeight: '50px' }}>出版社名称：</font>
-            <Input value={this.state.addPubName} onChange={(e) => { this.setState({ addPubName: e.target.value }) }} />
+            <font style={{ lineHeight: '50px' }}>名称：</font>
+            <Input value={this.state.addGeneName} onChange={(e) => { this.setState({ addGeneName: e.target.value }) }} />
+            <br/>
+            <font style={{ lineHeight: '50px' }}>排序：</font><br/>
+            <InputNumber value={this.state.addGeneSort} onChange={(value) => { this.setState({ addGeneSort: value }) }} />
         </span>
         return (
             <div className="">
-                <BreadcrumbCustom first="书籍管理" second="出版社" />
+                <BreadcrumbCustom first="书籍管理" second="基因维护" />
                 <Card
-                    title="出版社维护"
+                    title="基因维护"
                 >
-                    <PublisherSearchForm /><br />
+                    <GeneSearchForm /><br />
                     <div style={{ marginBottom: '10px' }}>
                         <Popconfirm icon={null} title={AddInput} placement="right" onConfirm={this.handleAdd} okText="确定" cancelText="取消">
                             <Button type="primary">新增</Button>
                         </Popconfirm>
                     </div>
-                    <PublisherTable
-                        pagination={this.state.pagination}
+                    <GeneTable
+                        pagination={{
+                            showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
+                            showSizeChanger: true,
+                            pageSizeOptions: ['10', '20', '50']
+                        }}
                         dataSource={this.state.dataSource}
                         onSave={(v) => { this.handleUpdate(v) }}
                         onDel={(key) => { this.handleDel(key) }}
@@ -284,4 +217,4 @@ class BookLib extends React.Component {
     }
 }
 
-export default BookLib;
+export default GeneM;

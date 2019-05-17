@@ -1,82 +1,94 @@
 import React from 'react';
-import { Form, Select, Input, Button, Row, Col, DatePicker, InputNumber, Upload, Icon } from 'antd';
+import { Form, Button, Row, Col, Select } from 'antd';
+import { getFormItem, getOptionList } from '../../baseFormItem';
 
-const { TextArea } = Input;
-const { Option } = Select;
+//基因Input
+class GeneInput extends React.Component {
+    static getDerivedStateFromProps(nextProps) {
+        // Should be a controlled component.
+        if ('value' in nextProps) {
+            return { ...(nextProps.value || {}) };
+        }
+        return null;
+    }
+    constructor(props) {
+        super(props);
+        const value = props.value || {};
+        this.state = {
+            genes: value.genes || [],
+            geneConfig: [{ id: '0', name: '文艺' }, { id: '1', name: '二次元' }]
+        };
+    }
+    handleChange = (genes) => {
+        if (!('value' in this.props)) {
+            this.setState({ genes });
+        }
+        this.triggerChange({ genes });
+    }
+    triggerChange = (changedValue) => {
+        // Should provide an event to pass value to Form.
+        const onChange = this.props.onChange;
+        if (onChange) {
+            onChange(changedValue);
+        }
+    }
+    render() {
+        const { genes, geneConfig } = this.state;
+        return (
+            <Select
+                mode="multiple"
+                style={{ width: '100%' }}
+                placeholder="Please select"
+                value={genes}
+                onChange={this.handleChange}
+            >
+                {getOptionList(geneConfig)}
+            </Select>
+        );
+    }
+}
+
+
 const BookLibForm = Form.create()(
     class extends React.Component {
         render() {
-            const { getFieldDecorator } = this.props.form;
+            const { form } = this.props;
             const initial = this.props.initialValues;
             const formItemLayout = {
                 labelCol: { span: 4 },
                 wrapperCol: { span: 20 },
             };
-            const formItem = [
-                { type: 1, label: '名称', name: 'name', width: '300px', },
-                { type: 1, label: 'ISBN', name: 'isbn', width: '300px', },
-                { type: 2, label: '出版社', name: 'publish', width: '100px', value: ['新华出版社', '1', '2'] },
-                { type: 2, label: '分类', name: 'category', width: '100px', value: ['儿童', '1', '2'] },
-                { type: 1, label: '作者', name: 'author', width: '300px' },
-                { type: 2, label: '是否精选', name: 'isSelected', width: '100px', value: ['是', '否'] },
-                { type: 3, label: '印刷时间', name: 'printTime', },
-                { type: 3, label: '出版时间', name: 'publishTime', },
-                { type: 4, label: '页数', name: 'pages', width: '100px', extra: '页' },
-                { type: 1, label: '规格', name: 'standard', width: '300px' },
-                { type: 1, label: '版次', name: 'edition', width: '300px' },
-                { type: 1, label: '印次', name: 'printNum', width: '300px' },
-                { type: 4, label: '价格', name: 'price', width: '100px', extra: '元' },
-                { type: 4, label: '评分', name: 'score', min: 0, max: 5, width: '100px', help: '(0-5分)' },
-                { type: 4, label: '浏览次数', name: 'viewNum', width: '100px' },
-                { type: 4, label: '搜索次数', name: 'searchNum', width: '100px' },
-                { type: 4, label: '重量', name: 'weight', width: '100px', extra: 'Kg' },
-                { type: 1, label: '中图分类', name: 'clc', width: '100px', extra: '元' },
-                { type: 5, label: '缩略图', name: 'thumbnail', width: '100px', extra: '元', help: '建议204*262像支持jpg,png格式' },
-                { type: 5, label: '童书简图', name: 'childPic', width: '100px', extra: '元', help: '建议330*250像支持jpg,png格式' }
-            ];
+            const formList = [
+                { type: 'INPUT', label: '名称', name: 'name', width: '300px' },
+                { type: 'INPUT', label: 'ISBN', name: 'isbn', width: '300px' },
+                { type: 'SELECT', label: '出版社', name: 'publish', width: '100px', list: [] },
+                { type: 'SELECT', label: '分类', name: 'category', width: '100px', list: [] },
+                { type: 'INPUT', label: '作者', name: 'author', width: '300px' },
+                { type: 'SELECT', label: '是否精选', name: 'isSelected', width: '100px', list: [] },
+                { type: 'DATEPICKER', label: '印刷时间', name: 'printTime' },
+                { type: 'DATEPICKER', label: '出版时间', name: 'publishTime' },
+                { type: 'INPUTNUMBER', label: '页数', name: 'pages', width: '100px', extra: '页' },
+                { type: 'INPUT', label: '规格', name: 'standard', width: '300px' },
+                { type: 'INPUT', label: '版次', name: 'edition', width: '300px' },
+                { type: 'INPUT', label: '印次', name: 'printNum', width: '300px' },
+                { type: 'INPUTNUMBER', label: '价格', name: 'price', width: '100px', extra: '元' },
+                { type: 'INPUTNUMBER', label: '评分', name: 'score', width: '100px', help: '(0-5分)' },
+                { type: 'INPUTNUMBER', label: '浏览次数', name: 'viewNum', width: '100px'},
+                { type: 'INPUTNUMBER', label: '搜索次数', name: 'searchNum', width: '100px' },
+                { type: 'INPUTNUMBER', label: '重量', name: 'weight', width: '100px', extra: 'Kg' },
+                { type: 'INPUT', label: '中图分类', name: 'clc', width: '100px', extra: '元' },
+                { type: 'UPLOAD', label: '缩略图', name: 'thumbnail', width: '100px', help: '建议204*262像支持jpg,png格式' },
+                { type: 'UPLOAD', label: '童书简图', name: 'childPic', width: '100px', help: '建议330*250像支持jpg,png格式' },
+                { type: 'OTHER', label: '基因', name: 'gene', component: <GeneInput />, initialValue: { genes: ["文艺(8)", "二次元(8)", "科普(1)"] }, help: "最多选择10个基因", formItemLayout: { labelCol: { span: 2 }, wrapperCol: { span: 22 } } },
+                { type: 'TEXTAREA', label: '简介', name: 'brief', row: 10, formItemLayout: { labelCol: { span: 2 }, wrapperCol: { span: 22 } } },
+            ].map((i) => { i.formItemLayout = i.formItemLayout || formItemLayout; return i; });
             return (
                 <Form onSubmit={(e) => { this.props.onSubmit(e) }}><Row>
-                    {formItem.map(i => (
-                        <Col key={i.name} span={i.span ? i.span : 12}>
-                            <Form.Item {...formItemLayout} label={i.label} help={i.help}>
-                                {getFieldDecorator(i.name, { initialValue: initial ? initial[i.name] : null })((() => {
-                                    switch (i.type) {
-                                        case 1:
-                                            return <span>
-                                                <Input style={{ width: `${i.width}` }} />
-                                                <span style={{ marginLeft: 10 }}>{i.extra}</span>
-                                            </span>
-                                        case 2:
-                                            return <Select style={{ width: `${i.width}` }}>
-                                                {i.value.map(v => (<Option key={v} value={v}>{v}</Option>))}
-                                            </Select>
-                                        case 3:
-                                            return <DatePicker />
-                                        case 4:
-                                            return <span>
-                                                <InputNumber min={i.min} max={i.max} />
-                                                <span style={{ marginLeft: 10 }}>{i.extra}</span>
-                                            </span>
-                                        case 5:
-                                            return <Upload name="file" action="" listType="picture">
-                                                <Button>
-                                                    <Icon type="upload" /> Click to upload
-                                        </Button>
-                                            </Upload>
-                                        default:
-                                            return null
-                                    }
-                                })())}
-                            </Form.Item>
+                    {getFormItem(form, formList).map((item, index) => (
+                        <Col span={index < formList.length - 2 ? 12 : 24} key={index}>
+                            {item}
                         </Col>
                     ))}
-                    <Col span={24}>
-                        <Form.Item label='简介'>
-                            {getFieldDecorator('brief', { initialValue: initial ? initial['brief'] : null })(
-                                <TextArea rows={3} />
-                            )}
-                        </Form.Item>
-                    </Col>
                 </Row>
                     <Row hidden={this.props.type == 'modify' ? false : true}>
                         <Col span={12}>

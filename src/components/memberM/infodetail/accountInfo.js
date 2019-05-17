@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Col, Row, Button, Table, Modal } from 'antd';
+import { Form, Col, Row, Button, Table, Modal, Tag } from 'antd';
 import { getFormItem } from '../../baseFormItem';
 
 const layout = {
@@ -10,27 +10,6 @@ const layout = {
         span: 18
     },
 }
-
-const formList = [
-    { type: 'INPUTNUMBER', label: '成长值', name: 'growth' },
-    { type: 'INPUTNUMBER', label: '累计积分', name: 'totalPoint' },
-    { type: 'INPUTNUMBER', label: '积分余额', name: 'point' },
-    { type: 'SELECT', label: '会员等级', name: 'memberLevel' },
-    { type: 'INPUTNUMBER', label: '粉丝数', name: 'fanNum' },
-    { type: 'INPUTNUMBER', label: '关注数', name: 'followingNum' },
-    { type: 'SWITCH', label: '微信', name: 'weChat' },
-    { type: 'SWITCH', label: '微博', name: 'weibo' },
-    { type: 'SWITCH', label: 'QQ', name: 'qq' },
-    { type: 'SWITCH', label: '评伦开关', name: 'commentSwitch' },
-    { type: 'SWITCH', label: '消息开关', name: 'msgSwitch' },
-    { type: 'SWITCH', label: '签到开关', name: 'signInSwitch' },
-    { type: 'SWITCH', label: '阅历更新', name: 'experienceUpdateSwitch' },
-    { type: 'SELECT', label: '类型', name: 'type' },
-    { type: 'DATEPICKER', label: '开始时间', name: 'beginTime' },
-    { type: 'DATEPICKER', label: '结束时间', name: 'endTime' },
-    { type: 'INPUTNUMBER', label: '因加入家庭组未使用的累计有效天数', name: 'unUseDay' },
-];
-formList.map(i => i.formItemLayout = layout);
 
 //所属家庭组表单
 const formItem = {
@@ -49,6 +28,35 @@ const baseInfo = [
     { label: '有效期', name: 'validDate' },
 ];
 
+//基因显示Tag
+class GeneTag extends React.Component {
+    static getDerivedStateFromProps(nextProps) {
+        // Should be a controlled component.
+        if ('value' in nextProps) {
+            return { ...(nextProps.value || {}) };
+        }
+        return null;
+    }
+
+    constructor(props) {
+        super(props);
+        console.log(props);
+        const value = props.value || {};
+        this.state = {
+            genes: value.genes || [],
+        };
+    }
+
+    render() {
+        return (
+            <div>
+                {this.state.genes.map((text, index) => <Tag key={index}>{text}</Tag>)}
+            </div>
+        );
+    }
+}
+
+//"所属家庭组"表格的单元格
 class EditableCell extends React.Component {
     render() {
         const { editable, form, formItem, ...restProps } = this.props;
@@ -63,49 +71,79 @@ class EditableCell extends React.Component {
 class AccountInfo extends React.Component {
     state = {
         visible: false,
-        data: {
-
-        },
+        editable: false,
+        data: {},
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-                console.log('Received values of form: ', values);
-            }
-        });
+        if(this.state.editable){
+            this.setState({editable: false},()=>{
+                this.props.form.validateFields((err, values) => {
+                    if (!err) {
+                        console.log('Received values of form: ', values);
+                    }
+                });
+            })
+        }else{
+            this.setState({editable:true});
+        }
     }
 
     render() {
         const { form } = this.props;
+        const { editable } = this.state;
         const components = {
             body: {
                 cell: EditableCell,
             },
         };
+        const formList = [
+            { type: 'INPUTNUMBER', label: '成长值', name: 'growth' },
+            { type: 'INPUTNUMBER', label: '累计积分', name: 'totalPoint' },
+            { type: 'INPUTNUMBER', label: '积分余额', name: 'point' },
+            { type: 'SELECT', label: '会员等级', name: 'memberLevel' },
+            { type: 'INPUTNUMBER', label: '粉丝数', name: 'fanNum' },
+            { type: 'INPUTNUMBER', label: '关注数', name: 'followingNum' },
+            { type: 'SWITCH', label: '微信', name: 'weChat' },
+            { type: 'SWITCH', label: '微博', name: 'weibo' },
+            { type: 'SWITCH', label: 'QQ', name: 'qq' },
+            { type: 'SWITCH', label: '评伦开关', name: 'commentSwitch' },
+            { type: 'SWITCH', label: '消息开关', name: 'msgSwitch' },
+            { type: 'SWITCH', label: '签到开关', name: 'signInSwitch' },
+            { type: 'SWITCH', label: '阅历更新', name: 'experienceUpdateSwitch' },
+            { type: 'OTHER', label: '阅读基因', name: 'gene', component: <GeneTag />, initialValue: { genes: ["文艺(8)", "二次元(8)", "科普(1)"] } },
+            { type: 'SELECT', label: '类型', name: 'type' },
+            { type: 'DATEPICKER', label: '开始时间', name: 'beginTime' },
+            { type: 'DATEPICKER', label: '结束时间', name: 'endTime' },
+            { type: 'INPUTNUMBER', label: '因加入家庭组未使用的累计有效天数', name: 'unUseDay' },
+        ].map((i) => {
+            i.disabled = !editable;
+            i.formLayout = layout;
+            return i;
+        });
         const columns = [
-            { title: '家庭组ID', dataIndex: 'familyID', onCell: record => ({ record, form, editable: true, formItem: formItem['familyID'] }) },
-            { title: '加入时间', dataIndex: 'joinDate', onCell: record => ({ record, form, editable: true, formItem: formItem['joinDate'] }) },
-            { title: '家庭组主人', dataIndex: 'familyHost', onCell: record => ({ record, form, editable: true, formItem: formItem['familyHost'] }) },
-            { title: '会员角色', dataIndex: 'familyRole', onCell: record => ({ record, form, editable: true, formItem: formItem['familyRole'] }) },
-            { title: '家庭组有效期', dataIndex: 'familyLimit', onCell: record => ({ record, form, editable: true, formItem: formItem['familyLimit'] }) },
+            { title: '家庭组ID', dataIndex: 'familyID', onCell: record => ({ record, form, editable: editable, formItem: formItem['familyID'] }) },
+            { title: '加入时间', dataIndex: 'joinDate', onCell: record => ({ record, form, editable: editable, formItem: formItem['joinDate'] }) },
+            { title: '家庭组主人', dataIndex: 'familyHost', onCell: record => ({ record, form, editable: editable, formItem: formItem['familyHost'] }) },
+            { title: '会员角色', dataIndex: 'familyRole', onCell: record => ({ record, form, editable: editable, formItem: formItem['familyRole'] }) },
+            { title: '家庭组有效期', dataIndex: 'familyLimit', onCell: record => ({ record, form, editable: editable, formItem: formItem['familyLimit'] }) },
             {
                 title: '操作', dataIndex: 'action',
                 render: (text, record) => (<a onClick={() => this.setState({ visible: true })}>查看家庭组详情</a>)
             }
         ];
         const familyDetCol = [
-            { title: '成员昵称', dataIndex: 'fMember'},
-            { title: '成员账号', dataIndex: 'fAccount'},
-            { title: '加入时间', dataIndex: 'fjoinTime'},
+            { title: '成员昵称', dataIndex: 'fMember' },
+            { title: '成员账号', dataIndex: 'fAccount' },
+            { title: '加入时间', dataIndex: 'fjoinTime' },
         ];
         return (
             <div>
                 <Form layout="horizontal" onSubmit={this.handleSubmit}>
                     <Row>
                         {getFormItem(form, formList).map((item, index) => (
-                            index < 14 ? <Col key={index} span={4}>{item}</Col> : <Col key={index} span={6}>{item}</Col>
+                            index < 15 ? <Col key={index} span={4}>{item}</Col> : <Col key={index} span={6}>{item}</Col>
                         ))}
                     </Row>
                     <Row>
@@ -121,7 +159,11 @@ class AccountInfo extends React.Component {
                         </Col>
                     </Row>
                     <div style={{ textAlign: 'center', lineHeight: '100px' }}>
-                        <Button type='primary' htmlType="submit">修改</Button>
+                        {
+                            this.state.editable ?
+                                <Button type="primary" htmlType="submit">保存</Button> :
+                                <Button type="primary" htmlType="submit">修改</Button>
+                        }
                     </div>
                 </Form>
                 <Modal
@@ -137,7 +179,7 @@ class AccountInfo extends React.Component {
                                 <span style={{ paddingLeft: 8 }}>{this.state.data[i.name]}</span>
                             </Col>)
                         )}
-                    </Row><br/>
+                    </Row><br />
                     <Table
                         dataSource={[{ key: 1 }]}
                         bordered

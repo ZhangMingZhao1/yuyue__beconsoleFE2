@@ -31,6 +31,7 @@ export default {
       key: '/app/bookM', title: '书籍管理', icon: 'rocket',
       subs: [
         { key: '/app/bookM/bookLib', title: '书目库', component: 'BookLib' },
+        { key: '/app/bookM/geneM', title: '基因维护', component: 'GeneM' },
         { key: '/app/bookM/publisherM', title: '出版社维护', component: 'PublisherM' },
         { key: '/app/bookM/goodsM', title: '商品管理', component: 'GoodsM' },
       ],

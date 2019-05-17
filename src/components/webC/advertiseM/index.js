@@ -26,13 +26,19 @@ const AdSearch = Form.create()(
             e.preventDefault();
             let fieldsValue = this.props.form.getFieldsValue();
             console.log(fieldsValue);
+            this.props.onSubmit(fieldsValue);
         }
 
         render() {
-            const { form } = this.props;
+            const { form,caseInfo } = this.props;
+            let caseList = [];
+            caseList.push({ id: '0', name: '全部' });
+            for (let i in caseInfo) {
+                caseList.push({ id: i, name: caseInfo[i] });
+            }
             const formList = [
-                { type: 'SELECT', label: '柜子', name: 'outStore', width: '100px', list: [] },
-                { type: 'INPUT', placeholder: '按名称模糊查询', name: 'fuzzyQuery', width: '300px' },
+                { type: 'SELECT', label: '柜子', name: 'caseId', width: '300px', list: caseList },
+                { type: 'INPUT', placeholder: '按名称模糊查询', name: 'keyword', width: '300px' },
             ];
             return (
                 <Form layout="inline" onSubmit={this.handleSubmit}>
@@ -57,6 +63,11 @@ class AdvertiseM extends React.Component {
     params = {
         currentPage: 1,//当前页面
         pageSize: 10,//每页大小
+        /**搜索参数 */
+        search: {
+            type: 0,//投放位置
+            keyword: '',//关键字
+        },
     }
 
     componentDidMount() {
@@ -76,7 +87,12 @@ class AdvertiseM extends React.Component {
     }
 
     requestList = () => {
-        fetch(`${Url}/advertisements?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`, { credentials: 'include' })
+        let params = {
+            start: this.params.currentPage - 1,
+            size: this.params.pageSize,
+            ...this.params.search,
+        };
+        fetch(`${Url}/advertisements?${parseParams(params)}`, { credentials: 'include' })
             .then((res) => res.json()).then(result => {
                 let data = result;
                 this.setState({
@@ -103,6 +119,14 @@ class AdvertiseM extends React.Component {
             }).catch((err) => {
                 console.log(err);
             })
+    }
+
+    /**
+     * 查询
+     */
+    handleSearch = (data) => {
+        this.params.search = { ...data, keyword: data.keyword || '' };
+        this.requestList();
     }
 
     /**
@@ -263,31 +287,19 @@ class AdvertiseM extends React.Component {
                 dataIndex: 'action',
                 render: (text, record) => (
                     record.status ?
-                        <a onClick={() => {
-                            this.pop("是否确定禁用？", () => { this.handleSwitch(record.advId, record.status) })
-                        }}>
+                        <a onClick={() => {this.pop("是否确定禁用？", () => { this.handleSwitch(record.advId, record.status) })}}>
                             禁用
                         </a > :
                         <span>
-                            <a onClick={() => {
-                                this.setState({
-                                    modalType: 'modify',
-                                    modalData: record,
-                                    visible: true
-                                })
-                            }}>
+                            <a onClick={() => {this.setState({modalType: 'modify',modalData: record,visible: true})}}>
                                 修改
                             </a>
                             <Divider type="vertical" />
-                            <a onClick={() => {
-                                this.pop("是否确定删除？", () => { this.handleDelete(record.advId) })
-                            }}>
+                            <a onClick={() => {this.pop("是否确定删除？", () => { this.handleDelete(record.advId) })}}>
                                 删除
                             </a>
                             <Divider type="vertical" />
-                            <a onClick={() => {
-                                this.pop("是否确定启用？", () => { this.handleSwitch(record.advId, record.status) })
-                            }}>
+                            <a onClick={() => {this.pop("是否确定启用？", () => { this.handleSwitch(record.advId, record.status) })}}>
                                 启用
                             </a>
                         </span>
@@ -301,7 +313,7 @@ class AdvertiseM extends React.Component {
                 <Card
                     title="广告管理"
                 >
-                    <AdSearch />
+                    <AdSearch caseInfo={this.state.caseInfo} onSubmit={this.handleSearch}/>
                     <div style={{ textAlign: 'left' }}>
                         <Button type="primary" onClick={() => { this.setState({ modalType: 'add', visible: true }) }}>新增</Button>
                     </div><br />
