@@ -31,8 +31,8 @@ class Modals extends React.Component {
         //     </Modal>
         // );
         const { visible, optId, orderId, orderStatusId, deliverType, handleOk, handleCancel } = this.props;
-        return(
-            chooseModal(optId, orderStatusId, deliverType, handleOk, handleCancel, visible)
+        return (
+            chooseModal(optId, orderStatusId, deliverType, handleOk, handleCancel, visible, orderId)
         );
     }
 }
