@@ -100,7 +100,7 @@ class StaffM extends React.Component {
         this.setState({tableData:data})
     }
     requestList = () => {
-        const url = `${URL}/listUsers`;
+        const url = `${URL}/users`;
         fetch(url, {
             method: 'GET',
             headers: {
