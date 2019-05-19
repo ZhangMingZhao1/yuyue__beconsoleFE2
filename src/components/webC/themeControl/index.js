@@ -22,7 +22,7 @@ class ThemeControl extends React.Component {
   }
 
   requestList = () => {
-    fetch(`${Url}/booksubjects?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`, { credentials: 'include' })
+    fetch(`${Url}/website/booksubjects?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`, { credentials: 'include' })
       .then((res) => res.json()).then(result => {
         let data = result;
         this.setState({
@@ -64,7 +64,7 @@ class ThemeControl extends React.Component {
   handleAdd = (form) => {
     let values = form.getFieldsValue();
     values = { ...values, isShow: values.isShow ? 1 : 0 }
-    fetch(`${Url}/booksubjects`, {
+    fetch(`${Url}/website/booksubjects`, {
       method: 'POST',
       mode: 'cors',
       headers: {
@@ -90,7 +90,7 @@ class ThemeControl extends React.Component {
   handleModify = (form, key) => {
     let values = form.getFieldsValue();
     values = { ...values, isShow: values.isShow ? 1 : 0 }
-    fetch(`${Url}/booksubject`, {
+    fetch(`${Url}/website/booksubject`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -114,7 +114,7 @@ class ThemeControl extends React.Component {
 
   //删除专题
   handleDel = (key) => {
-    fetch(`${Url}/booksubjects/${key}`, {
+    fetch(`${Url}/website/booksubjects/${key}`, {
       method: 'DELETE',
       credentials: 'include',
       mode:"cors",

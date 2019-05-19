@@ -163,7 +163,7 @@ class BookLib extends React.Component {
     }
 
     requestList = () => {
-        fetch(`${Url}/publishinfos?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`, { credentials: 'include' })
+        fetch(`${Url}/book/publishinfos?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`, { credentials: 'include' })
             .then((res) => res.json()).then(data => {
                 this.setState({
                     pagination: pagination(data, (current) => {//改变页码
@@ -187,7 +187,7 @@ class BookLib extends React.Component {
      * 修改出版社信息
      */
     handleUpdate = (value) => {
-        fetch(`${Url}/publishinfos`, {
+        fetch(`${Url}/book/publishinfos`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -211,7 +211,7 @@ class BookLib extends React.Component {
      * 删除出版社信息
      */
     handleDel = (key) => {
-        fetch(`${Url}/publishinfos/${key}`, {
+        fetch(`${Url}/book/publishinfos/${key}`, {
             method: 'DELETE',
             credentials: 'include',
             headers: {
@@ -234,7 +234,7 @@ class BookLib extends React.Component {
      * 新增出版社
      */
     handleAdd = () => {
-        fetch(`${Url}/publishinfos`, {
+        fetch(`${Url}/book/publishinfos`, {
             method: 'Post',
             mode: 'cors',
             headers: {
