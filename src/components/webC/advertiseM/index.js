@@ -76,7 +76,7 @@ class AdvertiseM extends React.Component {
 
     //获取书柜信息
     requestCaseInfo = () => {
-        fetch(`${Url}/bookcaseinfo`, { credentials: 'include' })
+        fetch(`${Url}/website/bookcaseinfo`, { credentials: 'include' })
             .then((res) => res.json()).then(result => {
                 this.setState({
                     caseInfo: result
@@ -92,7 +92,7 @@ class AdvertiseM extends React.Component {
             size: this.params.pageSize,
             ...this.params.search,
         };
-        fetch(`${Url}/advertisements?${parseParams(params)}`, { credentials: 'include' })
+        fetch(`${Url}/website/advertisements?${parseParams(params)}`, { credentials: 'include' })
             .then((res) => res.json()).then(result => {
                 let data = result;
                 this.setState({
@@ -145,7 +145,7 @@ class AdvertiseM extends React.Component {
         }
         delete values.image;
 
-        fetch(`${Url}/advertisements?${parseParams(values)}`, {
+        fetch(`${Url}/website/advertisements?${parseParams(values)}`, {
             method: 'POST',
             mode: 'cors',
             credentials: 'include',
@@ -184,7 +184,7 @@ class AdvertiseM extends React.Component {
             formData.append(v, values[v]);
         }
 
-        fetch(`${Url}/advertisements`, {
+        fetch(`${Url}/website/advertisements`, {
             method: 'PUT',
             mode: 'cors',
             credentials: 'include',
@@ -208,7 +208,7 @@ class AdvertiseM extends React.Component {
      */
     handleSwitch = (advId, status) => {
         let params = { advId, status: status ? 2 : 1 };
-        fetch(`${Url}/advertisements?${parseParams(params)}`, {
+        fetch(`${Url}/website/advertisements?${parseParams(params)}`, {
             method: 'PUT',
             mode: 'cors',
             headers: {
@@ -231,7 +231,7 @@ class AdvertiseM extends React.Component {
      * 删除广告
      */
     handleDelete = (key) => {
-        fetch(`${Url}/advertisements/${key}`, {
+        fetch(`${Url}/website/advertisements/${key}`, {
             method: 'DELETE',
             credentials: 'include',
             mode: "cors",

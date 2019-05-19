@@ -80,7 +80,7 @@ class BannerC extends React.Component {
             size: this.params.pageSize,
             ...this.params.search,
         };
-        fetch(`${Url}/pictures?${parseParams(params)}`, { credentials: 'include' })
+        fetch(`${Url}/website/pictures?${parseParams(params)}`, { credentials: 'include' })
             .then((res) => res.json()).then(result => {
                 let data = result;
                 this.setState({
@@ -133,7 +133,7 @@ class BannerC extends React.Component {
             formData.append(v, values[v]);
         }
 
-        fetch(`${Url}/pictures`, {
+        fetch(`${Url}/website/pictures`, {
             method: 'POST',
             mode: 'cors',
             credentials: 'include',
@@ -165,7 +165,7 @@ class BannerC extends React.Component {
         delete values.image;
         values = { ...values, status: values.status ? "1" : "0", picId: key };
 
-        fetch(`${Url}/pictures?${parseParams(values)}`, {
+        fetch(`${Url}/website/pictures?${parseParams(values)}`, {
             method: 'PUT',
             mode: 'cors',
             credentials: 'include',
@@ -194,7 +194,7 @@ class BannerC extends React.Component {
             okText: '确定',
             cancelText: '取消',
             onOk() {
-                fetch(`${Url}/pictures/${key}`, {
+                fetch(`${Url}/website/pictures/${key}`, {
                     method: 'DELETE',
                     credentials: 'include',
                     mode: "cors",

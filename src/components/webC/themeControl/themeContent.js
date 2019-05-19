@@ -30,7 +30,7 @@ class ThemeContent extends React.Component {
      * 专题书籍查询
      */
     requestList() {
-        fetch(`${Url}/bookinsubjects/${this.props.match.params.id}`, { credentials: 'include' })
+        fetch(`${Url}/website/bookinsubjects/${this.props.match.params.id}`, { credentials: 'include' })
             .then((res) => res.json()).then(data => {
                 this.setState({
                     booksubjectId: data.subject.booksubjectId,
@@ -49,7 +49,7 @@ class ThemeContent extends React.Component {
      * 书籍目录获取
      */
     requestCategory() {
-        fetch(`${Url}/bookcategories`, { credentials: 'include' })
+        fetch(`${Url}/website/bookcategories`, { credentials: 'include' })
             .then((res) => res.json()).then(data => {
                 this.setState({
                     treeData: [{
@@ -67,7 +67,7 @@ class ThemeContent extends React.Component {
      * 书名&目录 查询
      */
     requestQuery() {
-        fetch(`${Url}/bookinfo/${this.state.searchCategory}?bookName=${this.state.searchValue}`, { credentials: 'include' })
+        fetch(`${Url}/website/bookinfo/${this.state.searchCategory}?bookName=${this.state.searchValue}`, { credentials: 'include' })
             .then((res) => res.json()).then(data => {
                 this.setState({
                     radioData: data.map(i => ({
@@ -87,7 +87,7 @@ class ThemeContent extends React.Component {
      */
     requestAdd(value) {
         console.log(JSON.stringify({ bsBookinfo: value, bsBooksubject: this.state.booksubjectId }))
-        fetch(`${Url}/bookinsubjects`, {
+        fetch(`${Url}/website/bookinsubjects`, {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -122,7 +122,7 @@ class ThemeContent extends React.Component {
      * @param {*} key Bookidinsubject
      */
     handleDel(key) {
-        fetch(`${Url}/bookinsubjects/${key}`, {
+        fetch(`${Url}/website/bookinsubjects/${key}`, {
             method: 'DELETE',
             credentials: 'include',
             headers: {

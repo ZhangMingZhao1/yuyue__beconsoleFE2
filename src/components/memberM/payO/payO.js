@@ -70,7 +70,7 @@ class PayO extends React.Component {
     }
 
     requestList = () => {
-        fetch(`${Url}/vipplanorders?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`, { credentials: 'include' })
+        fetch(`${Url}/vip/vipplanorders?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`, { credentials: 'include' })
             .then((res) => res.json()).then(result => {
                 let data = result;
                 this.setState({
@@ -84,12 +84,13 @@ class PayO extends React.Component {
                     dataSource: data.content.map(i => ({
                         key: i.orderNo,
                         orderNo: i.orderNo,
-                        userId: i.bsUserinfo.userId,
-                        nickname: i.bsUserinfo.nickname,
+                        vipNo: i.vipNo,
+                        nikeName: i.nikeName,
                         title: i.title,
                         payType: i.payType,
                         price: i.price,
                         payTime: moment(i.payTime).format("YYYY-MM-DD HH:mm:ss"),
+                        createTime: moment(i.createTime).format("YYYY-MM-DD HH:mm:ss"),
                         tradeNo: i.tradeNo,
                         status: i.status,
                     }))
@@ -105,10 +106,10 @@ class PayO extends React.Component {
             dataIndex: 'orderNo',
         }, {
             title: '会员账号',
-            dataIndex: 'userId',
+            dataIndex: 'vipNo',
         }, {
             title: '会员昵称',
-            dataIndex: 'nickname',
+            dataIndex: 'nikeName',
         }, {
             title: '购买服务名称',
             dataIndex: 'title',
