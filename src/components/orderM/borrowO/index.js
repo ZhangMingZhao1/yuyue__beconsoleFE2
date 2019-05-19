@@ -240,7 +240,7 @@ class BorrowO extends React.Component {
                     i.eLabel = i.bsBookinstore.rfid;
                     i.borWay = i.deliverType === 1 ? '书柜' : '快递'
                     i.borTime = moment(i.startTime).format('YYYY-MM-DD');
-                    i.backWay = i.returnWay === 1 ? '书柜' : '快递';
+                    i.backWay = i.returnWay ? (i.returnWay === 1 ? '书柜' : '快递') : null;
                     i.backTime = i.finishTime ? moment(i.finishTime).format('YYYY-MM-DD') : null;
                     i.createTime = moment(i.createTime).format('YYYY-MM-DD');
                     i.orderStatus = { type: i.stage, name: orderStatus[i.stage].name };

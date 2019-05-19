@@ -1,7 +1,6 @@
 import React from 'react';
 import { Row, Col, Form, Button, Input, Select, message } from 'antd';
-import { Link } from 'react-router-dom';
-import { withRouter } from "react-router-dom";
+import { Link, withRouter } from 'react-router-dom';
 import URL from '../../../api/config';
 
 const TextArea = Input.TextArea;
@@ -16,7 +15,7 @@ const WarehouseForm = Form.create()(
 
         componentDidMount() {
             // 获取部门信息
-            fetch(`${URL}/departments`, {
+            fetch(`${URL}/system/departments`, {
                 method: 'GET',
                 credentials: 'include'
             })
@@ -44,7 +43,7 @@ const WarehouseForm = Form.create()(
                     if (point) {
                         //这个point就是解析地址获得的百度地图坐标系
                         // console.log(point); //{lat: xx, lng: xx}
-                        fetch(`${URL}/warehouses`, {
+                        fetch(`${URL}/system/warehouses`, {
                             method: `${type === 'change' ? 'PUT' : 'POST'}`,
                             headers: {
                                 'Accept': 'application/json', 'Content-Type': 'application/json',
