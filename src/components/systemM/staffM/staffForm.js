@@ -6,22 +6,13 @@ const Option = Select.Option;
 const StaffForm = Form.create()(
     class extends React.Component {
 
-        state = {
-            value: ''
-        }
-
-        onChange = (e) => {
-            const { value } = e.target;
-            const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
-            if ((!isNaN(value) && reg.test(value)) || value === '') {
-                this.setState({
-                    value: value
-                });
-            }
-        }
-
-        inputChange = (e) => {
-            this.props.initialValues.name = e.target.value;
+        onSubmit = (e) => {
+            e.preventDefault();
+            this.props.form.validateFields((err, values) => {
+                if (!err) {
+                    console.log('Received values of form: ', values);
+                }
+            });
         }
 
         render() {
@@ -32,11 +23,11 @@ const StaffForm = Form.create()(
                 wrapperCol: { span: 20 },
             };
             const formItem = [
-                { type: 1, label: '员工姓名*', name: 'userName', width: '150px', value: '' },
+                { type: 1, label: '员工姓名', name: 'userName', width: '150px', value: '' },
                 { type: 4, label: '登录密码', name: 'password', width: '150px', },
                 { type: 2, label: '状态', name: 'status', width: '150px', value: ['正常', '停用'] },
                 { type: 2, label: '角色', name: 'role', width: '150px', value: ['管理员', '审稿员'] },
-                { type: 3, label: '手机号*', name: 'telephone', width: '250px', },
+                { type: 3, label: '手机号', name: 'telephone', width: '250px', },
                 { type: 5, label: '注册时间', name: 'time', width: '300px', value: '2017-05-11 15:11:00' },
                 { type: 2, label: '所属机构', name: 'beInstitution', width: '150px', value: [] },
                 { type: 2, label: '所属部门', name: 'beDepartment', width: '150px', value: [] },
@@ -46,24 +37,40 @@ const StaffForm = Form.create()(
                     {formItem.map(i => (
                         <Col key={i.name} span={i.span ? i.span : 12}>
                             <Form.Item {...formItemLayout} label={i.label} help={i.help}>
-                                {getFieldDecorator(i.name, { initialValue: initial ? initial[i.name] : null })((() => {
+                                {getFieldDecorator(i.name, {
+                                    initialValue: initial ? initial[i.name] : null,
+                                    rules: [
+                                        {
+                                            required: i.name === 'userName' ? true : false,
+                                            message: '员工姓名不能为空'
+                                        },
+                                        {
+                                            required: i.name === 'telephone' ? true : false,
+                                            message: '手机号不能为空'
+                                        },
+                                        {
+                                            len: i.name === 'telephone' ? 11 : null,
+                                            message: '请输入正确的电话号码'
+                                        },
+                                        {
+                                            pattern: i.name === 'telephone' ? new RegExp('[0-9]+', 'g') : null,
+                                            message: '请输入数字'
+                                        }
+                                    ]
+                                })((() => {
                                     switch (i.type) {
                                         case 1:
-                                            return <span>
-                                                <Input value={initial ? initial[i.name] : null} style={{ width: `${i.width}` }} onChange={this.inputChange} />
-                                            </span>
+                                            return <Input style={{ width: `${i.width}` }} />
                                         case 2:
                                             return <Select style={{ width: `${i.width}` }}>
                                                 {i.value.map(v => (<Option key={v.id} value={v.name}>{v.name}</Option>))}
                                             </Select>
                                         case 3:
-                                            return <span>
-                                                <Input value={initial ? initial[i.name] : null} style={{ width: `${i.width}` }} onChange={this.onChange} />
-                                            </span>
+                                            return <Input style={{ width: `${i.width}` }} onChange={this.onChange} />
+
                                         case 4:
-                                            return <span>
-                                                <Input type="password" value={initial ? initial[i.name] : null} style={{ width: `${i.width}` }} />
-                                            </span>
+                                            return <Input type="password" style={{ width: `${i.width}` }} />
+
                                         case 5:
                                             return <div style={{ width: `${i.width}` }}>
                                                 {i.value}

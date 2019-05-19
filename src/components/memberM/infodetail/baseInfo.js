@@ -98,11 +98,17 @@ class BaseInfo extends React.Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-                console.log('Received values of form: ', values);
-            }
-        });
+        if (this.state.editable) {
+            this.setState({ editable: false }, () => {
+                this.props.form.validateFields((err, values) => {
+                    if (!err) {
+                        console.log('Received values of form: ', values);
+                    }
+                });
+            })
+        } else {
+            this.setState({ editable: true });
+        }
     }
 
     render() {
@@ -131,10 +137,10 @@ class BaseInfo extends React.Component {
             { type: 'SELECT', label: '所属大客户', name: 'customer' },
             { type: 'UPLOAD', label: '', name: 'headImg', width: '100px' },
             { type: 'TEXTAREA', label: '个性签名', name: 'signature', row: 3 },
-        ].map((i, index, arr) => { 
-            i.disabled = !this.state.editable; 
-            if(index<arr.length-2) i.formItemLayout = formItemLayout; 
-            return i; 
+        ].map((i, index, arr) => {
+            i.disabled = !this.state.editable;
+            if (index < arr.length - 2) i.formItemLayout = formItemLayout;
+            return i;
         });
 
         const { form } = this.props;
@@ -160,8 +166,8 @@ class BaseInfo extends React.Component {
                     <div style={{ textAlign: 'center' }}>
                         {
                             this.state.editable ?
-                                <Button type="primary" onClick={() => { this.setState({ editable: false }) }} htmlType="submit">保存</Button> :
-                                <Button type="primary" onClick={() => { this.setState({ editable: true }) }}>修改</Button>
+                                <Button type="primary" htmlType="submit">保存</Button> :
+                                <Button type="primary" htmlType="submit">修改</Button>
                         }
                     </div>
 

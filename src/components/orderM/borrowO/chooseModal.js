@@ -5,50 +5,50 @@ import CloseModal from './closeModal';
 import RetrialModal from './retrialModal';
 import ToExpress from './toExpress';
 
-const chooseModal = (optId, orderStatusId, deliverType, handleOk, handleCancel, visible) => {
+const chooseModal = (optId, orderStatusId, deliverType, handleOk, handleCancel, visible, orderId) => {
     switch (deliverType) {
         case 1:
             switch (orderStatusId) {
                 case 0:
                     switch (optId) {
                         case 1:
-                            return <DetModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} />
+                            return <DetModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} orderId={orderId} />
                         case 2:
-                            return <ToCabinet handleOk={handleOk} handleCancel={handleCancel} visible={visible} />
+                            return <ToCabinet handleOk={handleOk} handleCancel={handleCancel} visible={visible} orderId={orderId} />
                         case 4:
-                            return <CloseModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} />
+                            return <CloseModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} orderId={orderId} />
                         default:
                             return null;
                     }
                 case 1:
                     switch (optId) {
                         case 1:
-                            return <DetModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} />
+                            return <DetModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} orderId={orderId} />
                         case 4:
-                            return <CloseModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} />
+                            return <CloseModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} orderId={orderId} />
                         default:
                             return null;
                     }
                 case 2:
                     switch (optId) {
                         case 1:
-                            return <DetModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} />
+                            return <DetModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} orderId={orderId} />
                         default:
                             return null;
                     }
                 case 3:
                     switch (optId) {
                         case 1:
-                            return <DetModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} />
+                            return <DetModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} orderId={orderId} />
                         default:
                             return null;
                     }
                 case 4:
                     switch (optId) {
                         case 1:
-                            return <DetModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} />
+                            return <DetModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} orderId={orderId} />
                         case 3:
-                            return <RetrialModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} />
+                            return <RetrialModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} orderId={orderId} />
                         default:
                             return null;
                     }
@@ -60,41 +60,41 @@ const chooseModal = (optId, orderStatusId, deliverType, handleOk, handleCancel, 
                 case 0:
                     switch (optId) {
                         case 1:
-                            return <DetModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} />
+                            return <DetModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} orderId={orderId} />
                         case 2:
-                            return <ToExpress handleOk={handleOk} handleCancel={handleCancel} visible={visible} />
+                            return <ToExpress handleOk={handleOk} handleCancel={handleCancel} visible={visible} orderId={orderId} />
                         default:
                             return null;
                     }
                 case 1:
                     switch (optId) {
                         case 1:
-                            return <DetModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} />
+                            return <DetModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} orderId={orderId} />
                         case 4:
-                            return <CloseModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} />
+                            return <CloseModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} orderId={orderId} />
                         default:
                             return null;
                     }
                 case 2:
                     switch (optId) {
                         case 1:
-                            return <DetModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} />
+                            return <DetModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} orderId={orderId} />
                         default:
                             return null;
                     }
                 case 3:
                     switch (optId) {
                         case 1:
-                            return <DetModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} />
+                            return <DetModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} orderId={orderId} />
                         default:
                             return null;
                     }
                 case 4:
                     switch (optId) {
                         case 1:
-                            return <DetModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} />
+                            return <DetModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} orderId={orderId} />
                         case 3:
-                            return <RetrialModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} />
+                            return <RetrialModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} orderId={orderId} />
                         default:
                             return null;
                     }

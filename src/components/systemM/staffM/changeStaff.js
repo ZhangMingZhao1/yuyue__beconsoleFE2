@@ -17,15 +17,10 @@ class ChangeStaff extends React.Component {
     }
 
     requestList = () => {
-        const url = 'http://119.3.231.11:8080/yuyue/listUser';
+        const url = 'http://119.3.231.11:8080/yuyue/system/user';
         fetch(url, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json', 'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                data: this.state.data
-            })
+            method: 'GET',
+            credentials: 'include'
         })
             .then((res) => {
                 if (res.status === 200) {//http请求成功
