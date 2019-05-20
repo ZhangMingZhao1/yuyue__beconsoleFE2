@@ -93,7 +93,7 @@ const WarehouseForm = Form.create()(
             const formItem = [
                 { type: 3, label: '仓库编号', name: 'warehouseCode', width: '150px', placeholder: '请输入仓库编号' },
                 { type: 1, label: '仓库名称', name: 'warehouseName', width: '300px', placeholder: '请输入仓库名称' },
-                { type: 2, label: '所属部门', name: 'departmentId', width: '150px', placeholder: '全部', values: this.state.selectData },
+                { type: 2, label: '所属部门', name: 'departmentId', width: '150px', values: this.state.selectData },
                 { type: 1, label: '联系人', name: 'contacts', width: '150px', placeholder: '请输入联系人姓名' },
                 { type: 3, label: '联系方式', name: 'telephone', width: '150px', placeholder: '请输入联系人电话' },
                 { type: 1, label: '地址', name: 'warehouseAddress', width: '300px', placeholder: '省/ 市/ 区' },
@@ -117,10 +117,6 @@ const WarehouseForm = Form.create()(
                                         },
                                         {
                                             pattern: i.name === 'telephone' ? new RegExp('[0-9]+', 'g') : null,
-                                            message: '请输入数字'
-                                        },
-                                        {
-                                            len: i.name === 'telephone' ? 11 : null,
                                             message: '请输入正确的电话号码'
                                         }
                                     ]
@@ -131,9 +127,11 @@ const WarehouseForm = Form.create()(
                                                 <Input placeholder={i.placeholder} style={{ width: `${i.width}` }} />
                                             )
                                         case 2:
-                                            return <Select placeholder={i.placeholder} style={{ width: `${i.width}` }}>
-                                                {i.values.map((v) => (<Option key={v.id} value={`${v.id}`}>{v.name}</Option>))}
-                                            </Select>
+                                            return (
+                                                <Select placeholder={i.placeholder} style={{ width: `${i.width}` }}>
+                                                    {i.values.map((v) => (<Option key={v.id} value={`${v.id}`}>{v.name}</Option>))}
+                                                </Select>
+                                            )
                                         case 3:
                                             return (
                                                 <Input placeholder={i.placeholder} style={{ width: `${i.width}` }} />
