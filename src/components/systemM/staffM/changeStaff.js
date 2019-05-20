@@ -1,6 +1,7 @@
 import React from 'react';
 import StaffForm from './staffForm';
 import { Card } from 'antd';
+import URL from '../../../api/config';
 
 class ChangeStaff extends React.Component {
 
@@ -15,30 +16,21 @@ class ChangeStaff extends React.Component {
     StaffFormRef = (formRef) => {
         this.staff_formRef = formRef;
     }
-
+    // 遗留问题无法查询某个员工数据
     requestList = () => {
-        const url = 'http://119.3.231.11:8080/yuyue/system/user';
-        fetch(url, {
+        fetch(`${URL}/system/users?id=${this.props.match.params.id}`, {
             method: 'GET',
             credentials: 'include'
         })
-            .then((res) => {
-                if (res.status === 200) {//http请求成功
-                    return res.json()
-                } else {
-                    Promise.reject(res);
-                }
-            })
+            .then(res => res.json())
             .then(data => {
                 // eslint-disable-next-line
-                data.map((item) => {
-                    // eslint-disable-next-line
-                    if (item.uid == this.props.match.params.id) {
-                        this.setState({
-                            data: [item]
-                        });
-                    }
-                });
+                // data.map((item) => {
+
+                // });
+                // this.setState({
+                //     data: data
+                // })
             })
             .catch(err => {
                 console.log('fetch error', err)
@@ -55,7 +47,7 @@ class ChangeStaff extends React.Component {
                     <StaffForm
                         wrappedComponentRef={this.StaffFormRef}
                         type="change"
-                        initialValues={data[0]}
+                        initialValues={data}
                         onSubmit={() => { console.log(this.staff_formRef.props.form.getFieldsValue()) }}
                         onCancel={() => { }}
                     />

@@ -12,7 +12,7 @@ const StaffSearchForm = Form.create()(
             e.preventDefault();
             props.form.validateFields((err, values) => {
                 if (!err) {
-                    console.log('2323232Received values of form: ', values);
+                    // console.log('2323232Received values of form: ', values);
                 }
             });
             let options = {
@@ -103,19 +103,17 @@ class StaffM extends React.Component {
         const url = `${URL}/system/users`;
         fetch(url, {
             method: 'GET',
-            headers: {
-                'Accept': 'application/json', 'Content-Type': 'application/json',
-            },
             credentials: 'include', // 请求带上cookies，是每次请求保持会话一直
         })
             .then((res) => res.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 // eslint-disable-next-line
                 data.content.map((item) => {
                     item.key = item.uid;
-                    item.beDepartment=item.beDepartment.name;
-                    item.beInstitution=item.beInstitution.name;
+                    item.beDepartment = item.beDepartment.name;
+                    item.beInstitution = item.beInstitution.name;
+                    item.status = item.status ? '正常' : '停用'
                 });
                 this.setState({
                     tableData: data.content
