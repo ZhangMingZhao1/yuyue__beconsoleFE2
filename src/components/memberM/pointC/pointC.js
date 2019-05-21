@@ -1,66 +1,62 @@
 import React from 'react';
 import { Card, Select, DatePicker, Button, Form, Input, Table, Modal, Row, Col } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
-import { fetchGet } from '../../../axios/tools';
+import Url from '../../../api/config';
+import pagination from '../../pagination';
+import moment from 'moment';
+import { getFormItem } from '../../baseFormItem';
+
+//积分类型
+const typeConfig = {
+    "0": "增加",
+    "1": "减少",
+    "2": "冻结",
+}
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
-function validateAccount(account) {
-    if (!account || account === '') {
-        return {
-            validateStatus: 'error',
-            errorMsg: 'please input an existed Account!',
-        };
-    }
-    return {
-        validateStatus: 'success',
-        errorMsg: null
-    };
-}
-
+//会员账号搜索弹框
 const AccountSearchForm = Form.create({ name: 'account_search_form' })(
     class extends React.Component {
-        state = {
-            account: {},
-        };
-
-        next = () => {
-            const value = this.props.form.getFieldValue('account');
-            this.setState({
-                account: {
-                    ...validateAccount(value)
-                },
-            }, () => {
-                if (value && this.state.account.validateStatus === 'success')
-                    this.props.onNext()
-            });
+        state = {}
+        handleNext = () => {
+            this.props.form.validateFields((err, values) => {
+                if (!err) {
+                    this.setState({ loading: true })
+                    setTimeout(() => {
+                        this.setState({ loading: false }, () => { this.props.onNext() })
+                    }, 1000);
+                }
+            })
         }
-
         render() {
-            const { visible, onCancel } = this.props;
-            const { getFieldDecorator } = this.props.form;
-            const account = this.state.account;
+            const { visible, onCancel, form } = this.props;
+            const formItemLayout = {
+                labelCol: { span: 6 },
+                wrapperCol: { span: 14 },
+            };
+            const formList = [{
+                type: 'INPUT', label: '会员账号', name: 'account', formItemLayout: formItemLayout, rules: [
+                    { required: true, message: 'Please input your username!' },
+                ],
+            }];
             return (
                 <Modal
                     visible={visible}
                     onCancel={onCancel}
-                    footer={null}
+                    footer={<p style={{ textAlign: 'center' }}>
+                        <Button type="primary" loading={this.state.loading} onClick={this.handleNext}>下一步</Button>
+                    </p>}
                 >
-                    <Form layout="horizontal">
-                        <Form.Item
-                            label="会员账号" labelCol={{ span: 8 }} wrapperCol={{ span: 14 }}
-                            validateStatus={account.validateStatus}
-                            help={account.errorMsg || null}
-                            required={true}
-                        >
-                            {getFieldDecorator('account')(
-                                <Input />
-                            )}
-                        </Form.Item>
-                        <Form.Item>
-                            <p style={{ textAlign: 'center' }}><Button type="primary" htmlType='submit' onClick={this.next}>下一步</Button></p>
-                        </Form.Item>
+                    <Form >
+                        <Row>
+                            {getFormItem(form, formList).map((item, index) => (
+                                <Col key={index}>
+                                    {item}
+                                </Col>
+                            ))}
+                        </Row>
                     </Form>
                 </Modal>
             );
@@ -68,14 +64,15 @@ const AccountSearchForm = Form.create({ name: 'account_search_form' })(
     }
 );
 
+//变更积分弹框
 const PointAlterForm = Form.create({ name: 'point_alter_form' })(
     class extends React.Component {
         render() {
             const { visible, onCancel, dataSource } = this.props;
             const { getFieldDecorator } = this.props.form;
             const title = [
-                <Row style={{lineHeight: 2}}><Col span={12}>会员账号：{dataSource.account}</Col><Col span={12}>昵称：{dataSource.nickName}</Col></Row>,
-                <Row style={{lineHeight: 2}}><Col span={12}>积分余额：{dataSource.balance}</Col><Col span={12}>冻结积分：{dataSource.frozen}</Col></Row>
+                <Row style={{ lineHeight: 2 }}><Col span={12}>会员账号：{dataSource.account}</Col><Col span={12}>昵称：{dataSource.nickName}</Col></Row>,
+                <Row style={{ lineHeight: 2 }}><Col span={12}>积分余额：{dataSource.balance}</Col><Col span={12}>冻结积分：{dataSource.frozen}</Col></Row>
             ];
             const selectData = {
                 label: "类型",
@@ -168,26 +165,41 @@ class PointC extends React.Component {
         modal2: false,
     };
 
+    params = {
+        currentPage: 1,//当前页面
+        pageSize: 10,//每页大小
+    }
+
     componentDidMount() {
         this.requestList();
     }
 
     requestList = () => {
-        fetchGet({
-            url: '/memberM/pointC',
-            params: {
-                page: 1
-            }
-        }).then((res) => {
-            if (res.code == 0) {
-                res.result.list.map((item, index) => {
-                    item.key = index;
-                })
+        fetch(`${Url}/vip/usercredits?start=${this.params.currentPage - 1}&size=${this.params.pageSize}`, { credentials: 'include' })
+            .then((res) => res.json()).then(result => {
+                let data = result;
                 this.setState({
-                    dataSource: res.result.list,
+                    pagination: pagination(data, (current) => {//改变页码
+                        this.params.currentPage = current;
+                        this.requestList();
+                    }, (size) => {//pageSize 变化的回调
+                        this.params.pageSize = size;
+                        this.requestList();
+                    }),
+                    dataSource: data.content.map(i => ({
+                        ...i,
+                        key: i.usercreditId,
+                        mobilePhone: i.bsUserinfo.mobilePhone,
+                        nickname: i.bsUserinfo.nickname,
+                        point: i.bsUserinfo.point,
+                        freezePoint: i.bsUserinfo.freezePoint,
+                        createTime: moment(i.createTime),
+                        operatieTime: moment(i.operatieTime),
+                    }))
                 })
-            }
-        })
+            }).catch((err) => {
+                console.log(err);
+            })
     }
 
     showModal = (key) => {
@@ -213,37 +225,18 @@ class PointC extends React.Component {
     }
 
     render() {
-        const columns = [{
-            title: '时间',
-            dataIndex: 'time',
-        }, {
-            title: '会员账号',
-            dataIndex: 'account',
-        }, {
-            title: '会员昵称',
-            dataIndex: 'nickName',
-        }, {
-            title: '类型',
-            dataIndex: 'type',
-        }, {
-            title: '积分',
-            dataIndex: 'point',
-        }, {
-            title: '积分余额',
-            dataIndex: 'balance',
-        }, {
-            title: '冻结积分',
-            dataIndex: 'frozen',
-        }, {
-            title: '原因',
-            dataIndex: 'reason',
-        }, {
-            title: '操作人',
-            dataIndex: 'operator',
-        }, {
-            title: '操作时间',
-            dataIndex: 'operationTime'
-        }];
+        const columns = [
+            { title: '时间', dataIndex: 'createTime', render: (createTime) => createTime.format("YYYY-MM-DD HH:mm:ss") },
+            { title: '会员账号', dataIndex: 'mobilePhone' },
+            { title: '会员昵称', dataIndex: 'nickname' },
+            { title: '类型', dataIndex: 'type', render: (type) => typeConfig[type] },
+            { title: '积分', dataIndex: 'creditValue' },
+            { title: '积分余额', dataIndex: 'point' },
+            { title: '冻结积分', dataIndex: 'freezePoint' },
+            { title: '原因', dataIndex: 'remark' },
+            { title: '操作人', dataIndex: 'operatorId' },
+            { title: '操作时间', dataIndex: 'operatieTime', render: (operatieTime) => operatieTime.format("YYYY-MM-DD HH:mm:ss") }
+        ];
 
         const addData = { account: '13476437878', nickName: '张三', balance: '123', frozen: '0' };
         return (
@@ -257,11 +250,7 @@ class PointC extends React.Component {
                     <Table
                         columns={columns}
                         dataSource={this.state.dataSource}
-                        pagination={{
-                            showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
-                            showSizeChanger: true,
-                            pageSizeOptions: ['10', '20', '50']
-                        }}
+                        pagination={this.state.pagination}
                         bordered
                     />
                     <AccountSearchForm
