@@ -21,13 +21,13 @@ class SensitiveWordsM extends React.Component {
   requestList = () => {
     const words = [];
     const id = [];
-    fetch(`${URL}/sensitives`, {
+    fetch(`${URL}/shoal/sensitives`, {
       method: 'GET',
       credentials: 'include'
     })
       .then((res) => res.json())
       .then(data => {
-        data.map((i) => {
+        data.map((i, index) => {
           words.push(i.word);
           id.push(i.id);
         });
@@ -50,7 +50,7 @@ class SensitiveWordsM extends React.Component {
       cancelText: '取消',
       onOk: () => {
         const id = this.state.id;
-        fetch(`${URL}/sensitives/${id[index]}`, {
+        fetch(`${URL}/shoal/sensitives/${id[index]}`, {
           method: 'DELETE',
           credentials: 'include'
         })
@@ -87,7 +87,7 @@ class SensitiveWordsM extends React.Component {
     let tags = state.tags;
     if (inputValue && tags.indexOf(inputValue) === -1) {
       tags = [...tags, inputValue];
-      fetch(`${URL}/sensitives`, {
+      fetch(`${URL}/shoal/sensitives`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -133,7 +133,7 @@ class SensitiveWordsM extends React.Component {
               {tags.map((tag, index) => {
                 const isLongTag = tag.length > 20;
                 const tagElem = (
-                  <Tag key={tag}
+                  <Tag key={index}
                     closable
                     onClose={(e) => this.handleClose(tag, index, e)}
                     style={{ marginBottom: '8px' }}
