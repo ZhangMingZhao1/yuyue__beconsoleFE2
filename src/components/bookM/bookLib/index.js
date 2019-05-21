@@ -74,45 +74,25 @@ class BookLib extends React.Component {
     }
 
     render() {
-        const columns = [{
-            title: '书目ID',
-            dataIndex: 'bookinfoId',
-            width: '5%',
-        }, {
-            title: '名称',
-            dataIndex: 'bookName',
-            width: '25%',
-        }, {
-            title: 'ISBN',
-            dataIndex: 'isbn',
-            width: '10%',
-        }, {
-            title: '作者',
-            dataIndex: 'author',
-            width: '20%',
-        }, {
-            title: '出版社',
-            dataIndex: 'pubName',
-            width: '15%',
-        }, {
-            title: '是否精选',
-            dataIndex: 'recommend',
-            width: '5%',
-        }, {
-            title: '分类',
-            dataIndex: 'categoryName',
-            width: '10%',
-        }, {
-            title: '操作',
-            dataIndex: 'action',
-            render: (text, record) => (
-                <span>
-                    <Link to={`${this.props.match.url}/modifyBookLib/${record.bibliographyId}`}>修改</Link>
-                    <Divider type="vertical" />
-                    <a href="javascript:;">删除</a>
-                </span>
-            ),
-        }];
+        const columns = [
+            { title: '书目ID', dataIndex: 'bookinfoId', width: '5%' },
+            { title: '名称', dataIndex: 'bookName', width: '25%' },
+            { title: 'ISBN', dataIndex: 'isbn', width: '10%' },
+            { title: '作者', dataIndex: 'author', width: '20%' },
+            { title: '出版社', dataIndex: 'pubName', width: '15%' },
+            { title: '是否精选', dataIndex: 'recommend', width: '5%' },
+            { title: '分类', dataIndex: 'categoryName', width: '10%' },
+            {
+                title: '操作',
+                dataIndex: 'action',
+                render: (text, record) => (
+                    <span>
+                        <Link to={`${this.props.match.url}/modifyBookLib/${record.bookinfoId}`}>修改</Link>
+                        <Divider type="vertical" />
+                        <a href="javascript:;">删除</a>
+                    </span>
+                ),
+            }];
 
         return (
             <div className="">

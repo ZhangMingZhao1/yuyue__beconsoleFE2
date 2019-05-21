@@ -41,14 +41,14 @@ export const getFormItem = (form, formList) => {
             let width = item.width;
             let disabled = item.disabled;
             let extra = item.extra;
-            let rules = item.rules;
+            let rules = item.rules || [];
             let formItemLayout = item.formItemLayout
             switch (item.type) {
                 case "INPUT":
                     formItemList.push(
-                        <FormItem label={label} key={name} help={help} {...formItemLayout}>
+                        <FormItem label={label} key={name} help={rules ? undefined : help} {...formItemLayout}>
                             <span style={{ whiteSpace: 'nowrap' }}>
-                                {getFieldDecorator(name, { initialValue: initialValue })(
+                                {getFieldDecorator(name, { initialValue: initialValue, rules: rules })(
                                     <Input disabled={disabled} placeholder={placeholder} style={{ width: width }} />
                                 )}
                                 <span style={{ marginLeft: 10 }}>{extra}</span>
@@ -139,7 +139,7 @@ export const getFormItem = (form, formList) => {
                     formItemList.push(
                         <FormItem label={label} key={name} help={help} {...formItemLayout}>
                             {
-                                getFieldDecorator(name)(
+                                getFieldDecorator(name, { initialValue: initialValue })(
                                     <TextArea disabled={disabled} style={{ width: width }} row={item.row} />
                                 )
                             }
