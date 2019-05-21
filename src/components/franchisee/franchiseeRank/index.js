@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Table,Divider,Card,Button,message} from 'antd';
 import { Link } from 'react-router-dom';
-
+import URL from '../../../api/node_config';
 class FranRank extends Component {
     constructor(props) {
       super(props)
@@ -10,7 +10,7 @@ class FranRank extends Component {
       }
     }
     fetchTableData=()=> {
-        fetch('http://localhost:8080/yuyue/franrank',{
+        fetch(`${URL}/franrank`,{
             method:"GET",
             mode:"cors",
             credentials:'include'
@@ -28,7 +28,7 @@ class FranRank extends Component {
         this.fetchTableData();
     }
     deleFranInfo(id){
-      fetch(`http://localhost:8080/yuyue/franrank/${id}`,
+      fetch(`${URL}/franrank/${id}`,
       {method:"DELETE",credentials: "include"})
         .then(res=>res.json())
         .then(data=>{

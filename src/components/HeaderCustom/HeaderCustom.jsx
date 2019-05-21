@@ -53,13 +53,13 @@ class HeaderCustom extends Component {
     };
     logout = () => {
         localStorage.removeItem('user');
-        fetch(`${URL}/loyout`,{
+        fetch(`${URL}/logout`,{
             method:"POST",
             credentials: 'include'})
             .then(res=>res.json())
             .then(data=>{
                 if(data.code == "0") {
-                    message.success("退出成功")
+                    message.success("退出成功,删除session成功")
                 }
                 else {
                     message.warning("session删除失败")
