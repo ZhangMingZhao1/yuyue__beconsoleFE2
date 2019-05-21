@@ -22,7 +22,7 @@ class DynamicCmnt extends React.Component {
     }
 
     requestList = () => {
-        fetch(`${URL}/userdynamiccmnts/${this.props.match.params.id}`, {
+        fetch(`${URL}/shoal/userdynamiccmnts/${this.props.match.params.id}`, {
             method: 'GET',
             credentials: 'include'
         })
@@ -75,7 +75,7 @@ class DynamicCmnt extends React.Component {
 
     dynamicCmntSearch = () => {
         const state = this.state;
-        fetch(`${URL}/userdynamiccmnts/${this.props.match.params.id}` +
+        fetch(`${URL}/shoal/userdynamiccmnts/${this.props.match.params.id}` +
             `?dynamicId=${this.props.match.params.id}` +
             '&content=' + state.input1Value +
             '&userName=' + state.input2Value +
@@ -116,7 +116,7 @@ class DynamicCmnt extends React.Component {
             okText: '确定',
             cancelText: '取消',
             onOk: () => {
-                fetch(`${URL}/userdynamiccmnts`, {
+                fetch(`${URL}/shoal/userdynamiccmnts`, {
                     method: 'POST',
                     mode: "cors",
                     headers: {

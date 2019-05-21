@@ -23,7 +23,7 @@ class Dynamic extends React.Component {
     }
 
     requestList = () => {
-        fetch(`${URL}/bUserdynamics`,
+        fetch(`${URL}/shoal/bUserdynamics`,
             {
                 method: 'GET',
                 mode: 'cors',
@@ -61,7 +61,7 @@ class Dynamic extends React.Component {
 
     dynamicSearch = () => {
         const state = this.state;
-        fetch(`${URL}/bUserdynamics` +
+        fetch(`${URL}/shoal/bUserdynamics` +
             '?bookName=' + state.input1Value +
             '&content=' + state.input2Value +
             '&userName=' + state.input3Value +
@@ -128,7 +128,7 @@ class Dynamic extends React.Component {
             okText: '确定',
             cancelText: '取消',
             onOk: () => {
-                fetch(`${URL}/deleteUserdynamic`, {
+                fetch(`${URL}/shoal/userdynamic`, {
                     method: 'POST',
                     credentials: "include",
                     headers: {
