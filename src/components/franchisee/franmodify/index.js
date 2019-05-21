@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Card,Row,Col,Divider,Form, Select,Input,Button,message} from 'antd' ;
-
+import URL from '../../../api/node_config';
 const { Option } = Select;
 
 class FranModify extends Component{
@@ -26,7 +26,7 @@ class FranModify extends Component{
             },
             body:JSON.stringify(data)
         }
-        fetch(`http://localhost:8080/yuyue/modifyfran/${id}`,options)
+        fetch(`${URL}/modifyfran/${id}`,options)
             .then(res=>res.json())
             .then(data=>{
                 console.log('data1212 ',data);

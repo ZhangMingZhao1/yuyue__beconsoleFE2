@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Card,Row,Col,Divider,Form, Select,Input,Button,message} from 'antd' ;
-
+import URL from '../../../api/node_config';
 const { Option } = Select;
 
 class AddFranInfo extends Component{
@@ -25,7 +25,7 @@ class AddFranInfo extends Component{
             },
             body:JSON.stringify(data)
         }
-        fetch(`http://localhost:8080/yuyue/addfraninfo/${localStorage.getItem("user")}`,options)
+        fetch(`${URL}/addfraninfo/${localStorage.getItem("user")}`,options)
             .then(res=>res.json())
             .then(data=>{
                 console.log('dataaddFranInfo ',data);

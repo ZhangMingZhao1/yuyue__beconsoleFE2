@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Table, Card, Divider, Form, Select, Input, Button, message } from 'antd';
 import { Link } from 'react-router-dom'
-import URL from '../../../api/config';
+import URL from '../../../api/node_config';
 const { Option } = Select;
 
 class FranInfo extends Component {
@@ -14,7 +14,7 @@ class FranInfo extends Component {
       }
 
     fetchFranInfoData=()=> {
-      fetch('http://localhost:8080/yuyue/franinfo',{
+      fetch(`${URL}/franinfo`,{
           method: 'GET',
           credentials: "include",
           headers: {
@@ -50,7 +50,7 @@ class FranInfo extends Component {
       // fetch("")
     }
     deleFranInfo(id){
-      fetch(`http://localhost:8080/yuyue/franinfo/${id}`,
+      fetch(`${URL}/franinfo/${id}`,
       {method:"DELETE",credentials: "include"})
         .then(res=>res.json())
         .then(data=>{

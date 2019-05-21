@@ -21,7 +21,7 @@ class Comment extends React.Component {
     }
 
     requestList = () => {
-        fetch(`${URL}/pUserdynamic`, {
+        fetch(`${URL}/shoal/pUserdynamic`, {
             method: 'GET',
             credentials: 'include'
         })
@@ -73,7 +73,7 @@ class Comment extends React.Component {
 
     commentSearch = () => {
         const state = this.state;
-        fetch(`${URL}/pUserdynamic` +
+        fetch(`${URL}/shoal/pUserdynamic` +
             '?content=' + state.input1Value +
             '&userName=' + state.input2Value +
             '&starttime=' + state.dateRange[0] +
@@ -115,7 +115,7 @@ class Comment extends React.Component {
             okText: '确定',
             cancelText: '取消',
             onOk: () => {
-                fetch(`${URL}/deleteUserdynamic`, {
+                fetch(`${URL}/shoal/userdynamic`, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json', 'Content-Type': 'application/json',

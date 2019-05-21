@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Card, Row,Col, Divider} from 'antd';
 import { RFC_2822 } from 'moment';
-
+import URL from '../../../api/node_config';
 
 const FormItem = Form.Item;
 const infoDetailData = [
@@ -37,7 +37,7 @@ class FranInfoDetail extends React.Component {
 
     fetchFranInfoDetailData=()=>{
         const id = this.props.match.params.id;
-        fetch(`http://localhost:8080/yuyue/frandetail/${id}`)
+        fetch(`${URL}/frandetail/${id}`)
             .then((res)=>res.json())
             .then(data=>{
                     console.log('data[0])',data[0]);

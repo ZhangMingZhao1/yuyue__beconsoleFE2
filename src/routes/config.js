@@ -1,6 +1,6 @@
 export default {
   menus: [ // 菜单相关路由
-    { key: '/app/dashboard/index', title: '首页', icon: 'mobile', component: 'Dashboard', login: false },
+    { key: '/app/dashboard/index', title: '首页', icon: 'dashboard', component: 'Dashboard', login: false },
     {
       key: '/app/ui', title: '网站管理', icon: 'scan',
       subs: [
@@ -21,14 +21,14 @@ export default {
       ],
     },
     {
-      key: '/app/fishM', title: '鱼群管理', icon: 'rocket',
+      key: '/app/fishM', title: '鱼群管理', icon: 'car',
       subs: [
         { key: '/app/fishM/sensitiveWordsM', title: '敏感词库', component: 'SensitiveWordsM' },
         { key: '/app/fishM/commentM', title: '评论管理', component: 'CommentM' },
       ],
     },
     {
-      key: '/app/bookM', title: '书籍管理', icon: 'rocket',
+      key: '/app/bookM', title: '书籍管理', icon: 'cloud',
       subs: [
         { key: '/app/bookM/bookLib', title: '书目库', component: 'BookLib' },
         { key: '/app/bookM/geneM', title: '基因维护', component: 'GeneM' },
@@ -37,7 +37,7 @@ export default {
       ],
     },
     {
-      key: '/app/storehouseM', title: '仓库管理', icon: 'rocket',
+      key: '/app/storehouseM', title: '仓库管理', icon: 'project',
       subs: [
         { key: '/app/storehouseM/query', title: '仓库查询', component: 'StoreQuery' },
         { key: '/app/storehouseM/indata', title: '入库单', component: 'InStoreData' },
@@ -48,7 +48,7 @@ export default {
       ],
     },
     {
-      key: '/app/orderM', title: '订单管理', icon: 'rocket',
+      key: '/app/orderM', title: '订单管理', icon: 'code',
       subs: [
         { key: '/app/orderM/borrowO', title: '借阅订单', component: 'BorrowO' },
         { key: '/app/orderM/donateO', title: '捐书订单', component: 'DonateO' },
@@ -57,14 +57,14 @@ export default {
       ]
     },
     {
-      key: '/app/franchiseeM', title: '加盟商管理', icon: 'rocket',
+      key: '/app/franchiseeM', title: '加盟商管理', icon: 'wallet',
       subs: [
         { key: '/app/franchiseeM/level', title: '加盟商等级', component: 'FranRank' },
         { key: '/app/franchiseeM/info', title: '加盟商资料', component: 'FranInfo' },
       ],
     },
     {
-      key: '/app/bookCaseM', title: '书柜管理', icon: 'rocket',
+      key: '/app/bookCaseM', title: '书柜管理', icon: 'tool',
       subs: [
         { key: '/app/bookCaseM/caseState', title: '机柜状态跟踪', component: 'BannerControl' },
         { key: '/app/bookCaseM/monitorB', title: '监控回放', component: 'BannerControl' },
@@ -73,7 +73,7 @@ export default {
       ],
     },
     {
-      key: '/app/statisticsT', title: '统计报表', icon: 'rocket',
+      key: '/app/statisticsT', title: '统计报表', icon: 'number',
       subs: [
         { key: '/app/statisticsT/member', title: '会员统计表', component: 'BannerControl' },
         { key: '/app/statisticsT/borrow', title: '借阅统计表', component: 'BannerControl' },
@@ -83,7 +83,7 @@ export default {
       ],
     },
     {
-      key: '/app/systemM', title: '系统管理', icon: 'rocket',
+      key: '/app/systemM', title: '系统管理', icon: 'security-scan',
       subs: [
         { key: '/app/systemM/organizationM', title: '机构管理', component: 'OrganizationM' },
         { key: '/app/systemM/warehouseM', title: '仓库维护', component: 'WarehouseM' },
