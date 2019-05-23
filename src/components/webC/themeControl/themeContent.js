@@ -102,6 +102,7 @@ class ThemeContent extends React.Component {
                 this.requestList();//刷新页面
             } else {
                 message.error(result.message)
+                this.setState({ Adding: false });
             }
         }).catch((err) => {
             console.log(err)

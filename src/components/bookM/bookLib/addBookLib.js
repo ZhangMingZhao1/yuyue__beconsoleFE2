@@ -1,6 +1,7 @@
 import React from 'react';
 import BookLibForm from './bookLibFrom';
 import { Card } from 'antd';
+import { withRouter } from "react-router-dom";
 
 class AddBookLib extends React.Component {
 
@@ -18,7 +19,7 @@ class AddBookLib extends React.Component {
                         wrappedComponentRef={this.bookLibFormRef}
                         type='add'
                         onSubmit={() => { console.log(this.bookLib_formRef.props.form.getFieldsValue()) }}
-                        onCancel={() => { }}
+                        onCancel={() => { this.props.history.push('/app/bookM/bookLib') }}
                     />
                 </Card>
             </div>
@@ -26,4 +27,4 @@ class AddBookLib extends React.Component {
     }
 }
 
-export default AddBookLib;
+export default withRouter(AddBookLib);
