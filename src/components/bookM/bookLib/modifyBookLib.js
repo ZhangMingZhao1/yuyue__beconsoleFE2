@@ -2,35 +2,48 @@ import React from 'react';
 import moment from 'moment';
 import BookLibForm from './bookLibFrom';
 import { Card } from 'antd';
+import Url from '../../../api/config';
+import { withRouter } from "react-router-dom";
 
 class ModifyBookLib extends React.Component {
+    state = {}
+
+    componentDidMount() {
+        this.requestList();
+    }
+
+    requestList = () => {
+        fetch(`${Url}/book/bookinfos/${this.props.match.params.id}`, { credentials: 'include' })
+            .then((res) => res.json()).then(data => {
+                this.setState({
+                    dataSource: {
+                        ...data,
+                        pubName: data.bsPublishinfo.pubName,
+                        printDate: moment(data.printDate),
+                        publishDate: moment(data.publishDate),
+                    }
+                })
+            }).catch((err) => {
+                console.log(err);
+            })
+    }
 
     bookLibFormRef = (formRef) => {
         this.bookLib_formRef = formRef;
     }
 
     render() {
-        const dateFormat = 'YYYY/MM/DD';
-        const data = {
-            publish: '新华出版社',
-            category: '儿童',
-            isSelected: '是',
-            printTime: moment('2015/01/01', dateFormat),
-            clc: '儿童',
-            createTime: '2018-02-02 12:23:23',
-            modifyTime: '2018-02-02 12:23:23',
-        }
         return (
             <div className="">
                 <Card
-                    title={`修改书目${this.props.match.params.id}`}
+                    title="修改书目"
                 >
                     <BookLibForm
                         wrappedComponentRef={this.bookLibFormRef}
                         type='modify'
-                        initialValues={data}
+                        dataSource={this.state.dataSource}
                         onSubmit={() => { console.log(this.bookLib_formRef.props.form.getFieldsValue()) }}
-                        onCancel={() => { }}
+                        onCancel={() => { this.props.history.push('/app/bookM/bookLib') }}
                     />
                 </Card>
             </div>
@@ -38,4 +51,4 @@ class ModifyBookLib extends React.Component {
     }
 }
 
-export default ModifyBookLib;
+export default withRouter(ModifyBookLib);
