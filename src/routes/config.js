@@ -90,6 +90,7 @@ export default {
         { key: '/app/systemM/cabinetM', title: '机柜管理', component: 'CabinetM' },
         { key: '/app/systemM/staffM', title: '员工管理', component: 'StaffM' },
         { key: '/app/systemM/roleAuth', title: '角色权限', component: 'roleAuth' },
+        { key: '/app/systemM/dataAuth', title: '数据权限', component: 'DataAuth' },
       ],
     },
   ],

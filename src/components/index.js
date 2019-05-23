@@ -77,6 +77,7 @@ import FranInfoDetail from './franchisee/frandetail';
 import FranModify from './franchisee/franmodify';
 import AddFranInfo from './franchisee/addfraninfo';
 import AddFranRank from './franchisee/addfranrank';
+import DataAuth from './systemM/dataAuth';
 
 export default {
     ThemeControl, ThemeContent, BannerControl, AdvertiseM,
@@ -93,7 +94,7 @@ export default {
     StoreQuery, InStoreData, InStoreInfo, OutStoreData, OutStoreInfo, MvStoreData, MvStoreInfo,
     AllocateInCase, AllocateInCaseG, AllocateInCaseS, AllocateInCaseR, AllocateInCaseP, AllocateInCaseC, AllocateInCaseF,
     AllocateOutCase, AllocateOutCaseG, AllocateOutCaseS, AllocateOutCaseR, AllocateOutCaseP, AllocateOutCaseC, AllocateOutCaseF,
-    roleAuth,
+    roleAuth,DataAuth,
 
 
     FranRank,FranInfo,FranInfoDetail,FranModify,AddFranInfo,AddFranRank
