@@ -88,10 +88,11 @@ export const getFormItem = (form, formList) => {
                     break;
                 case "INPUTNUMBER":
                     formItemList.push(
-                        <FormItem label={label} key={name} help={help} {...formItemLayout}>
+                        <FormItem label={label} key={name} help={rules ? undefined : help} {...formItemLayout}>
                             {
                                 getFieldDecorator(name, {
-                                    initialValue: initialValue
+                                    initialValue: initialValue,
+                                    rules: rules
                                 })(
                                     <InputNumber disabled={disabled} />
                                 )

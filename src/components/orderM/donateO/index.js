@@ -131,7 +131,6 @@ class DonateO extends React.Component {
      * 条件查询
      */
     handleSearch = (data) => {
-        console.log(data)
         this.params.search = data;
         this.requestList();
     }
