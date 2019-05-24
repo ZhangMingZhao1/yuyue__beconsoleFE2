@@ -11,7 +11,7 @@ const BookSearchForm = Form.create()(
         handleSubmit = (e) => {
             e.preventDefault();
             let fieldsValue = this.props.form.getFieldsValue();
-            console.log(fieldsValue);
+            // console.log(fieldsValue);
         }
 
         render() {
