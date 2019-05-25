@@ -1,7 +1,10 @@
 import React from 'react';
 import { Card, Button, Input, Select, Form, Table, Divider, Modal } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
+import URL from '../../../api/config';
 import { Link } from 'react-router-dom';
+import pagination from '../../pagination';// 翻页
+import { parseParams } from '../../../axios/tools';// 翻页
 
 const Option = Select.Option;
 const confirm = Modal.confirm;
@@ -45,6 +48,11 @@ class StaffM extends React.Component {
     componentDidMount() {
         this.requestList();
     }
+    // 翻页
+    params = {
+        currentPage: 1,//当前页面
+        pageSize: 10,//每页大小
+    }
 
     showConfirm = () => {
         confirm({
@@ -58,27 +66,38 @@ class StaffM extends React.Component {
             },
         });
     }
-
+    // TO CHANGE 缺少运维联系方式、操作员、修改日期字段
     requestList = () => {
-        const url = 'https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/systemM/cabinetM';
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json', 'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                data: this.state.data
-            })
+        // 翻页
+        let params = {
+            start: this.params.currentPage - 1,
+            size: this.params.pageSize,
+        };
+        // const url = 'https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/systemM/cabinetM';
+        // 翻页
+        fetch(`${URL}/system/bookcaseinfos?${parseParams(params)}`, {
+            method: 'GET',
+            credentials: 'include',
         })
             .then((res) => res.json())
             .then(data => {
-                // eslint-disable-next-line
-                data.data.data.map((item, index) => {
-                    item.key = index;
+                const { content } = data;
+                // console.log(content);
+                content.map((i) => {
+                    i.key = i.caseId
+                    i.status = i.status ? '正常' : '异常'
                 });
                 this.setState({
-                    data: data.data.data
-                });
+                    // 翻页
+                    pagination: pagination(data, (current) => {//改变页码
+                        this.params.currentPage = current;
+                        this.requestList();
+                    }, (size) => {//pageSize 变化的回调
+                        this.params.pageSize = size;
+                        this.requestList();
+                    }),
+                    data: content
+                })
             })
             .catch(err => {
                 console.log('fetch error', err)
@@ -89,28 +108,28 @@ class StaffM extends React.Component {
 
         const columns = [{
             title: '序号',
-            dataIndex: 'num',
+            dataIndex: 'caseId',
         }, {
             title: '柜子编号',
-            dataIndex: 'ID',
+            dataIndex: 'caseCode',
         }, {
             title: '柜子名称',
-            dataIndex: 'name',
+            dataIndex: 'caseName',
         }, {
             title: '所属仓库',
-            dataIndex: 'wareHouse',
+            dataIndex: 'beWarehouse',
         }, {
             title: '容量',
-            dataIndex: 'capacity',
+            dataIndex: 'cellCount',
         }, {
             title: '运维人',
-            dataIndex: 'people',
+            dataIndex: 'ywName',
         }, {
             title: '联系方式',
             dataIndex: 'phoneNum',
         }, {
             title: '柜子地址',
-            dataIndex: 'address',
+            dataIndex: 'caseAddress',
         }, {
             title: '柜子状态',
             dataIndex: 'status'
@@ -125,7 +144,7 @@ class StaffM extends React.Component {
             dataIndex: 'action',
             render: (text, record) => (
                 <span>
-                    <Link to={`${this.props.match.url}/changeCabinet/${record.ID}`}>修改</Link>
+                    <Link to={`${this.props.match.url}/changeCabinet/${record.caseId}`}>修改</Link>
                     <Divider type="vertical" />
                     {/* eslint-disable-next-line */}
                     <a href="javascript:;" onClick={this.showConfirm}>删除</a>
@@ -137,8 +156,7 @@ class StaffM extends React.Component {
         }];
 
         const { data } = this.state;
-        console.log(data)
-
+        // console.log(data)
         return (
             <React.Fragment>
                 <BreadcrumbCustom first="系统管理" second="机柜管理" />
@@ -152,11 +170,8 @@ class StaffM extends React.Component {
                     <Table className="infoC-table"
                         columns={columns}
                         dataSource={data}
-                        pagination={{
-                            showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
-                            showSizeChanger: true,
-                            pageSizeOptions: ['10', '20', '50']
-                        }}
+                        // 翻页
+                        pagination={this.state.pagination}
                         bordered
                     />
                 </Card>

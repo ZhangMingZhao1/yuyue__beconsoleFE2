@@ -1,6 +1,7 @@
 import React from 'react';
 import CabinetForm from './cabinetForm';
 import { Card } from 'antd';
+import URL from '../../../api/config';
 
 class ChangeCabinet extends React.Component {
 
@@ -17,15 +18,10 @@ class ChangeCabinet extends React.Component {
     }
 
     requestList = () => {
-        const url = 'https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/systemM/cabinetM';
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json', 'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                data: this.state.data
-            })
+        // const url = 'https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/systemM/cabinetM';
+        fetch(`${URL}/system/bookcaseinfos/${this.props.match.params.id}`, {
+            method: 'GET',
+            credentials: 'include'
         })
             .then((res) => {
                 if (res.status === 200) {//http请求成功
@@ -35,14 +31,13 @@ class ChangeCabinet extends React.Component {
                 }
             })
             .then(data => {
-                data.data.data.map((item) => {
-                    // eslint-disable-next-line
-                    if (item.ID == this.props.match.params.id) {
-                        this.setState({
-                            data: [item]
-                        });
-                    }
-                });
+                console.log(data);
+                data.beWarehouseId = data.beWarehouse ? `${data.beWarehouse.warehouseId}` : null;
+                data.status = data.status === 0 || 1 ? `${data.status}` : null;
+                data.cellCount = `${data.cellCount}`;
+                this.setState({
+                    data: data
+                })
             })
             .catch(err => {
                 console.log('fetch error', err)
@@ -59,7 +54,7 @@ class ChangeCabinet extends React.Component {
                     <CabinetForm
                         wrappedComponentRef={this.CabinetFormRef}
                         type="change"
-                        initialValues={data[0]}
+                        initialValues={data}
                         onSubmit={() => { console.log(this.cabinet_formRef.props.form.getFieldsValue()) }}
                         onCancel={() => { }}
                     />
