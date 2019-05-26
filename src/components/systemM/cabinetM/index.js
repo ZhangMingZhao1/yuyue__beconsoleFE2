@@ -42,7 +42,7 @@ const SearchForm = Form.create()(
 class StaffM extends React.Component {
 
     state = {
-        data: []
+        data: [],
     }
 
     componentDidMount() {
@@ -81,11 +81,14 @@ class StaffM extends React.Component {
         })
             .then((res) => res.json())
             .then(data => {
-                const { content } = data;
-                // console.log(content);
+                const { content, user } = data;
+                console.log(content);
                 content.map((i) => {
-                    i.key = i.caseId
-                    i.status = i.status ? '正常' : '异常'
+                    i.key = i.caseId;
+                    i.status = i.status ? '正常' : '异常';
+                    i.beWarehouseName = i.beWarehouse.warehouseName;
+                    i.ywName = i.user.userName;
+                    i.phoneNum = i.user.telephone;
                 });
                 this.setState({
                     // 翻页
@@ -117,7 +120,7 @@ class StaffM extends React.Component {
             dataIndex: 'caseName',
         }, {
             title: '所属仓库',
-            dataIndex: 'beWarehouse',
+            dataIndex: 'beWarehouseName',
         }, {
             title: '容量',
             dataIndex: 'cellCount',
@@ -133,12 +136,6 @@ class StaffM extends React.Component {
         }, {
             title: '柜子状态',
             dataIndex: 'status'
-        }, {
-            title: '操作员',
-            dataIndex: 'operator'
-        }, {
-            title: '修改日期',
-            dataIndex: 'date'
         }, {
             title: '操作',
             dataIndex: 'action',

@@ -5,6 +5,8 @@ import './index.less';
 import moment from 'moment';
 import Modals from './modals';
 import URL from '../../../api/config';
+import pagination from '../../pagination';// 翻页
+import { parseParams } from '../../../axios/tools';// 翻页
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -211,19 +213,36 @@ class BorrowO extends React.Component {
     componentDidMount() {
         this.requestList();
     }
+    // 翻页
+    params = {
+        currentPage: 1,//当前页面
+        pageSize: 10,//每页大小
+    }
 
     requestList = () => {
 
         const orderStatus = [
-            { type: 0, name: '待发货' },
-            { type: 1, name: '待收书/已发货' },
-            { type: 2, name: '待归还' },
-            { type: 3, name: '审核中' },
-            { type: 4, name: '审核未通过' },
+            { type: 0, name: '待支付' },
+            { type: 1, name: '待发货' },
+            { type: 2, name: '待出库' },
+            { type: 3, name: '配送中' },
+            { type: 4, name: '待收书/已发货' },
+            { type: 5, name: '待归还' },
+            { type: 6, name: '审核中' },
+            { type: 7, name: '审核通过' },
+            { type: 8, name: '审核未通过' },
+            { type: 9, name: '逾期欠费' },
+            { type: 10, name: '已取消' },
         ];
+        // 翻页
+        let params = {
+            start: this.params.currentPage - 1,
+            size: this.params.pageSize,
+        };
 
         // const url = 'https://www.easy-mock.com/mock/5c7134c16f09752cdf0d69f4/example/borrowO'
-        fetch(`${URL}/curborrowrecords`, {
+        // 翻页
+        fetch(`${URL}/order/curborrowrecords?${parseParams(params)}`, {
             method: 'GET',
             credentials: 'include'
         })
@@ -251,6 +270,14 @@ class BorrowO extends React.Component {
                 //     i.createTime = moment(i.createTime).format('YYYY-MM-DD');
                 // });
                 this.setState({
+                    // 翻页
+                    pagination: pagination(data, (current) => {//改变页码
+                        this.params.currentPage = current;
+                        this.requestList();
+                    }, (size) => {//pageSize 变化的回调
+                        this.params.pageSize = size;
+                        this.requestList();
+                    }),
                     dataSource: data.content
                 });
             })
@@ -300,11 +327,8 @@ class BorrowO extends React.Component {
                         columns={col}
                         dataSource={dataSource}
                         style={{ marginTop: '10px' }}
-                        pagination={{
-                            showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
-                            showSizeChanger: true,
-                            pageSizeOptions: ['10', '20', '50']
-                        }}
+                        // 翻页
+                        pagination={this.state.pagination}
                     />
                 </Card>
             </div>
