@@ -3,7 +3,6 @@ import { Row, Col, Form, Button, Input, Select, message } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
 import URL from '../../../api/config';
 
-const TextArea = Input.TextArea;
 const Option = Select.Option;
 const StaffForm = Form.create()(
     class extends React.Component {
@@ -24,7 +23,7 @@ const StaffForm = Form.create()(
             e.preventDefault();
             this.props.form.validateFields((err, values) => {
                 if (!err) {
-                    // console.log('Received values of form: ', values);
+                    console.log('Received values of form: ', values);
                     fetch(`${URL}/system/users`, {
                         method: `${type === 'change' ? 'PUT' : 'POST'}`,
                         headers: {
@@ -32,14 +31,15 @@ const StaffForm = Form.create()(
                         },
                         credentials: 'include',
                         body: JSON.stringify({
+                            uid: this.props.initialValues ? this.props.initialValues.uid : null,
                             beDepartment: {
                                 id: parseInt(values.beDepartment)
                             },
                             beInstitution: {
                                 id: parseInt(values.beInstitution)
                             },
-                            roleId: parseInt(values.role),
-                            password: values.password,
+                            roleType: parseInt(values.role),
+                            password: type === 'change' ? values.password : null,
                             status: parseInt(values.status),
                             telephone: values.telephone,
                             userName: values.userName
@@ -106,9 +106,6 @@ const StaffForm = Form.create()(
                                         },
                                         {
                                             required: i.name === 'telephone' ? true : false,
-                                            message: '手机号不能为空'
-                                        },
-                                        {
                                             pattern: i.name === 'telephone' ? new RegExp('[0-9]+', 'g') : null,
                                             message: '请输入正确的电话号码'
                                         }
@@ -132,13 +129,6 @@ const StaffForm = Form.create()(
                             </Form.Item>
                         </Col>
                     ))}
-                    <Col span={24}>
-                        <Form.Item label="备注">
-                            {getFieldDecorator('remark', { initialValue: initial ? initial['remark'] : null })(
-                                <TextArea placeholder="请输入备注" rows={3} />
-                            )}
-                        </Form.Item>
-                    </Col>
                 </Row>
                     <Row hidden={this.props.type === 'change' ? false : true}>
                         <Col span={12}>

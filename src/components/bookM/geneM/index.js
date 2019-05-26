@@ -3,8 +3,9 @@ import { Form, Input, Button, Card, Table, Divider, message, Popconfirm, InputNu
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import './index.less';
 import Url from '../../../api/config';
-import pagination from '../../pagination';
 import { getFormItem } from '../../baseFormItem';
+import pagination from '../../pagination';// 翻页
+import { parseParams } from '../../../axios/tools';// 翻页
 const EditableContext = React.createContext();
 
 //顶部查询表单
@@ -114,7 +115,7 @@ const GeneTable = Form.create()(
         render() {
             const { dataSource, pagination } = this.props;
             const components = {
-                body: {cell: EditableCell},
+                body: { cell: EditableCell },
             };
             const columns = this.columns.map((col) => {
                 if (!col.editable) {
@@ -132,7 +133,7 @@ const GeneTable = Form.create()(
             return (
                 <EditableContext.Provider value={this.props.form} >
                     <Table
-                        className="geneM-Table"
+                        className="geneM-table"
                         components={components}
                         columns={columns}
                         dataSource={dataSource}
@@ -147,20 +148,52 @@ const GeneTable = Form.create()(
 
 class GeneM extends React.Component {
     state = {
-        dataSource: [
-            { key: 0, name: '文艺', sort: 1 },
-            { key: 1, name: '文艺', sort: 1 }
-        ],
+        dataSource: [],
         addGeneName: '',//新增基因名称
         addGeneSort: '',//新增基因排序
     }
 
+    componentDidMount() {
+        this.requestList();
+    }
+    // 翻页
     params = {
         currentPage: 1,//当前页面
         pageSize: 10,//每页大小
     }
 
-    componentDidMount() { }
+    requestList = () => {
+        // 翻页
+        let params = {
+            start: this.params.currentPage - 1,
+            size: this.params.pageSize,
+        };
+        // 翻页
+        fetch(`${Url}/book/genes?${parseParams(params)}`, {
+            method: 'GET',
+            credentials: 'include'
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                const res = data.content;
+                res.map((i) => {
+                    i.key = i.geneId;
+                });
+                this.setState({
+                    // 翻页
+                    pagination: pagination(data, (current) => {//改变页码
+                        this.params.currentPage = current;
+                        this.requestList();
+                    }, (size) => {//pageSize 变化的回调
+                        this.params.pageSize = size;
+                        this.requestList();
+                    }),
+                    dataSource: res,
+                })
+            })
+            .catch(err => console.log(err));
+    }
 
     /**
      * 修改基因信息
@@ -185,8 +218,8 @@ class GeneM extends React.Component {
         const AddInput = <span>
             <font style={{ lineHeight: '50px' }}>名称：</font>
             <Input value={this.state.addGeneName} onChange={(e) => { this.setState({ addGeneName: e.target.value }) }} />
-            <br/>
-            <font style={{ lineHeight: '50px' }}>排序：</font><br/>
+            <br />
+            <font style={{ lineHeight: '50px' }}>排序：</font><br />
             <InputNumber value={this.state.addGeneSort} onChange={(value) => { this.setState({ addGeneSort: value }) }} />
         </span>
         return (
@@ -202,11 +235,8 @@ class GeneM extends React.Component {
                         </Popconfirm>
                     </div>
                     <GeneTable
-                        pagination={{
-                            showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
-                            showSizeChanger: true,
-                            pageSizeOptions: ['10', '20', '50']
-                        }}
+                        // 翻页
+                        pagination={this.state.pagination}
                         dataSource={this.state.dataSource}
                         onSave={(v) => { this.handleUpdate(v) }}
                         onDel={(key) => { this.handleDel(key) }}

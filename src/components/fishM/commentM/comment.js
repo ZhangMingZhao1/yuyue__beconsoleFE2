@@ -2,6 +2,8 @@ import React from 'react';
 import moment from 'moment';
 import { Input, DatePicker, Button, Modal, Table, message, Popover } from 'antd';
 import URL from '../../../api/config';
+import pagination from '../../pagination';// 翻页
+import { parseParams } from '../../../axios/tools';// 翻页
 
 const { confirm } = Modal;
 const { RangePicker } = DatePicker;
@@ -19,9 +21,20 @@ class Comment extends React.Component {
     componentDidMount() {
         this.requestList();
     }
+    // 翻页
+    params = {
+        currentPage: 1,//当前页面
+        pageSize: 10,//每页大小
+    }
 
     requestList = () => {
-        fetch(`${URL}/shoal/pUserdynamic`, {
+        // 翻页
+        let params = {
+            start: this.params.currentPage - 1,
+            size: this.params.pageSize,
+        };
+        // 翻页
+        fetch(`${URL}/shoal/pUserdynamic?${parseParams(params)}`, {
             method: 'GET',
             credentials: 'include'
         })
@@ -41,6 +54,14 @@ class Comment extends React.Component {
                             item.content;
                 });
                 this.setState({
+                    // 翻页
+                    pagination: pagination(data, (current) => {//改变页码
+                        this.params.currentPage = current;
+                        this.requestList();
+                    }, (size) => {//pageSize 变化的回调
+                        this.params.pageSize = size;
+                        this.requestList();
+                    }),
                     comment: data.content
                 });
             })
@@ -225,11 +246,8 @@ class Comment extends React.Component {
                     dataSource={comment}
                     rowSelection={rowSelection}
                     style={{ marginTop: '10px' }}
-                    pagination={{
-                        showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
-                        showSizeChanger: true,
-                        pageSizeOptions: ['10', '20', '50']
-                    }}
+                    // 翻页
+                    pagination={this.state.pagination}
                 />
             </React.Fragment>
         );
