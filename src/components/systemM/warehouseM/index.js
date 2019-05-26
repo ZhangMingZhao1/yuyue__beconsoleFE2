@@ -5,6 +5,8 @@ import './index.less';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import URL from '../../../api/config';
+import pagination from '../../pagination';// 翻页
+import { parseParams } from '../../../axios/tools';// 翻页
 
 const Option = Select.Option;
 const confirm = Modal.confirm;
@@ -23,6 +25,11 @@ class WarehouseM extends React.Component {
 
     componentDidMount() {
         this.requestList();
+    }
+    // 翻页
+    params = {
+        currentPage: 1,//当前页面
+        pageSize: 10,//每页大小
     }
 
     selectChange = (v) => {
@@ -68,8 +75,14 @@ class WarehouseM extends React.Component {
     }
 
     requestList = () => {
+        // 翻页
+        let params = {
+            start: this.params.currentPage - 1,
+            size: this.params.pageSize,
+        };
+        // 翻页
         // 获取表格内容
-        fetch(`${URL}/system/warehouses`, {
+        fetch(`${URL}/system/warehouses?${parseParams(params)}`, {
             method: 'GET',
             credentials: 'include'
         })
@@ -89,6 +102,14 @@ class WarehouseM extends React.Component {
                             i.remarks
                 });
                 this.setState({
+                    // 翻页
+                    pagination: pagination(data, (current) => {//改变页码
+                        this.params.currentPage = current;
+                        this.requestList();
+                    }, (size) => {//pageSize 变化的回调
+                        this.params.pageSize = size;
+                        this.requestList();
+                    }),
                     warehouseData: data.content
                 })
             })
@@ -156,6 +177,12 @@ class WarehouseM extends React.Component {
         }, {
             title: '所属部门',
             dataIndex: 'department',
+        }, {
+            title: '类型',
+            dataIndex: 'type',
+        }, {
+            title: '加盟商名称',
+            dataIndex: 'franchiseeName'
         }, {
             title: '联系人',
             dataIndex: 'contacts'
@@ -246,11 +273,8 @@ class WarehouseM extends React.Component {
                                 columns={columns}
                                 dataSource={this.state.warehouseData}
                                 style={{ marginTop: '10px' }}
-                                pagination={{
-                                    showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
-                                    showSizeChanger: true,
-                                    pageSizeOptions: ['10', '20', '50']
-                                }}
+                                // 翻页
+                                pagination={this.state.pagination}
                             />
                         </div>
                     </div>
