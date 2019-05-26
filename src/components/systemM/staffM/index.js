@@ -148,9 +148,6 @@ class StaffM extends React.Component {
             title: '状态',
             dataIndex: 'status',
         }, {
-            title: '备注',
-            dataIndex: 'remark',
-        }, {
             title: '操作',
             dataIndex: 'action',
             render: (text, record) => (

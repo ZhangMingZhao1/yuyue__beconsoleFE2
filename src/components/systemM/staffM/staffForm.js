@@ -49,7 +49,7 @@ const StaffForm = Form.create()(
                         .then(data => {
                             if (!data.code) {
                                 message.success(`${type === 'change' ? '修改' : '新增'}成功`);
-                                this.props.history.push('/app/systemM/staffM');
+                                this.props.history.push('/app/systemM/staffM');// 返回
                             } else {
                                 message.error(`${data.message}`);
                             }
@@ -90,7 +90,7 @@ const StaffForm = Form.create()(
                 { type: 2, label: '角色', name: 'role', width: '150px', value: this.state.roleValue },
                 { type: 3, label: '手机号', name: 'telephone', width: '250px', placeholder: '请输入手机号码' },
                 { type: 2, label: '所属机构', name: 'beInstitution', width: '300px', value: this.state.beInstitutionValue },
-                { type: 2, label: '所属部门', name: 'beDepartment', width: '300px', value: this.state.beDepartmentValue },
+                { type: 2, label: '所属部门', name: 'beDepartment', width: '150px', value: this.state.beDepartmentValue },
             ];
             return (
                 <Form onSubmit={this.onSubmit}><Row>
