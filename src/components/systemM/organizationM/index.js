@@ -1,247 +1,161 @@
 import React from 'react';
-import { Card, Layout, Tree, Input, Button, Modal } from 'antd';
+import { Card, Col, Row, message } from 'antd';
+import Url from '../../../api/config';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
-
-const { Sider, Content } = Layout;
-const TreeNode = Tree.TreeNode;
-const Search = Input.Search;
-const confirm = Modal.confirm;
-
-const x = 3;
-const y = 1;
-const gData = [];
-
-const generateData = (_level, _preKey, _tns) => {
-
-    const preKey = _preKey || '0';
-    const tns = _tns || gData;
-
-    const children = [];
-    for (let i = 0; i < x; i++) {
-        const key = `${preKey}-${i}`;
-        tns.push({ title: key, key });
-        if (i < y) {
-            children.push(key);
-        }
-    }
-    if (_level < 0) {
-        return tns;
-    }
-    const level = _level - 1;
-    children.forEach((key, index) => {
-        tns[index].children = [];
-        return generateData(level, key, tns[index].children);
-    });
-};
-generateData(1);
-
-const dataList = [];
-const generateList = (data) => {
-    for (let i = 0; i < data.length; i++) {
-        const node = data[i];
-        const key = node.key;
-        dataList.push({ key, title: key });
-        if (node.children) {
-            generateList(node.children, node.key);
-        }
-    }
-};
-generateList(gData);
-
-const getParentKey = (key, tree) => {
-    let parentKey;
-    for (let i = 0; i < tree.length; i++) {
-        const node = tree[i];
-        if (node.children) {
-            if (node.children.some(item => item.key === key)) {
-                parentKey = node.key;
-            } else if (getParentKey(key, node.children)) {
-                parentKey = getParentKey(key, node.children);
-            }
-        }
-    }
-    return parentKey;
-};
+import OrganizationCard from './organizationCard';
+import OrganizationTree from './organizationTree';
 
 class OrganizationM extends React.Component {
-
     state = {
-        expandedKeys: [],
-        searchValue: '',
-        autoExpandParent: true,
-        input1Value: '',
-        input2Value: '',
-        input3Value: ''
+        treeData: [{ key: "/", title: '/', children: [] }],//Tree数据,存在根节点key="/"
+        detailData: {},
     }
 
-    onExpand = (expandedKeys) => {
-        this.setState({
-            expandedKeys,
-            autoExpandParent: false,
-        });
+    componentDidMount() {
+        this.requestList();
     }
 
-    onChange = (e) => {
-        const value = e.target.value;
-        const expandedKeys = dataList.map((item) => {
-            if (item.key.indexOf(value) > -1) {
-                return getParentKey(item.key, gData);
+    /**
+     * 机构获取
+     */
+    requestList() {
+        fetch(`${Url}/system/institutions`, { credentials: 'include' })
+            .then((res) => res.json()).then(data => {
+                if (data.code && data.code === 1) {
+                    message.error(data.message)
+                } else {
+                    let tree = this.fomatData(data);
+                    this.setState({
+                        treeData: [{
+                            key: "/",
+                            title: '/',
+                            children: tree,
+                        }]
+                    });
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+    }
+
+    /**
+     * 增加机构
+     */
+    handleAdd = (id, name) => {
+        let reqBody = id ? {
+            beInstitution: { id: id },
+            name: name
+        } : { name: name };
+        console.log(reqBody);
+        return fetch(`${Url}/system/institutions`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json;'
+            },
+            credentials: 'include',
+            body: JSON.stringify(reqBody)
+        }).then((res) => res.json()).then(result => {
+            if (result.code === 0) {
+                message.success("新增成功 " + JSON.stringify(result.data))
+                this.requestList();//刷新页面
+            } else {
+                message.error(result.message)
             }
-            return null;
-        }).filter((item, i, self) => item && self.indexOf(item) === i);
-        this.setState({
-            expandedKeys,
-            searchValue: value,
-            autoExpandParent: true,
-        });
+        }).catch((err) => {
+            console.log(err)
+        })
     }
 
-    editBtnClick() {
-        confirm({
-            okText: '确认',
-            cancelText: '取消',
-            content: '确认是否需要编辑该机构信息',
-            onOk() {
-                console.log('OK');
+    /**
+     * 修改机构
+     */
+    handleModify = (data) => {
+        fetch(`${Url}/system/institutions`, {
+            method: 'PUT',
+            mode: 'cors',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json;'
             },
-            onCancel() {
-                console.log('Cancel');
-            },
-        });
+            body: JSON.stringify(data),
+        }).then((res) => res.json()).then(result => {
+            if (result.code === 0) {
+                message.success("更新成功")
+                this.requestList();//刷新页面
+            } else {
+                message.error(result.message)
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
     }
 
-    deleteBtnClick() {
-        confirm({
-            okText: '删除',
-            cancelText: '取消',
-            content: '是否删除该机构信息',
-            onOk() {
-                console.log('Delete');
-            },
-            onCancel() {
-                console.log('Cancel');
-            },
-        });
+    /**
+     * 删除机柜
+     */
+    handleDelete = (key) => {
+        fetch(`${Url}/system/institutions/${key}`, {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((res) => res.json()).then(result => {
+            if (result.code === 0) {
+                message.success("删除成功")
+                this.requestList();//刷新页面
+            } else {
+                message.error(result.message)
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
     }
 
-    handleInput2Change = (e) => {
+    //格式化目录数据
+    fomatData(data) {
+        return data.map(i => ({
+            title: i.name,
+            key: i.id.toString(),
+            children: i.beInstitutions.length > 0 ? this.fomatData(i.beInstitutions) : null
+        }))
+    }
+
+    //详情展示
+    onShowDetail = (data) => {
         this.setState({
-            input2Value: e.target.value
-        });
-    }
-
-    handleInput3Change = (e) => {
-        this.setState({
-            input3Value: e.target.value
-        });
-    }
-
-    handleInput1Change = (e) => {
-        this.setState({
-            input1Value: e.target.value
+            detailData: {
+                beInstitution: data.key,
+                id: data.children.key,
+                name: data.children.title
+            }
         });
     }
 
     render() {
-        const { searchValue, expandedKeys, autoExpandParent, input1Value, input2Value, input3Value } = this.state;
-        const loop = data => data.map((item) => {
-            const index = item.key.search(searchValue);
-            const beforeStr = item.key.substr(0, index);
-            const afterStr = item.key.substr(index + searchValue.length);
-            const title = index > -1 ? (
-                <span>
-                    {beforeStr}
-                    <span style={{ color: '#f50' }}>{searchValue}</span>
-                    {afterStr}
-                </span>
-            ) : <span>{item.key}</span>;
-            if (item.children) {
-                return (
-                    <TreeNode key={item.key} title={title}>
-                        {loop(item.children)}
-                    </TreeNode>
-                );
-            }
-            return <TreeNode key={item.key} title={title} />;
-        });
         return (
             <React.Fragment>
                 <BreadcrumbCustom first="系统管理" second="机构管理" />
                 <Card title="机构管理">
-                    <Layout>
-                        <Sider
-                            width="260"
-                            style={{ background: 'white' }}
-                        >
-                            <div>
-                                <Search
-                                    style={{ width: 250 }}
-                                    placeholder="输入关键词进行过滤"
-                                    onChange={this.onChange}
-                                />
-                                <Tree
-                                    onExpand={this.onExpand}
-                                    expandedKeys={expandedKeys}
-                                    autoExpandParent={autoExpandParent}
-                                >
-                                    {loop(gData)}
-                                </Tree>
-                            </div>
-                            <div style={{ marginLeft: '60%', marginTop: '24px' }}>
-                                <Button
-                                    type="primary"
-                                >
-                                    新增机构
-                                </Button>
-                            </div>
-                        </Sider>
-                        <Content style={{ background: 'white' }}>
-                            <Card
-                                title="维护机构"
-                                style={{}}
-                            >
-                                <div style={{ margin: '10px' }}>
-                                    机构代码：
-                                    <Input
-                                        // eslint-disable-next-line
-                                        disabled={true}
-                                        value={input1Value}
-                                        style={{ width: '200px' }}
-                                    // onChange={this.handleInput1Change}
-                                    />
-                                </div>
-                                <div style={{ margin: '10px' }}>
-                                    上级名称：
-                                    <Input
-                                        value={input2Value}
-                                        style={{ width: '200px' }}
-                                        onChange={this.handleInput2Change}
-                                    />
-                                </div>
-                                <div style={{ margin: '10px' }}>
-                                    机构名称：
-                                    <Input
-                                        value={input3Value}
-                                        style={{ width: '400px' }}
-                                        onChange={this.handleInput3Change}
-                                    />
-                                </div>
-                                <div style={{ marginLeft: '70%', marginTop: '24px' }}>
-                                    <Button
-                                        onClick={this.editBtnClick}
-                                    >
-                                        编辑
-                                    </Button>
-                                    <Button
-                                        type="danger"
-                                        onClick={this.deleteBtnClick}
-                                    >
-                                        删除
-                                    </Button>
-                                </div>
-                            </Card>
-                        </Content>
-                    </Layout>
+                    <Row>
+                        <Col span={8}>
+                            <OrganizationTree
+                                treeData={this.state.treeData}
+                                onAdd={this.handleAdd}//增加机构
+                                onShowDetail={this.onShowDetail}//详情显示
+                            />
+                        </Col>
+                        <Col span={1}></Col>
+                        <Col span={11}>
+                            <OrganizationCard
+                                dataSource={this.state.detailData}
+                                treeData={this.state.treeData}
+                                onDelete={this.handleDelete}
+                                onSave={this.handleModify}
+                            />
+                        </Col>
+                    </Row>
                 </Card>
             </React.Fragment >
         );
