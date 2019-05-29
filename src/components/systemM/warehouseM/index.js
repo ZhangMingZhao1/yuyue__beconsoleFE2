@@ -94,12 +94,14 @@ class WarehouseM extends React.Component {
                     i.updateTime = moment(i.updateTime).format('YYYY-MM-DD');
                     i.department = i.beDepartment ? i.beDepartment.name : null;
                     i.allRemarks = i.remarks;
-                    i.remarks =
-                        i.remarks.length > 30
+                    i.remarks = i.remarks ?
+                        (i.remarks.length > 30
                             ?
                             i.remarks.slice(0, 30) + '······'
                             :
-                            i.remarks
+                            i.remarks)
+                        :
+                        null
                 });
                 this.setState({
                     // 翻页
