@@ -98,19 +98,19 @@ class OrganizationM extends React.Component {
         fetch(`${Url}/system/institutions/${key}`, {
             method: 'DELETE',
             credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then((res) => res.json()).then(result => {
-            if (result.code === 0) {
-                message.success("删除成功")
-                this.requestList();//刷新页面
-            } else {
-                message.error(result.message)
-            }
-        }).catch((err) => {
-            console.log(err)
         })
+            .then((res) => res.json())
+            .then(result => {
+                if (result.code === 0) {
+                    message.success("删除成功")
+                    this.requestList();//刷新页面
+                } else {
+                    message.error(result.message)
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
 
     //格式化目录数据

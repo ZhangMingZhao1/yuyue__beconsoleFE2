@@ -158,7 +158,8 @@ export default {
       key: '/app/systemM/cabinetM', title: '系统管理/机柜管理',
       subs: [
         { key: '/app/systemM/cabinetM/addCabinet', title: '新增', component: 'AddCabinet' },
-        { key: '/app/systemM/cabinetM/changeCabinet/:id', title: '修改', component: 'ChangeCabinet' }
+        { key: '/app/systemM/cabinetM/changeCabinet/:id', title: '修改', component: 'ChangeCabinet' },
+        { key: '/app/systemM/cabinetM/cellM/:id', title: '格子管理', component: 'CellM' },
       ]
     },
     {

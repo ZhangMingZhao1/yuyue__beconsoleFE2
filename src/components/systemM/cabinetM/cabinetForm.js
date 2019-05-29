@@ -98,12 +98,12 @@ const CabinetForm = Form.create()(
                                     beWarehouse: {
                                         warehouseId: parseInt(values.beWarehouseId)
                                     },
-                                    caseAdress: values.caseAddress,
+                                    caseAddress: values.caseAddress,
                                     caseCode: values.caseCode,
                                     caseName: values.caseName,
                                     casePicture: null,// TODO
-                                    cellCount: parseInt(values.cellcount),
-                                    cellEmpty: parseInt(values.cellcount),// TOCAHNGE
+                                    cellCount: parseInt(values.cellCount),
+                                    cellEmpty: parseInt(values.cellCount),// TOCAHNGE
                                     deviceId: null,// TODO
                                     latitude: point.lat,
                                     longitude: point.lng,

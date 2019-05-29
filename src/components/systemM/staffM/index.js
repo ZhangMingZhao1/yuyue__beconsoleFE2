@@ -3,6 +3,8 @@ import { Card, Button, Input, Select, Form, Table, Divider, Modal } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import { Link } from 'react-router-dom';
 import URL from '../../../api/config';
+import pagination from '../../pagination';// 翻页
+import { parseParams } from '../../../axios/tools';// 翻页
 
 const Option = Select.Option;
 const confirm = Modal.confirm;
@@ -83,6 +85,11 @@ class StaffM extends React.Component {
     componentDidMount() {
         this.requestList();
     }
+    // 翻页
+    params = {
+        currentPage: 1,//当前页面
+        pageSize: 10,//每页大小
+    }
 
     showConfirm = () => {
         confirm({
@@ -100,7 +107,13 @@ class StaffM extends React.Component {
         this.setState({ tableData: data })
     }
     requestList = () => {
-        const url = `${URL}/system/users`;
+        const url = `${URL}/system/users?${parseParams(params)}`;
+        // 翻页
+        let params = {
+            start: this.params.currentPage - 1,
+            size: this.params.pageSize,
+        };
+        // 翻页
         fetch(url, {
             method: 'GET',
             credentials: 'include', // 请求带上cookies，是每次请求保持会话一直
@@ -116,6 +129,14 @@ class StaffM extends React.Component {
                     item.status = item.status ? '正常' : '停用'
                 });
                 this.setState({
+                    // 翻页
+                    pagination: pagination(data, (current) => {//改变页码
+                        this.params.currentPage = current;
+                        this.requestList();
+                    }, (size) => {//pageSize 变化的回调
+                        this.params.pageSize = size;
+                        this.requestList();
+                    }),
                     tableData: data.content
                 });
             })
@@ -178,11 +199,8 @@ class StaffM extends React.Component {
                     <Table className="infoC-table"
                         columns={columns}
                         dataSource={tableData}
-                        pagination={{
-                            showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
-                            showSizeChanger: true,
-                            pageSizeOptions: ['10', '20', '50']
-                        }}
+                        // 翻页
+                        pagination={this.state.pagination}
                         bordered
                     />
                 </Card>

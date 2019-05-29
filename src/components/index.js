@@ -43,6 +43,7 @@ import OrganizationM from './systemM/organizationM/index.js';
 import CabinetM from './systemM/cabinetM/index.js';
 import AddCabinet from './systemM/cabinetM/addCabinet.js';
 import ChangeCabinet from './systemM/cabinetM/changeCabinet.js';
+import CellM from './systemM/cabinetM/cellM.js';
 import WarehouseM from './systemM/warehouseM/index.js';
 import AddWarehouse from './systemM/warehouseM/addWarehouse.js';
 import ChangeWarehouse from './systemM/warehouseM/changeWarehouse.js';
@@ -90,13 +91,13 @@ export default {
     BorrowO, DonateO, CheckO, BorrowH,
     CommentM, SensitiveWordsM, DynamicCmnt,
 
-    OrganizationM, CabinetM, AddCabinet, ChangeCabinet, WarehouseM, AddWarehouse, ChangeWarehouse, StaffM, AddStaff, ChangeStaff,
+    OrganizationM, CabinetM, AddCabinet, ChangeCabinet, CellM, WarehouseM, AddWarehouse, ChangeWarehouse, StaffM, AddStaff, ChangeStaff,
     StoreQuery, InStoreData, InStoreInfo, OutStoreData, OutStoreInfo, MvStoreData, MvStoreInfo,
     AllocateInCase, AllocateInCaseG, AllocateInCaseS, AllocateInCaseR, AllocateInCaseP, AllocateInCaseC, AllocateInCaseF,
     AllocateOutCase, AllocateOutCaseG, AllocateOutCaseS, AllocateOutCaseR, AllocateOutCaseP, AllocateOutCaseC, AllocateOutCaseF,
-    roleAuth,DataAuth,
+    roleAuth, DataAuth,
 
 
-    FranRank,FranInfo,FranInfoDetail,FranModify,AddFranInfo,AddFranRank
+    FranRank, FranInfo, FranInfoDetail, FranModify, AddFranInfo, AddFranRank
 
 }

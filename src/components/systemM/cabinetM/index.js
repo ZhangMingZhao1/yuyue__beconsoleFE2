@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Button, Input, Select, Form, Table, Divider, Modal } from 'antd';
+import { Card, Button, Input, Select, Form, Table, Divider, Modal, message } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import URL from '../../../api/config';
 import { Link } from 'react-router-dom';
@@ -54,19 +54,6 @@ class StaffM extends React.Component {
         pageSize: 10,//每页大小
     }
 
-    showConfirm = () => {
-        confirm({
-            title: 'Want to delete these items?',
-            content: 'some descriptions',
-            onOk() {
-                console.log('OK');
-            },
-            onCancel() {
-                console.log('Cancel');
-            },
-        });
-    }
-    // TO CHANGE 缺少运维联系方式、操作员、修改日期字段
     requestList = () => {
         // 翻页
         let params = {
@@ -107,6 +94,35 @@ class StaffM extends React.Component {
             });
     }
 
+    showConfirm(id) {
+        confirm({
+            title: '确定要删除此条仓库信息吗？',
+            content: '点击确定删除此仓库信息',
+            okText: '确定',
+            cancelText: '取消',
+            onOk: () => {
+                // console.log('OK');
+                fetch(`${URL}/system/bookcaseinfos/${id}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (!data.code) {
+                            this.requestList();// 更新页面
+                            message.success('删除成功');
+                        } else {
+                            message.error('删除失败');
+                        }
+                    })
+                    .catch(err => console.log(err));
+            },
+            onCancel: () => {
+                // console.log('Cancel');
+            },
+        });
+    }
+
     render() {
 
         const columns = [{
@@ -144,10 +160,11 @@ class StaffM extends React.Component {
                     <Link to={`${this.props.match.url}/changeCabinet/${record.caseId}`}>修改</Link>
                     <Divider type="vertical" />
                     {/* eslint-disable-next-line */}
-                    <a href="javascript:;" onClick={this.showConfirm}>删除</a>
+                    <a href="javascript:;" onClick={() => this.showConfirm(record.caseId)}>删除</a>
                     <Divider type="vertical" />
                     {/* eslint-disable-next-line */}
-                    <a href="javascript:;">格子管理</a>
+                    {/* <a href="javascript:;">格子管理</a> */}
+                    <Link to={`${this.props.match.url}/cellM/${record.caseId}`}>格子管理</Link>
                 </span>
             ),
         }];
