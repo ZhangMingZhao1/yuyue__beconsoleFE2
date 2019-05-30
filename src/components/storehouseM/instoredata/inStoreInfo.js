@@ -3,6 +3,7 @@ import { Card, Form, Button, Modal } from 'antd';
 import { getFormItem } from '../../baseFormItem';
 import "./index.less"
 import InStoreTable from './inStoreTable';
+import { connect } from 'react-redux';
 
 const confirm = Modal.confirm;
 const InStoreForm = Form.create()(
@@ -13,7 +14,7 @@ const InStoreForm = Form.create()(
                 { type: 'INPUT', label: '订单编号', name: 'orderCode', disabled: true },
                 { type: 'SELECT', label: '入库仓库', name: 'store', width: '100px', list: [] },
                 { type: 'SELECT', label: '入库类型', name: 'inType', width: '100px', list: [] },
-                { type: 'INPUT', label: '制单人', disabled: true, name: 'creator', width: '100px', list: [] },
+                { type: 'INPUT', label: '制单人', disabled: true, name: 'creator', width: '100px', initialValue: this.props.userName },
                 { type: 'INPUT', label: '运费', name: 'freight', width: '100px', extra: '元' },
             ];
             if (type !== 'add') {
@@ -31,7 +32,10 @@ const InStoreForm = Form.create()(
 );
 
 class InStoreInfo extends React.Component {
-    state = { data: [] }
+    state = { 
+        data: [],
+        userName: this.props.user && this.props.user.data.userName,
+    }
 
     handleSave = () => {
         this.table.getTableValues((v) => { console.log(v) })
@@ -122,7 +126,7 @@ class InStoreInfo extends React.Component {
                 ))
             }
         </div>
-
+        console.log(this.props.user)
         return (
             <div className="" >
                 <Card
@@ -133,6 +137,7 @@ class InStoreInfo extends React.Component {
                     <InStoreForm
                         type={type}
                         wrappedComponentRef={this.outStoreFormRef}
+                        userName={this.props.user && this.props.user.data.userName}
                     /><br />
                     <InStoreTable
                         type={type}
@@ -145,4 +150,8 @@ class InStoreInfo extends React.Component {
     }
 }
 
-export default InStoreInfo;
+const mapStateToPorps = state => ({
+    user: state.getIn(['login', 'user'])
+});
+
+export default connect(mapStateToPorps)(InStoreInfo);
