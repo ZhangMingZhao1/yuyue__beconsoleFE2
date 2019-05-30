@@ -80,7 +80,7 @@ class ExpressDet extends React.Component {
         const option = this.state.option;
         return (
             <Modal
-                title="快递"
+                title="详情"
                 visible={this.props.visible}
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
@@ -116,7 +116,8 @@ class ExpressDet extends React.Component {
                     <Col span={20}>
                         <span>{moment(this.props.initValue.createTime).format("YYYY-MM-DD HH:MM:SS")}</span>
                     </Col>
-                </Row><Row>
+                </Row>
+                <Row>
                     <Col span={4}>
                         <span>会员账号：</span>
                     </Col>
@@ -263,8 +264,12 @@ class CabinetDet extends React.Component {
         this.props.handleCancel(e);
     }
 
+    vipNoReplace = (no) => {
+        return no.substr(0, 3) + '****' + no.substr(7, 11);
+    }
+
     render() {
-        console.log(this.props.initValue)
+        // console.log(this.props.initValue)
         const option = this.state.option;
         return (
             <Modal
@@ -303,6 +308,22 @@ class CabinetDet extends React.Component {
                     </Col>
                     <Col span={20}>
                         <span>{moment(this.props.initValue.createTime).format("YYYY-MM-DD HH:MM:SS")}</span>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={4}>
+                        <span>会员账号：</span>
+                    </Col>
+                    <Col span={20}>
+                        <span>{this.vipNoReplace(this.props.initValue.vipNo)}</span>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={4}>
+                        <span>订单ID：</span>
+                    </Col>
+                    <Col span={20}>
+                        <span>{moment(this.props.initValue.expireTime).format("YYYY-MM-DD HH:MM:SS")}</span>
                     </Col>
                 </Row>
                 <Row>
