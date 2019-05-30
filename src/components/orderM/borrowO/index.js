@@ -132,46 +132,97 @@ class TableOption extends React.Component {
 
         const { orderStatusId, orderId, deliverType } = this.props;
         const { visible, optId } = this.state;
+        // action=[
+        //     详情：1，
+        //     发书柜：2，
+        //     重新审核：3，
+        //     关闭订单：4，
+        //     修改金额：5，
+        //     接单：6，
+        //     上柜：7
+        // ]
         const optType = [
+            // 书柜1
             [
+                null,
+                // 待发货1
                 [
                     { type: 1, name: '详情', next: true },
                     { type: 2, name: '发书柜', next: true },
                     { type: 4, name: '关闭订单' }
                 ],
+                // 待出库2
                 [
                     { type: 1, name: '详情', next: true },
+                    { type: 6, name: '接单', next: true },
                     { type: 4, name: '关闭订单' },
                 ],
-                [
-                    { type: 1, name: '详情' },
-                ],
-                [
-                    { type: 1, name: '详情' },
-                ],
+                // 配送中3
                 [
                     { type: 1, name: '详情', next: true },
-                    { type: 3, name: '重新审核' },
+                    { type: 7, name: '上柜' }
+                ],
+                // 待收书4
+                [
+                    { type: 1, name: '详情' },
+                ],
+                // 待归还5
+                [
+                    { type: 1, name: '详情' },
+                ],
+                // 审核中6
+                [
+                    { type: 1, name: '详情' }
+                ],
+                // 审核通过7
+                [
+                    { type: 1, name: '详情' }
+                ],
+                // 审核未通过8
+                [
+                    { type: 1, name: '详情', next: true },
+                    { type: 3, name: '重新审核' }
+                ],
+                // 逾期欠费9
+                [
+                    { type: 1, name: '详情', next: true },
+                    { type: 5, name: '修改金额' }
                 ]
             ],
-            [
+            // 快递2
+            [   // 待支付0
+                [
+                    { type: 1, name: '详情' }
+                ],
+                // 待发货1
                 [
                     { type: 1, name: '详情', next: true },
                     { type: 2, name: '发快递' },
                 ],
-                [
-                    { type: 1, name: '详情', next: true },
-                    { type: 4, name: '关闭订单' },
-                ],
-                [
-                    { type: 1, name: '详情' },
-                ],
+                null,
+                null,
+                null,
+                // 待归还5
                 [
                     { type: 1, name: '详情' },
                 ],
+                // 审核中6
+                [
+                    { type: 1, name: '详情' },
+                ],
+                // 审核通过7
+                [
+                    { type: 1, name: '详情' },
+                ],
+                // 审核未通过8
                 [
                     { type: 1, name: '详情', next: true },
-                    { type: 1, name: '重新审核' },
+                    { type: 3, name: '重新审核' },
+                ],
+                // 逾期欠费9
+                [
+                    { type: 1, name: '详情', next: true },
+                    { type: 5, name: '修改金额' }
                 ]
             ],
         ];

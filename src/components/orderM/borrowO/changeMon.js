@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal } from 'antd';
 
-class ToExpress extends React.Component {
+class ChangeMon extends React.Component {
 
     handleOk = (e) => {
         this.props.handleOk(e);
@@ -15,15 +15,15 @@ class ToExpress extends React.Component {
         console.log(this.props.orderId);
         return (
             <Modal
-                title="发快递"
+                title="修改金额"
                 visible={this.props.visible}
                 onOk={this.handleOk}
-                onCancel={this.handleCancel}
+                onCancel={this.andleCancel}
             >
-                发快递
+                修改金额
             </Modal>
         );
     }
 }
 
-export default ToExpress;
+export default ChangeMon;
