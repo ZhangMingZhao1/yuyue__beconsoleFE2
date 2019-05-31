@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, Form, Button, Divider, Table } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import { getFormItem } from '../../baseFormItem';
+import Req from '../request';
 import "./index.less"
 import Link from 'react-router-dom/Link';
 import Url from '../../../api/config';
@@ -30,6 +31,10 @@ export const typeConfig = {
 
 const InStoreSearch = Form.create()(
     class extends React.Component {
+        state = {}
+        componentDidMount() {
+            Req.getWareHouses().then(data=>{this.setState({warehouseList: data})})
+        }
         handleSubmit = (e) => {
             e.preventDefault();
             let fieldsValue = this.props.form.getFieldsValue();
@@ -39,7 +44,7 @@ const InStoreSearch = Form.create()(
         render() {
             const { form } = this.props;
             const formList = [
-                { type: 'SELECT', label: '仓库', name: 'store', width: '100px', list: [] },
+                { type: 'SELECT', label: '仓库', name: 'store', width: '100px', list: this.state.warehouseList },
                 { type: 'INPUT', label: '制单人', name: 'creator' },
                 { type: 'INPUT', label: '审核人', name: 'checkman' },
                 { type: 'SELECT', label: '订单类型', name: 'orderType', width: '100px', list: [] },
@@ -84,6 +89,7 @@ class InStoreData extends React.Component {
         let params = {
             start: this.params.currentPage - 1,
             size: this.params.pageSize,
+            recordType: 0,
             ...this.params.search,
         };
         fetch(`${Url}/warehouse/storagerecords?${parseParams(params)}`, { credentials: 'include' })
@@ -126,7 +132,7 @@ class InStoreData extends React.Component {
             { title: '审核人', dataIndex: 'user2Name' },
             { title: '审核时间', dataIndex: 'reviewTime', render: (reviewTime) => reviewTime && reviewTime.format("YYYY-MM-DD HH:mm:ss") },
             { title: '运费', dataIndex: 'fee' },
-            { title: '订单状态', dataIndex: 'status', render: (status) => statusConfig[status]},
+            { title: '订单状态', dataIndex: 'status', render: (status) => statusConfig[status] },
             {
                 title: '操作', dataIndex: 'action',
                 render: (text, record) => {

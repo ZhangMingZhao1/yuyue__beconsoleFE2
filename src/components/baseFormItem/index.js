@@ -7,9 +7,24 @@ export const getOptionList = (data) => {
         return [];
     }
     let options = [];
-    data.map((item) => {
-        options.push(<Option value={item.id} key={item.id}>{item.name}</Option>)
-    })
+    if (Array.isArray(data)) {//[{id:"...", name: "..."}]
+        data.map((item) => {
+            options.push(<Option value={item.id} key={item.id}>{item.name}</Option>)
+        })
+    } else {//键值对形式
+        for (let v in data) {
+            options.push(<Option value={v} key={v}>{data[v]}</Option>)
+        }
+    }
+    // data.map((item) => {
+    //     if ('id' in item && 'name' in item) {//{id:"...", name: "..."}
+    //         options.push(<Option value={item.id} key={item.id}>{item.name}</Option>)
+    //     } else {//键值对形式
+    //         for (let v in item) {
+    //             options.push(<Option value={v} key={v}>{item[v]}</Option>)
+    //         }
+    //     }
+    // })
     return options;
 }
 
@@ -67,6 +82,7 @@ export const getFormItem = (form, formList) => {
                                         disabled={disabled}
                                         style={{ width: width }}
                                         placeholder={placeholder}
+                                        onChange={item.onChange}
                                     >
                                         {getOptionList(item.list)}
                                     </Select>
