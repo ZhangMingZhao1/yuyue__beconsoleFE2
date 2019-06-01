@@ -114,11 +114,11 @@ class StoreQuery extends React.Component {
             { title: '作者', dataIndex: 'author' },
             { title: '电子标签', dataIndex: 'rfid' },
             { title: 'ISBN', dataIndex: 'isbn' },
-            { title: '图书分类', dataIndex: 'category' },
+            { title: '图书分类', dataIndex: 'categoryName' },
             { title: '状态', dataIndex: 'status', render: (status) => statusConfig[status] },
             { title: '成本价', dataIndex: 'price' },
-            { title: '仓库/柜子', dataIndex: 'storeORcase' },
-            { title: '货位/格子', dataIndex: 'location' },
+            { title: '仓库/柜子', dataIndex: 'caseName' },
+            { title: '货位/格子', dataIndex: 'cellId' },
         ];
 
         return (
