@@ -19,7 +19,7 @@ const StaffForm = Form.create()(
         }
 
         onSubmit = (e) => {
-            const { type } = this.props;
+            const { type, initialValues } = this.props;
             e.preventDefault();
             this.props.form.validateFields((err, values) => {
                 if (!err) {
@@ -39,7 +39,7 @@ const StaffForm = Form.create()(
                                 id: parseInt(values.beInstitution)
                             },
                             roleType: parseInt(values.role),
-                            password: type === 'change' ? values.password : null,
+                            password: type === 'change' ? initialValues['password'] : values.password,
                             status: parseInt(values.status),
                             telephone: values.telephone,
                             userName: values.userName
