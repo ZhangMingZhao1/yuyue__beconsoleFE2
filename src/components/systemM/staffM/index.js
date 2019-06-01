@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Button, Input, Select, Form, Table, Divider, Modal } from 'antd';
+import { Card, Button, Input, Select, Form, Table, Divider, Modal, message } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import { Link } from 'react-router-dom';
 import URL from '../../../api/config';
@@ -91,28 +91,76 @@ class StaffM extends React.Component {
         pageSize: 10,//每页大小
     }
 
-    showConfirm = () => {
+    showConfirm = (uid) => {
         confirm({
-            title: 'Want to delete these items?',
-            content: 'some descriptions',
-            onOk() {
-                console.log('OK');
+            title: '确定重置密码？',
+            content: '点击确定重置密码为123456',
+            onOk: () => {
+                fetch(`${URL}/system/users/${uid}`, {
+                    method: 'GET',
+                    credentials: 'include'
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data);
+                        fetch(`${URL}/system/users`, {
+                            method: 'PUT',
+                            credentials: 'include',
+                            headers: {
+                                'Accept': 'application/json', 'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                uid: uid,
+                                beDepartment: {
+                                    id: data.beDepartment.id
+                                },
+                                beInstitution: {
+                                    id: data.beInstitution.id
+                                },
+                                roleType: data.roleType,
+                                password: '123456',
+                                status: data.status,
+                                telephone: data.telephone,
+                                userName: data.userName
+                            })
+                        })
+                            .then(res => res.json())
+                            .then(data => {
+                                if (!data.code) {
+                                    message.success('重置成功');
+                                } else {
+                                    message.error(data.massage);
+                                }
+                            })
+                            .catch(err => {
+                                console.log(err);
+                            })
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
             },
-            onCancel() {
-                console.log('Cancel');
+            onCancel: () => {
+
             },
         });
     }
+
+    deleteConfirm = (uid) => {
+
+    }
+
     tableFatherDataChange = (data) => {
         this.setState({ tableData: data })
     }
+
     requestList = () => {
-        const url = `${URL}/system/users?${parseParams(params)}`;
         // 翻页
         let params = {
             start: this.params.currentPage - 1,
             size: this.params.pageSize,
         };
+        const url = `${URL}/system/users?${parseParams(params)}`;
         // 翻页
         fetch(url, {
             method: 'GET',
@@ -174,12 +222,12 @@ class StaffM extends React.Component {
             render: (text, record) => (
                 <span>
                     {/* eslint-disable-next-line */}
-                    <a href="javascript:;" onClick={this.showConfirm}>重置密码</a>
+                    <a href="javascript:;" onClick={() => this.showConfirm(record.uid)}>重置密码</a>
                     <Divider type="vertical" />
                     <Link to={`${this.props.match.url}/changeStaff/${record.uid}`}>修改</Link>
                     <Divider type="vertical" />
                     {/* eslint-disable-next-line */}
-                    <a href="javascript:;">删除</a>
+                    <a href="javascript:;" onClick={() => this.deleteConfirm(record.uid)}>删除</a>
                 </span>
             ),
         }];
