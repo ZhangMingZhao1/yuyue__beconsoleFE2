@@ -2,18 +2,24 @@ import React from 'react';
 import { Card, Form, Button, Modal } from 'antd';
 import { getFormItem } from '../../baseFormItem';
 import "./index.less"
+import Req from '../request';
 import InStoreTable from './inStoreTable';
 import { connect } from 'react-redux';
+import { typeConfig } from '.';
 
 const confirm = Modal.confirm;
 const InStoreForm = Form.create()(
     class extends React.Component {
+        state = {}
+        componentDidMount() {
+            Req.getWareHouses().then(data => { this.setState({ warehouseList: data }) })
+        }
         render() {
             const { form, type } = this.props;
             const formList = [
                 { type: 'INPUT', label: '订单编号', name: 'orderCode', disabled: true },
-                { type: 'SELECT', label: '入库仓库', name: 'store', width: '100px', list: [] },
-                { type: 'SELECT', label: '入库类型', name: 'inType', width: '100px', list: [] },
+                { type: 'SELECT', label: '入库仓库', name: 'store', width: '100px', list: this.state.warehouseList, onChange: this.props.onChange },
+                { type: 'SELECT', label: '入库类型', name: 'inType', width: '100px', list: typeConfig[0] },
                 { type: 'INPUT', label: '制单人', disabled: true, name: 'creator', width: '100px', initialValue: this.props.userName },
                 { type: 'INPUT', label: '运费', name: 'freight', width: '100px', extra: '元' },
             ];
@@ -32,7 +38,7 @@ const InStoreForm = Form.create()(
 );
 
 class InStoreInfo extends React.Component {
-    state = { 
+    state = {
         data: [],
         userName: this.props.user && this.props.user.data.userName,
     }
@@ -89,6 +95,11 @@ class InStoreInfo extends React.Component {
         this.outStore_formRef = formRef;
     }
 
+    //改变仓库
+    onChange = (v) => {
+        Req.getCaseInfos(v).then(v => { this.setState({ caseList: v }) });
+    }
+
     render() {
         const type = this.props.match.params.type;
 
@@ -126,7 +137,6 @@ class InStoreInfo extends React.Component {
                 ))
             }
         </div>
-        console.log(this.props.user)
         return (
             <div className="" >
                 <Card
@@ -138,11 +148,13 @@ class InStoreInfo extends React.Component {
                         type={type}
                         wrappedComponentRef={this.outStoreFormRef}
                         userName={this.props.user && this.props.user.data.userName}
+                        onChange={this.onChange}//改变仓库
                     /><br />
                     <InStoreTable
                         type={type}
                         ref={(ref) => { this.table = ref }}
                         dataSource={this.state.data}
+                        caseList={this.state.caseList}
                     />
                 </Card>
             </div>

@@ -55,7 +55,19 @@ class EditableCell extends React.Component {
 class InStoreTable extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { editingKey: '',type: this.props.type, data: this.props.dataSource, count: 0 };
+        this.state = {
+            editingKey: '',
+            type: this.props.type,
+            data: this.props.dataSource,
+            count: 0,
+            inputItem: {
+                'barCode': { type: 'INPUT', rules: [{ required: true, message: 'null' }] },
+                'isbn': { type: 'INPUT', rules: [{ required: true, message: 'null' }] },
+                'eLabel': { type: 'INPUT', rules: [{ required: true, message: 'null' }] },
+                'cost': { type: 'INPUT', rules: [{ required: true, message: 'null' }] },
+                'location': { type: 'SELECT', list: this.props.caseList },
+            }
+        };
         this.form = {};//每行数据对应的form
         this.columns = [
             { title: '序号', dataIndex: 'index', width: '16.5%', render: (text, record, index) => index },//key!=index
@@ -81,20 +93,24 @@ class InStoreTable extends React.Component {
                 },
             },
         ];
-        if(this.state.type!=='add'){
+        if (this.state.type !== 'add') {
             //删除'操作'栏
-            this.columns.splice(-1,1);
+            this.columns.splice(-1, 1);
             //置为不可编辑
-            this.columns.forEach(i=>{i.editable=false});
-        }
-        this.inputItem = {
-            'barCode': { type: 'INPUT', rules: [{ required: true, message: 'null' }] },
-            'isbn': { type: 'INPUT', rules: [{ required: true, message: 'null' }] },
-            'eLabel': { type: 'INPUT', rules: [{ required: true, message: 'null' }] },
-            'cost': { type: 'INPUT', rules: [{ required: true, message: 'null' }] },
-            'location': { type: 'SELECT', list: [] },
+            this.columns.forEach(i => { i.editable = false });
         }
     }
+
+    componentWillReceiveProps(v) {
+        //改变货位SELECT下拉框选项
+        this.setState({
+            inputItem: {
+                ...this.state.inputItem,
+                'location': { type: 'SELECT', list: v.caseList }
+            },
+        })
+    }
+
     isEditing = record => record.key == this.state.editingKey;
 
     //获得表格的值
@@ -133,7 +149,7 @@ class InStoreTable extends React.Component {
                     this.setState({ data: newData, editingKey: '' }, () => { callback(this.state.data) });
                 }
             });
-        }else{
+        } else {
             callback(this.state.data);
         }
     }
@@ -181,7 +197,7 @@ class InStoreTable extends React.Component {
                 ...col,
                 onCell: record => ({
                     record,
-                    inputItem: this.inputItem[col.dataIndex],
+                    inputItem: this.state.inputItem[col.dataIndex],
                     dataIndex: col.dataIndex,
                     editing: this.isEditing(record),
                 }),
@@ -190,7 +206,7 @@ class InStoreTable extends React.Component {
 
         return (
             <div style={{ position: 'relative' }}>
-                <div style={{display:`${this.state.type=='add'? 'inline':'none'}`}}>
+                <div style={{ display: `${this.state.type == 'add' ? 'inline' : 'none'}` }}>
                     <Button type="primary" onClick={() => this.handleAdd()}>新增一条记录</Button>
                     <Button type="primary" >批量导入</Button>
                 </div><br />
@@ -214,15 +230,15 @@ class InStoreTable extends React.Component {
                     }}
                 />
                 {
-                    this.state.type=='add'?
-                    <p style={{ position: 'absolute', bottom: 0, marginBottom: 28 }}>合计：{this.state.data.length} 本书</p>:
-                    <p style={{textAlign: 'justify'}}>
-                        <font style={{float:'left'}}>合计：{this.state.data.length} 本书</font>
-                        {this.state.type=='detail'? <font style={{float:'right'}}>审核时间：2018-12-11  08:12:24</font>:''}
-                        <font style={{float:'right',marginRight: 20}}>审核人：李四</font>
-                    </p>
+                    this.state.type == 'add' ?
+                        <p style={{ position: 'absolute', bottom: 0, marginBottom: 28 }}>合计：{this.state.data.length} 本书</p> :
+                        <p style={{ textAlign: 'justify' }}>
+                            <font style={{ float: 'left' }}>合计：{this.state.data.length} 本书</font>
+                            {this.state.type == 'detail' ? <font style={{ float: 'right' }}>审核时间：2018-12-11  08:12:24</font> : ''}
+                            <font style={{ float: 'right', marginRight: 20 }}>审核人：李四</font>
+                        </p>
                 }
-                
+
             </div>
         )
     }
