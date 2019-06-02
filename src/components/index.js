@@ -79,6 +79,7 @@ import FranModify from './franchisee/franmodify';
 import AddFranInfo from './franchisee/addfraninfo';
 import AddFranRank from './franchisee/addfranrank';
 import DataAuth from './systemM/dataAuth';
+import LogOperation from './statisticsT/logoperation';
 
 export default {
     ThemeControl, ThemeContent, BannerControl, AdvertiseM,
@@ -96,7 +97,7 @@ export default {
     AllocateInCase, AllocateInCaseG, AllocateInCaseS, AllocateInCaseR, AllocateInCaseP, AllocateInCaseC, AllocateInCaseF,
     AllocateOutCase, AllocateOutCaseG, AllocateOutCaseS, AllocateOutCaseR, AllocateOutCaseP, AllocateOutCaseC, AllocateOutCaseF,
     roleAuth, DataAuth,
-
+    LogOperation,
 
     FranRank, FranInfo, FranInfoDetail, FranModify, AddFranInfo, AddFranRank
 

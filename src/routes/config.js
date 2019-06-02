@@ -75,6 +75,7 @@ export default {
     {
       key: '/app/statisticsT', title: '统计报表', icon: 'number',
       subs: [
+        { key: '/app/statisticsT/logoperation', title: '操作日志', component: 'LogOperation' },
         { key: '/app/statisticsT/member', title: '会员统计表', component: 'BannerControl' },
         { key: '/app/statisticsT/borrow', title: '借阅统计表', component: 'BannerControl' },
         { key: '/app/statisticsT/donate', title: '捐书统计表', component: 'BannerControl' },
