@@ -22,6 +22,7 @@ const StaffForm = Form.create()(
             const { type, initialValues } = this.props;
             e.preventDefault();
             this.props.form.validateFields((err, values) => {
+                // message.error("你的权限不足，联系系统管理员")
                 if (!err) {
                     console.log('Received values of form: ', values);
                     fetch(`${URL}/system/users`, {

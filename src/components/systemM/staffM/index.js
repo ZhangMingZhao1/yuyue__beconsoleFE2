@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 import URL from '../../../api/config';
 import pagination from '../../pagination';// 翻页
 import { parseParams } from '../../../axios/tools';// 翻页
-
+import { connect } from 'react-redux';
+import NotFound from  '../../pages/NotFound';
 const Option = Select.Option;
 const confirm = Modal.confirm;
 const StaffSearchForm = Form.create()(
@@ -233,28 +234,45 @@ class StaffM extends React.Component {
         }];
 
         const { tableData } = this.state;
-
-        return (
-            <React.Fragment>
-                <BreadcrumbCustom first="系统管理" second="员工管理" />
-                <Card
-                    title="员工管理"
-                >
-                    <StaffSearchForm tableChildDataChange={this.tableFatherDataChange} /><br />
-                    <div style={{ marginBottom: '10px' }}>
-                        <Button type="primary"><Link to={`${this.props.match.url}/addStaff`}>新增</Link></Button>
-                    </div>
-                    <Table className="infoC-table"
-                        columns={columns}
-                        dataSource={tableData}
-                        // 翻页
-                        pagination={this.state.pagination}
-                        bordered
-                    />
-                </Card>
-            </React.Fragment>
-        );
+        const {user} = this.props;
+        const per = user.data.roleType;
+        console.log('per',per);
+        console.log(user);
+        if(per==10 || per==6) {
+            return (
+                
+                <React.Fragment>
+                    <BreadcrumbCustom first="系统管理" second="员工管理" />
+                    <Card
+                        title="员工管理"
+                    >
+                        <StaffSearchForm tableChildDataChange={this.tableFatherDataChange} /><br />
+                        <div style={{ marginBottom: '10px' }}>
+                            <Button type="primary"><Link to={`${this.props.match.url}/addStaff`}>新增</Link></Button>
+                        </div>
+                        <Table className="infoC-table"
+                            columns={columns}
+                            dataSource={tableData}
+                            // 翻页
+                            pagination={this.state.pagination}
+                            bordered
+                        />
+                    </Card>
+                </React.Fragment>
+            );
+        }else {
+            return  <NotFound/ > 
+        }
     };
 }
-
-export default StaffM;
+const mapStateToPorps = state => ({
+    user: state.getIn(['login', 'user'])
+});
+// const mapDispatchToProps = dispatch => ({
+//     login(userNameElem, passwordElem) {
+//         console.log('111111',userNameElem, passwordElem);
+//         dispatch(actionCreators.login(userNameElem, passwordElem));
+//     }
+// });
+export default connect(mapStateToPorps, null)(StaffM);
+// export default connect(mapStateToPorps, mapDispatchToProps)(Form.create()(Login));
