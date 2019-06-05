@@ -32,7 +32,7 @@ const StaffForm = Form.create()(
                         },
                         credentials: 'include',
                         body: JSON.stringify({
-                            uid: this.props.initialValues ? this.props.initialValues.uid : null,
+                            uid: initialValues ? initialValues.uid : null,
                             beDepartment: {
                                 id: parseInt(values.beDepartment)
                             },
@@ -48,7 +48,9 @@ const StaffForm = Form.create()(
                     })
                         .then(res => res.json())
                         .then(data => {
-                            if (!data.code) {
+                            if (data.codeguess === 0) {
+                                message.error(`${data.message}`);
+                            } else if (!data.code) {
                                 message.success(`${type === 'change' ? '修改' : '新增'}成功`);
                                 this.props.history.push('/app/systemM/staffM');// 返回
                             } else {
