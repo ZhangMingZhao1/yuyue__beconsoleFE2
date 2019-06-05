@@ -97,7 +97,7 @@ class StaffM extends React.Component {
     showConfirm(id) {
         confirm({
             title: '确定要删除此条仓库信息吗？',
-            content: '点击确定删除此仓库信息',
+            content: '点击确定删除此条仓库信息',
             okText: '确定',
             cancelText: '取消',
             onOk: () => {

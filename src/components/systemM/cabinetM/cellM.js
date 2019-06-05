@@ -93,6 +93,7 @@ class CellM extends React.Component {
                         this.params.pageSize = size;
                         this.requestList();
                     }),
+                    data: data.content
                 })
             })
             .catch(err => {
@@ -101,6 +102,12 @@ class CellM extends React.Component {
     }
 
     render() {
+
+        const { data } = this.state;
+
+        // const status = [
+
+        // ]
 
         const columns = [{
             dataIndex: 'icon'
@@ -118,7 +125,7 @@ class CellM extends React.Component {
             dataIndex: 'orderId'
         }, {
             title: '上柜时间',
-            dataIndex: 'toCaseTime'
+            dataIndex: 'createTime'
         }, {
             title: '状态',
             dataIndex: 'status'
@@ -133,11 +140,11 @@ class CellM extends React.Component {
         return (
             <React.Fragment>
                 <BreadcrumbCustom first="系统管理" second="机柜管理" />
-                <Card title="格子管理">
+                <Card title={`格子管理：${this.props.match.params.id}`}>
                     <SearchForm />
                     <Table className="infoC-table"
                         columns={columns}
-                        // dataSource={data}
+                        dataSource={data}
                         // 翻页
                         pagination={this.state.pagination}
                         style={{ marginTop: 10 }}

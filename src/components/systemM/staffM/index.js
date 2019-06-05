@@ -149,7 +149,35 @@ class StaffM extends React.Component {
     }
 
     deleteConfirm = (uid) => {
-
+        confirm({
+            title: '确定删除此条员工信息？',
+            content: '点击确定删除此条员工信息',
+            okText: '确定',
+            cancelText: '取消',
+            onOk: () => {
+                fetch(`${URL}/system/users/${uid}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.codeguess === 0) {
+                            message.error(`${data.message}`);
+                        } else if (!data.code) {
+                            message.success(`删除成功`);
+                            this.requestList();
+                        } else {
+                            message.error(`${data.message}`);
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            },
+            onCancel: () => {
+                console.log('cancel');
+            }
+        })
     }
 
     tableFatherDataChange = (data) => {
