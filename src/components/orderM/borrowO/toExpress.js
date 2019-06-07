@@ -1,8 +1,10 @@
 import React from 'react';
-import { Modal, Row, Col } from 'antd';
+import { Modal, Row, Col, Input, Form, Select } from 'antd';
 import moment from 'moment';
 import URL from '../../../api/config';
+import './toExpress.less';
 
+const Option = Select.Option;
 class ToExpress extends React.Component {
 
     state = {
@@ -44,6 +46,7 @@ class ToExpress extends React.Component {
 
     handleOk = (e) => {
         this.props.handleOk(e);
+        this.onSubmit(e);
     }
 
     handleCancel = (e) => {
@@ -54,12 +57,19 @@ class ToExpress extends React.Component {
         return no.substr(0, 3) + '****' + no.substr(7, 11);
     }
 
+    onSubmit = (e) => {
+        e.preventDefault();
+
+    }
+
     render() {
         // console.log(this.props.orderId);
         const { option, initValue } = this.state;
         // console.log(initValue);
+
         return (
             <Modal
+                className="toExpress-modal"
                 title="发快递"
                 visible={this.props.visible}
                 onOk={this.handleOk}
@@ -67,7 +77,7 @@ class ToExpress extends React.Component {
             >
                 <Row>
                     <Col span={4}>
-                        <span>订单ID：</span>
+                        <label>订单ID：</label>
                     </Col>
                     <Col span={20}>
                         <span>{initValue ? initValue.orderNo : null}</span>
@@ -75,7 +85,7 @@ class ToExpress extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>创建时间：</span>
+                        <label>创建时间：</label>
                     </Col>
                     <Col span={20}>
                         <span>{initValue ? moment(initValue.createTime).format("YYYY-MM-DD HH:MM:SS") : null}</span>
@@ -83,7 +93,7 @@ class ToExpress extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>会员账号：</span>
+                        <label>会员账号：</label>
                     </Col>
                     <Col span={20}>
                         <span>{!!initValue.vipNo ? this.vipNoReplace(initValue.vipNo) : null}</span>
@@ -91,7 +101,7 @@ class ToExpress extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>进度：</span>
+                        <label>进度：</label>
                     </Col>
                     <Col span={20}>
                         <span>{initValue ? option[initValue.status] : null}</span>
@@ -99,7 +109,7 @@ class ToExpress extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>书籍名称：</span>
+                        <label>书籍名称：</label>
                     </Col>
                     <Col span={20}>
                         <span>{!!initValue.bsBookinfo ? initValue.bsBookinfo.bookName : null}</span>
@@ -107,7 +117,7 @@ class ToExpress extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>ISBN：</span>
+                        <label>ISBN：</label>
                     </Col>
                     <Col span={20}>
                         <span>{!!initValue.bsBookinfo ? initValue.bsBookinfo.isbn : null}</span>
@@ -115,7 +125,7 @@ class ToExpress extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>货位：</span>
+                        <label>货位：</label>
                     </Col>
                     <Col span={20}>
                         {/* TODO 后端缺字段 */}
@@ -123,14 +133,62 @@ class ToExpress extends React.Component {
                     </Col>
                 </Row>
                 <hr />
-                <Row>
-                    <Col>
-                        
-                    </Col>
-                </Row>
+                <ToExpressForm onSubmit={this.onSubmit} />
             </Modal>
         );
     }
 }
+
+const ToExpressForm = Form.create()(
+    class extends React.Component {
+        render() {
+
+            const { getFieldDecorator } = this.props.form;
+            const formItemLayout = {
+                labelCol: { span: 4 },
+                wrapperCol: { span: 20 },
+            };
+            const formItem = [
+                { type: 1, label: '收件人：', name: 'userName', width: '150px', placeholder: '请输入收件人姓名' },
+                { type: 1, label: '联系方式：', name: 'phoneNum', width: '150px', placeholder: '请输入收件人电话' },
+                { type: 2, label: '快递公司：', name: 'expressCom', width: '150px', placeholder: '请选择快递公司', value: [{ id: 0, name: '顺丰速递' }, { id: 1, name: '申通快递' }] },
+                { type: 1, label: '快递编号：', name: 'expressNo', width: '300px', placeholder: '请输入快递编号' },
+                { type: 1, label: '收货地址：', name: 'address', width: '300px', placeholder: '请输入收件人收货地址' },
+                { type: 3, label: '快递费：', name: 'expressCost', width: '150px', value: '22元' },
+                { type: 3, label: '快递费状态：', name: 'expCostStatus', width: '150px', value: '未支付' },
+                { type: 1, label: '电子标签：', name: 'eLabel', width: '400px', placeholder: '请输入电子标签' },
+                // { type: 2, label: '所属机构', name: 'beInstitution', width: '300px', value: this.state.beInstitutionValue },
+                // { type: 2, label: '所属部门', name: 'beDepartment', width: '150px', value: this.state.beDepartmentValue },
+            ];
+
+            return (
+                <Form onSubmit={this.props.onSubmit}>
+                    <Row>{
+                        formItem.map(i => (
+                            <Col key={i.name}>
+                                <Form.Item label={i.label} {...formItemLayout}>
+                                    {getFieldDecorator(i.name)((() => {
+                                        switch (i.type) {
+                                            case 1:
+                                                return <Input placeholder={i.placeholder} style={{ width: `${i.width}` }} />
+                                            case 2:
+                                                return <Select style={{ width: `${i.width}` }} placeholder={i.placeholder}>
+                                                    {i.value.map(v => (<Option key={v.id} value={`${v.id}`}>{v.name}</Option>))}
+                                                </Select>
+                                            case 3:
+                                                return <span style={{ width: `${i.width}` }}>{i.value}</span>
+                                            default:
+                                                return null
+                                        }
+                                    })())}
+                                </Form.Item>
+                            </Col>
+                        ))
+                    }</Row>
+                </Form>
+            );
+        }
+    }
+)
 
 export default ToExpress;
