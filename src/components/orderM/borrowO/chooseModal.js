@@ -107,6 +107,8 @@ const chooseModal = (optId, orderStatusId, deliverType, handleOk, handleCancel, 
                             return <DetModal handleOk={handleOk} handleCancel={handleCancel} visible={visible} orderId={orderId} />
                         case 2:
                             return <ToExpress handleOk={handleOk} handleCancel={handleCancel} visible={visible} orderId={orderId} />
+                        // 测试
+                        // return <ToCabinet handleOk={handleOk} handleCancel={handleCancel} visible={visible} orderId={orderId} />
                         default:
                             return null;
                     }
