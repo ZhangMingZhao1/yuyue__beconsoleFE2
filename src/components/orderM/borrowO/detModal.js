@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, Row, Col } from 'antd';
 import URL from '../../../api/config';
 import moment from 'moment';
+import './detModal.less';
 
 class DetModal extends React.Component {
 
@@ -31,9 +32,19 @@ class DetModal extends React.Component {
     render() {
         switch (this.state.initValue.deliverType) {
             case 1:
-                return <CabinetDet initValue={this.state.initValue} handleOk={this.props.handleOk} handleCancel={this.props.handleCancel} visible={this.props.visible} />;
+                return <CabinetDet
+                    initValue={this.state.initValue}
+                    handleOk={this.props.handleOk}
+                    handleCancel={this.props.handleCancel}
+                    visible={this.props.visible}
+                />;
             case 2:
-                return <ExpressDet initValue={this.state.initValue} handleOk={this.props.handleOk} handleCancel={this.props.handleCancel} visible={this.props.visible} />;
+                return <ExpressDet
+                    initValue={this.state.initValue}
+                    handleOk={this.props.handleOk}
+                    handleCancel={this.props.handleCancel}
+                    visible={this.props.visible}
+                />;
             default:
                 return null;
         }
@@ -80,6 +91,7 @@ class ExpressDet extends React.Component {
         const option = this.state.option;
         return (
             <Modal
+                className="detModal-modal"
                 title="详情"
                 visible={this.props.visible}
                 onOk={this.handleOk}
@@ -87,7 +99,7 @@ class ExpressDet extends React.Component {
             >
                 <Row>
                     <Col span={4}>
-                        <span>订单ID：</span>
+                        <label>订单ID：</label>
                     </Col>
                     <Col span={20}>
                         <span>{this.props.initValue.orderNo}</span>
@@ -95,7 +107,7 @@ class ExpressDet extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>书籍名称：</span>
+                        <label>书籍名称：</label>
                     </Col>
                     <Col span={20}>
                         <span>{this.props.initValue.bsBookinfo.bookName}</span>
@@ -103,7 +115,7 @@ class ExpressDet extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>电子标签：</span>
+                        <label>电子标签：</label>
                     </Col>
                     <Col span={20}>
                         <span>{this.props.initValue.bsBookinfo.isbn}</span>
@@ -111,7 +123,7 @@ class ExpressDet extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>创建时间：</span>
+                        <label>创建时间：</label>
                     </Col>
                     <Col span={20}>
                         <span>{moment(this.props.initValue.createTime).format("YYYY-MM-DD HH:MM:SS")}</span>
@@ -119,7 +131,7 @@ class ExpressDet extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>会员账号：</span>
+                        <label>会员账号：</label>
                     </Col>
                     <Col span={20}>
                         <span>{this.vipNoReplace(this.props.initValue.vipNo)}</span>
@@ -127,7 +139,7 @@ class ExpressDet extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>订单ID：</span>
+                        <label>订单ID：</label>
                     </Col>
                     <Col span={20}>
                         <span>{moment(this.props.initValue.expireTime).format("YYYY-MM-DD HH:MM:SS")}</span>
@@ -136,13 +148,13 @@ class ExpressDet extends React.Component {
                 <hr />
                 <Row>
                     <Col span={4}>
-                        <span>借书方式：</span>
+                        <label>借书方式：</label>
                     </Col>
                     <Col span={8}>
                         <span>线上</span>
                     </Col>
                     <Col span={4}>
-                        <span>配送方式：</span>
+                        <label>配送方式：</label>
                     </Col>
                     <Col span={8}>
                         <span>快递</span>
@@ -150,13 +162,13 @@ class ExpressDet extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>进度：</span>
+                        <label>进度：</label>
                     </Col>
                     <Col span={8}>
                         <span>{option[this.props.initValue.status]}</span>
                     </Col>
                     <Col span={4}>
-                        <span>创建时间：</span>
+                        <label>创建时间：</label>
                     </Col>
                     <Col span={8}>
                         <span>{moment(this.props.initValue.createTime).format("YYYY-MM-DD HH:MM:SS")}</span>
@@ -164,13 +176,13 @@ class ExpressDet extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>收件人：</span>
+                        <label>收件人：</label>
                     </Col>
                     <Col span={8}>
                         <span>{this.props.initValue.nikeName}</span>
                     </Col>
                     <Col span={4}>
-                        <span>联系电话：</span>
+                        <label>联系电话：</label>
                     </Col>
                     <Col span={8}>
                         <span>{this.props.initValue.phone}</span>
@@ -178,7 +190,7 @@ class ExpressDet extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>收货地址：</span>
+                        <label>收货地址：</label>
                     </Col>
                     <Col span={20}>
                         {/* TODO 后端缺字段 */}
@@ -187,14 +199,14 @@ class ExpressDet extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>快递公司：</span>
+                        <label>快递公司：</label>
                     </Col>
                     <Col span={8}>
                         {/* TODO 后端缺字段 */}
                         <span>顺丰快递</span>
                     </Col>
                     <Col span={4}>
-                        <span>快递订单：</span>
+                        <label>快递订单：</label>
                     </Col>
                     <Col span={8}>
                         {/* TODO 后端缺字段 */}
@@ -203,14 +215,14 @@ class ExpressDet extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>快递费：</span>
+                        <label>快递费：</label>
                     </Col>
                     <Col span={8}>
                         {/* TODO 后端缺字段 */}
                         <span>22元</span>
                     </Col>
                     <Col span={4}>
-                        <span>费用状态：</span>
+                        <label>费用状态：</label>
                     </Col>
                     <Col span={8}>
                         {/* TODO 后端缺字段 */}
@@ -219,14 +231,14 @@ class ExpressDet extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>仓管：</span>
+                        <label>仓管：</label>
                     </Col>
                     <Col span={8}>
                         {/* TODO 后端缺字段 */}
                         <span>李三</span>
                     </Col>
                     <Col span={4}>
-                        <span>寄件时间：</span>
+                        <label>寄件时间：</label>
                     </Col>
                     <Col span={8}>
                         {/* TODO 后端缺字段 */}
@@ -273,6 +285,7 @@ class CabinetDet extends React.Component {
         const option = this.state.option;
         return (
             <Modal
+                className="detModal-modal"
                 title="详情"
                 visible={this.props.visible}
                 onOk={this.handleOk}
@@ -280,7 +293,7 @@ class CabinetDet extends React.Component {
             >
                 <Row>
                     <Col span={4}>
-                        <span>订单ID：</span>
+                        <label>订单ID：</label>
                     </Col>
                     <Col span={20}>
                         <span>{this.props.initValue.orderNo}</span>
@@ -288,7 +301,7 @@ class CabinetDet extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>书籍名称：</span>
+                        <label>书籍名称：</label>
                     </Col>
                     <Col span={20}>
                         <span>{this.props.initValue.bsBookinfo.bookName}</span>
@@ -296,7 +309,7 @@ class CabinetDet extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>电子标签：</span>
+                        <label>电子标签：</label>
                     </Col>
                     <Col span={20}>
                         <span>{this.props.initValue.bsBookinfo.isbn}</span>
@@ -304,7 +317,7 @@ class CabinetDet extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>创建时间：</span>
+                        <label>创建时间：</label>
                     </Col>
                     <Col span={20}>
                         <span>{moment(this.props.initValue.createTime).format("YYYY-MM-DD HH:MM:SS")}</span>
@@ -312,7 +325,7 @@ class CabinetDet extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>会员账号：</span>
+                        <label>会员账号：</label>
                     </Col>
                     <Col span={20}>
                         <span>{this.vipNoReplace(this.props.initValue.vipNo)}</span>
@@ -320,7 +333,7 @@ class CabinetDet extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>订单ID：</span>
+                        <label>订单ID：</label>
                     </Col>
                     <Col span={20}>
                         <span>{moment(this.props.initValue.expireTime).format("YYYY-MM-DD HH:MM:SS")}</span>
@@ -328,7 +341,7 @@ class CabinetDet extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>会员账号：</span>
+                        <label>会员账号：</label>
                     </Col>
                     <Col span={20}>
                         <span>{this.vipNoReplace(this.props.initValue.vipNo)}</span>
@@ -336,7 +349,7 @@ class CabinetDet extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>订单ID：</span>
+                        <label>订单ID：</label>
                     </Col>
                     <Col span={20}>
                         <span>{moment(this.props.initValue.expireTime).format("YYYY-MM-DD HH:MM:SS")}</span>
@@ -345,13 +358,13 @@ class CabinetDet extends React.Component {
                 <hr />
                 <Row>
                     <Col span={4}>
-                        <span>借书方式：</span>
+                        <label>借书方式：</label>
                     </Col>
                     <Col span={8}>
                         <span>线上</span>
                     </Col>
                     <Col span={4}>
-                        <span>配送方式：</span>
+                        <label>配送方式：</label>
                     </Col>
                     <Col span={8}>
                         <span>快递</span>
@@ -359,13 +372,13 @@ class CabinetDet extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>进度：</span>
+                        <label>进度：</label>
                     </Col>
                     <Col span={8}>
                         <span>{option[this.props.initValue.status]}</span>
                     </Col>
                     <Col span={4}>
-                        <span>创建时间：</span>
+                        <label>创建时间：</label>
                     </Col>
                     <Col span={8}>
                         <span>{moment(this.props.initValue.createTime).format("YYYY-MM-DD HH:MM:SS")}</span>
@@ -373,13 +386,13 @@ class CabinetDet extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>收件人：</span>
+                        <label>收件人：</label>
                     </Col>
                     <Col span={8}>
                         <span>{this.props.initValue.nikeName}</span>
                     </Col>
                     <Col span={4}>
-                        <span>联系电话：</span>
+                        <label>联系电话：</label>
                     </Col>
                     <Col span={8}>
                         <span>{this.props.initValue.phone}</span>
@@ -387,23 +400,23 @@ class CabinetDet extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>收货地址：</span>
+                        <label>收货地址：</label>
                     </Col>
                     <Col span={20}>
                         {/* TODO 后端缺字段 */}
-                        <span>收货地址</span>
+                        <label>收货地址</label>
                     </Col>
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>快递公司：</span>
+                        <label>快递公司：</label>
                     </Col>
                     <Col span={8}>
                         {/* TODO 后端缺字段 */}
                         <span>顺丰快递</span>
                     </Col>
                     <Col span={4}>
-                        <span>快递订单：</span>
+                        <label>快递订单：</label>
                     </Col>
                     <Col span={8}>
                         {/* TODO 后端缺字段 */}
@@ -412,14 +425,14 @@ class CabinetDet extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>快递费：</span>
+                        <label>快递费：</label>
                     </Col>
                     <Col span={8}>
                         {/* TODO 后端缺字段 */}
                         <span>22元</span>
                     </Col>
                     <Col span={4}>
-                        <span>费用状态：</span>
+                        <label>费用状态：</label>
                     </Col>
                     <Col span={8}>
                         {/* TODO 后端缺字段 */}
@@ -428,14 +441,14 @@ class CabinetDet extends React.Component {
                 </Row>
                 <Row>
                     <Col span={4}>
-                        <span>仓管：</span>
+                        <label>仓管：</label>
                     </Col>
                     <Col span={8}>
                         {/* TODO 后端缺字段 */}
                         <span>李三</span>
                     </Col>
                     <Col span={4}>
-                        <span>寄件时间：</span>
+                        <label>寄件时间：</label>
                     </Col>
                     <Col span={8}>
                         {/* TODO 后端缺字段 */}
