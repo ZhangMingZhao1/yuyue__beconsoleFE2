@@ -68,14 +68,14 @@ class StaffM extends React.Component {
         })
             .then((res) => res.json())
             .then(data => {
-                const { content, user } = data;
-                console.log(content);
+                const { content } = data;
+                console.log(data);
                 content.map((i) => {
                     i.key = i.caseId;
                     i.status = i.status ? '正常' : '异常';
                     i.beWarehouseName = i.beWarehouse.warehouseName;
-                    i.ywName = i.user.userName;
-                    i.phoneNum = i.user.telephone;
+                    i.ywName = !!i.user ? i.user.userName : null;
+                    i.phoneNum = !!i.user ? i.user.telephone : null;
                 });
                 this.setState({
                     // 翻页
@@ -97,7 +97,7 @@ class StaffM extends React.Component {
     showConfirm(id) {
         confirm({
             title: '确定要删除此条仓库信息吗？',
-            content: '点击确定删除此仓库信息',
+            content: '点击确定删除此条仓库信息',
             okText: '确定',
             cancelText: '取消',
             onOk: () => {

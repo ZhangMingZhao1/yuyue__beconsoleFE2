@@ -33,8 +33,8 @@ class ChangeCabinet extends React.Component {
             .then(data => {
                 // console.log(data);
                 // data.caseId=
-                data.ywName = `${data.user.uid}`;
-                data.beWarehouseId = data.beWarehouse ? `${data.beWarehouse.warehouseId}` : null;
+                data.ywName = !!data.user ? `${data.user.uid}` : null;
+                data.beWarehouseId = !!data.beWarehouse ? `${data.beWarehouse.warehouseId}` : null;
                 data.status = data.status === 0 || 1 ? `${data.status}` : null;
                 data.cellCount = `${data.cellCount}`;
                 data.allocation = `${data.allocation}`;

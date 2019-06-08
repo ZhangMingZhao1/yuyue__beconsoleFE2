@@ -6,10 +6,11 @@ import URL from '../../../api/config';
 import pagination from '../../pagination';// 翻页
 import { parseParams } from '../../../axios/tools';// 翻页
 import { connect } from 'react-redux';
-import NotFound from  '../../pages/NotFound';
+// import NotFound from '../../pages/NotFound';
 const Option = Select.Option;
 const confirm = Modal.confirm;
 const StaffSearchForm = Form.create()(
+    // TODO 高级查询
     (props) => {
         function handleSubmit(e) {
             e.preventDefault();
@@ -148,7 +149,35 @@ class StaffM extends React.Component {
     }
 
     deleteConfirm = (uid) => {
-
+        confirm({
+            title: '确定删除此条员工信息？',
+            content: '点击确定删除此条员工信息',
+            okText: '确定',
+            cancelText: '取消',
+            onOk: () => {
+                fetch(`${URL}/system/users/${uid}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.codeguess === 0) {
+                            message.error(`${data.message}`);
+                        } else if (!data.code) {
+                            message.success(`删除成功`);
+                            this.requestList();
+                        } else {
+                            message.error(`${data.message}`);
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            },
+            onCancel: () => {
+                console.log('cancel');
+            }
+        })
     }
 
     tableFatherDataChange = (data) => {
@@ -196,6 +225,11 @@ class StaffM extends React.Component {
 
     render() {
 
+        const { tableData } = this.state;
+        const { user } = this.props;
+        const per = user.data.roleType;
+        // console.log('per', per);
+        // console.log(user);
         const columns = [{
             title: '员工ID',
             dataIndex: 'uid',
@@ -233,36 +267,26 @@ class StaffM extends React.Component {
             ),
         }];
 
-        const { tableData } = this.state;
-        const {user} = this.props;
-        const per = user.data.roleType;
-        console.log('per',per);
-        console.log(user);
-        if(per==10 || per==6) {
-            return (
-                
-                <React.Fragment>
-                    <BreadcrumbCustom first="系统管理" second="员工管理" />
-                    <Card
-                        title="员工管理"
-                    >
-                        <StaffSearchForm tableChildDataChange={this.tableFatherDataChange} /><br />
-                        <div style={{ marginBottom: '10px' }}>
-                            <Button type="primary"><Link to={`${this.props.match.url}/addStaff`}>新增</Link></Button>
-                        </div>
-                        <Table className="infoC-table"
-                            columns={columns}
-                            dataSource={tableData}
-                            // 翻页
-                            pagination={this.state.pagination}
-                            bordered
-                        />
-                    </Card>
-                </React.Fragment>
-            );
-        }else {
-            return  <NotFound/ > 
-        }
+        return (
+            <React.Fragment>
+                <BreadcrumbCustom first="系统管理" second="员工管理" />
+                <Card
+                    title="员工管理"
+                >
+                    <StaffSearchForm tableChildDataChange={this.tableFatherDataChange} /><br />
+                    <div style={{ marginBottom: '10px' }}>
+                        <Button type="primary" disabled={per === 10 || per === 6 ? false : true}><Link to={`${this.props.match.url}/addStaff`}>新增</Link></Button>
+                    </div>
+                    <Table className="infoC-table"
+                        columns={columns}
+                        dataSource={tableData}
+                        // 翻页
+                        pagination={this.state.pagination}
+                        bordered
+                    />
+                </Card>
+            </React.Fragment>
+        );
     };
 }
 const mapStateToPorps = state => ({
