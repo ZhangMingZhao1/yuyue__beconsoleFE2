@@ -33,7 +33,7 @@ const InStoreSearch = Form.create()(
     class extends React.Component {
         state = {}
         componentDidMount() {
-            Req.getWareHouses().then(data=>{this.setState({warehouseList: data})})
+            Req.getWareHouses().then(data => { this.setState({ warehouseList: data }) })
         }
         handleSubmit = (e) => {
             e.preventDefault();
@@ -92,30 +92,26 @@ class InStoreData extends React.Component {
             recordType: 0,
             ...this.params.search,
         };
-        fetch(`${Url}/warehouse/storagerecords?${parseParams(params)}`, { credentials: 'include' })
-            .then((res) => res.json()).then(result => {
-                let data = result;
-                this.setState({
-                    pagination: pagination(data, (current) => {//改变页码
-                        this.params.currentPage = current;
-                        this.requestList();
-                    }, (size) => {//pageSize 变化的回调
-                        this.params.pageSize = size;
-                        this.requestList();
-                    }),
-                    dataSource: data.content.map(i => ({
-                        ...i,
-                        key: i.orderNo,
-                        warehouseName: i.warehouse.warehouseName,
-                        user1Name: i.user1.userName,
-                        user2Name: i.user2.userName,
-                        createTime: moment(i.createTime),
-                        reviewTime: moment(i.reviewTime),
-                    }))
-                })
-            }).catch((err) => {
-                console.log(err);
+        Req.getStorageRecords(params).then(data => {
+            this.setState({
+                pagination: pagination(data, (current) => {//改变页码
+                    this.params.currentPage = current;
+                    this.requestList();
+                }, (size) => {//pageSize 变化的回调
+                    this.params.pageSize = size;
+                    this.requestList();
+                }),
+                dataSource: data.content.map(i => ({
+                    ...i,
+                    key: i.storageId,
+                    warehouseName: i.beWarehouse.warehouseName,
+                    user1Name: i.user1 && i.user1.userName,
+                    user2Name: i.user2 && i.user2.userName,
+                    createTime: moment(i.createTime),
+                    reviewTime: moment(i.reviewTime),
+                }))
             })
+        })
     }
 
     handleSubmit = (params) => {
@@ -127,9 +123,9 @@ class InStoreData extends React.Component {
             { title: '订单编号', dataIndex: 'orderNo' },
             { title: '仓库', dataIndex: 'warehouseName' },
             { title: '类型', dataIndex: 'type', render: (type) => typeConfig[0][type] },
-            { title: '入库人', dataIndex: 'user1Name' },
+            { title: '入库人', dataIndex: 'user2Name' },
             { title: '入库时间', dataIndex: 'createTime', render: (createTime) => createTime && createTime.format("YYYY-MM-DD HH:mm:ss") },
-            { title: '审核人', dataIndex: 'user2Name' },
+            { title: '审核人', dataIndex: 'user1Name' },
             { title: '审核时间', dataIndex: 'reviewTime', render: (reviewTime) => reviewTime && reviewTime.format("YYYY-MM-DD HH:mm:ss") },
             { title: '运费', dataIndex: 'fee' },
             { title: '订单状态', dataIndex: 'status', render: (status) => statusConfig[status] },
@@ -137,9 +133,9 @@ class InStoreData extends React.Component {
                 title: '操作', dataIndex: 'action',
                 render: (text, record) => {
                     let config = {
-                        '1': <Link to={`${this.props.match.url}/add`}>编辑</Link>,
-                        '2': <Link to={`${this.props.match.url}/check`}>审核</Link>,
-                        '3': <Link to={`${this.props.match.url}/detail`}>查看</Link>,
+                        '1': <Link to={{ pathname: `${this.props.match.url}/add`, search: `?id=${record.storageId}` }}>编辑</Link>,
+                        '2': <Link to={{ pathname: `${this.props.match.url}/check`, search: `?id=${record.storageId}` }}>审核</Link>,
+                        '3': <Link to={{ pathname: `${this.props.match.url}/detail`, search: `?id=${record.storageId}` }}>查看</Link>,
                     }
                     return config[record.status];
                 }

@@ -4,8 +4,7 @@ import './index.less';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import { getFormItem } from '../../baseFormItem';
 import pagination from '../../pagination';
-import { parseParams } from '../../../axios/tools';
-import Url from '../../../api/config';
+import Req from '../request';
 
 //书籍状态映射
 export const statusConfig = {
@@ -81,31 +80,26 @@ class StoreQuery extends React.Component {
             size: this.params.pageSize,
             ...this.params.search,
         };
-        fetch(`${Url}/warehouse/bookinstores?${parseParams(params)}`, { credentials: 'include' })
-            .then((res) => res.json()).then(result => {
-                let data = result;
-                this.setState({
-                    pagination: pagination(data, (current) => {//改变页码
-                        this.params.currentPage = current;
-                        this.requestList();
-                    }, (size) => {//pageSize 变化的回调
-                        this.params.pageSize = size;
-                        this.requestList();
-                    }),
-                    dataSource: data.content.map(i => ({
-                        ...i,
-                        key: i.bookId,
-                        bookName: i.bsBookinfo.bookName,
-                        author: i.bsBookinfo.author,
-                        isbn: i.bsBookinfo.isbn,
-                        price: i.bsBookinfo.price,
-                    }))
-                })
-            }).catch((err) => {
-                console.log(err);
+        Req.getBookInStores(params).then((data)=>{
+            this.setState({
+                pagination: pagination(data, (current) => {//改变页码
+                    this.params.currentPage = current;
+                    this.requestList();
+                }, (size) => {//pageSize 变化的回调
+                    this.params.pageSize = size;
+                    this.requestList();
+                }),
+                dataSource: data.content.map(i => ({
+                    ...i,
+                    key: i.bookId,
+                    bookName: i.bsBookinfo.bookName,
+                    author: i.bsBookinfo.author,
+                    isbn: i.bsBookinfo.isbn,
+                    price: i.bsBookinfo.price,
+                }))
             })
+        });
     }
-
 
     render() {
         const columns = [

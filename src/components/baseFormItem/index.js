@@ -16,15 +16,6 @@ export const getOptionList = (data) => {
             options.push(<Option value={v} key={v}>{data[v]}</Option>)
         }
     }
-    // data.map((item) => {
-    //     if ('id' in item && 'name' in item) {//{id:"...", name: "..."}
-    //         options.push(<Option value={item.id} key={item.id}>{item.name}</Option>)
-    //     } else {//键值对形式
-    //         for (let v in item) {
-    //             options.push(<Option value={v} key={v}>{item[v]}</Option>)
-    //         }
-    //     }
-    // })
     return options;
 }
 
