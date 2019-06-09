@@ -140,9 +140,9 @@ class CellM extends React.Component {
             render: (text, record) => {
                 switch (record.status.type) {
                     case 5:
-                        return <img src={banImg} />
+                        return <img className='cellImg' src={banImg} />
                     case 4:
-                        return <img src={repairImg} />
+                        return <img className='cellImg' src={repairImg} />
                     default:
                         // return <img src={banImg} />
                         return null;
