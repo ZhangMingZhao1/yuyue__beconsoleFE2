@@ -86,6 +86,22 @@ export default {
             })
     },
     /**
+     * 检测rfid是否已经存在
+     * @param {*} rfid 
+     */
+    getRfidStatus(rfid) {
+        return fetch(`${Url}/warehouse/bookinstores/${rfid}`, { credentials: 'include' })
+            .then((res) => res.json()).then(result => {
+                if (result.code !== 1) {
+                    return Promise.resolve(result);
+                } else {
+                    message.error(result.message)
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+    },
+    /**
      * 根据storageId获取库单
      * @param {*} storageId 
      */
