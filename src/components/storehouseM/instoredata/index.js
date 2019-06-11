@@ -5,29 +5,9 @@ import { getFormItem } from '../../baseFormItem';
 import Req from '../request';
 import "./index.less"
 import Link from 'react-router-dom/Link';
-import Url from '../../../api/config';
 import pagination from '../../pagination';
-import { parseParams } from '../../../axios/tools';
 import moment from 'moment';
-
-//库单分类
-export const recordTypeConfig = {
-    '0': '入库单',
-    '1': '出库单',
-};
-
-//库单状态
-export const statusConfig = {
-    '1': '草稿', '2': '待审核', '3': '已审核',
-};
-
-//库单类型
-export const typeConfig = {
-    //入库单
-    '0': { '0': '其他', '1': '新书', '2': '捐书', '3': '还书' },
-    //出库单
-    '1': { '0': '其他', '1': '退货', '2': '报损', '3': '领用' },
-};
+import { typeConfig, statusConfig } from '../config/warehouseRConfig';
 
 const InStoreSearch = Form.create()(
     class extends React.Component {

@@ -307,8 +307,8 @@ class InStoreTable extends React.Component {
                         <p style={{ position: 'absolute', bottom: 0, marginBottom: 28 }}>合计：{this.state.data.length} 本书</p> :
                         <p style={{ textAlign: 'justify' }}>
                             <font style={{ float: 'left' }}>合计：{this.state.data.length} 本书</font>
-                            {this.props.type == 'detail' ? <font style={{ float: 'right' }}>审核时间：{moment(new Date()).valueOf()}</font> : ''}
-                            <font style={{ float: 'right', marginRight: 20 }}>审核人：{localStorage.getItem('user').replace(/^\"(\w+)\"$/g, "$1")}{/* 审核人去除“” */}</font>
+                            {this.props.type == 'detail' ? <font style={{ float: 'right' }}>审核时间：{this.props.reviewTime && moment(this.props.reviewTime).format("YYYY-MM-DD HH:mm:ss")}</font> : ''}
+                            <font style={{ float: 'right', marginRight: 20 }}>审核人：{this.props.user1Name}</font>
                         </p>
                 }
 
