@@ -5,9 +5,9 @@ import "./index.less"
 import Req from '../request';
 import InStoreTable from './inStoreTable';
 import { connect } from 'react-redux';
-import { typeConfig } from '.';
 import Url from '../../../api/config';
 import { parseParams } from "../../../axios/tools";
+import { typeConfig } from '../config/warehouseRConfig';
 
 const confirm = Modal.confirm;
 const InStoreForm = Form.create()(
@@ -93,7 +93,11 @@ class InStoreInfo extends React.Component {
                             locationId: i.locationName,
                         })) : [],
                         //仓库id值
-                        warehouseId: data.beWarehouse.warehouseId
+                        warehouseId: data.beWarehouse.warehouseId,
+                        //审核时间
+                        reviewTime: data.reviewTime,
+                        //审核人
+                        user1Name: data.user1 && data.user1.userName,
                     })
                 })
             })
@@ -314,6 +318,8 @@ class InStoreInfo extends React.Component {
                         ref={(ref) => { this.tableRef = ref }}
                         dataSource={this.state.bookinstores}
                         warehouseId={this.state.warehouseId}
+                        reviewTime={this.state.reviewTime}
+                        user1Name={this.state.user1Name}//审核人
                     />
                 </Card>
                 <Modal

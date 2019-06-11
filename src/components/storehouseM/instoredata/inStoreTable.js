@@ -75,7 +75,7 @@ class InStoreTable extends React.Component {
             inputItem: {
                 'code': { type: 'INPUT', rules: [{ required: true, message: 'null' }] },
                 'isbn': { type: 'INPUT', rules: [{ required: true, message: 'null' }] },
-                'rfid': { type: 'INPUT', rules: [{ required: true, message: 'null' }] },
+                'rfid': { type: 'INPUT', rules: [{ required: true, validator: this.validateRfid }] },
                 'price': { type: 'INPUT' },
                 'locationId': { type: 'SELECT', list: [] },
             },
@@ -83,6 +83,18 @@ class InStoreTable extends React.Component {
         this.type = this.props.type;//只是用于记录type是否发生改变
         this.form = {};//每行数据对应的form
         this.deleteData = [];//被删除的数据，不包括新增后删除的数据
+    }
+
+    //检测rfid,需满足数据库中不存在rfid
+    validateRfid(rule, value, callback) {
+        if (value) {
+            Req.getRfidStatus(value).then(result => {
+                result &&//返回值为-1,相应的rfid不存在数据库
+                    result === -1 ? callback() : callback("书籍已存在")
+            })
+        } else {//输入值为空，提示null
+            callback("null");
+        }
     }
 
     //配置Table columns
@@ -160,14 +172,16 @@ class InStoreTable extends React.Component {
     getTableValues = (call) => {
         const { editingKey } = this.state;
         this.save(editingKey, (v) => {
-            let list = this.state.inputItem.locationId.list;
-            let data = v.concat(this.deleteData).map(i => {
-                if (!list[i.locationId]) {
-                    i.locationId = null;
-                }
-                return i;
-            })
-            call(data)
+            if (v !== 'error') {
+                let list = this.state.inputItem.locationId.list;
+                let data = v.concat(this.deleteData).map(i => {
+                    if (!list[i.locationId]) {
+                        i.locationId = null;
+                    }
+                    return i;
+                })
+                call(data)
+            }
         });
     }
 
@@ -293,8 +307,8 @@ class InStoreTable extends React.Component {
                         <p style={{ position: 'absolute', bottom: 0, marginBottom: 28 }}>合计：{this.state.data.length} 本书</p> :
                         <p style={{ textAlign: 'justify' }}>
                             <font style={{ float: 'left' }}>合计：{this.state.data.length} 本书</font>
-                            {this.props.type == 'detail' ? <font style={{ float: 'right' }}>审核时间：{moment(new Date()).valueOf()}</font> : ''}
-                            <font style={{ float: 'right', marginRight: 20 }}>审核人：{localStorage.getItem('user').replace(/^\"(\w+)\"$/g, "$1")}{/* 审核人去除“” */}</font>
+                            {this.props.type == 'detail' ? <font style={{ float: 'right' }}>审核时间：{this.props.reviewTime && moment(this.props.reviewTime).format("YYYY-MM-DD HH:mm:ss")}</font> : ''}
+                            <font style={{ float: 'right', marginRight: 20 }}>审核人：{this.props.user1Name}</font>
                         </p>
                 }
 
