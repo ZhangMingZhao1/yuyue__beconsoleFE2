@@ -15,21 +15,9 @@ const EditableRow = ({ form, index, ...props }) => (
 
 const EditableFormRow = Form.create()(EditableRow);
 class EditableCell extends React.Component {
-    onChange = (name, event) => {
-        let value = event.target.value;
-        if (name === "code") {
-            //通过条码自动填充信息
-            Req.getInfoByCode(value).then(v => {
-                if (v !== -1) {//不存在对应的信息，服务器返回-1
-                    this.form.setFieldsValue({ isbn: v.isbn, rfid: v.rfid, price: v.price })
-                }
-            });
-        }
-    }
-
     getInput = (item, name) => {
         if (item.type === 'INPUT') {
-            return <Input autoFocus={name === 'barCode'} onChange={(e) => { this.onChange(name, e) }} />;
+            return <Input autoFocus={name === 'barCode'} />;
         } else if (item.type === 'SELECT') {
             return <Select style={{ width: '100%' }}>
                 {getOptionList(item.list)}
@@ -73,9 +61,10 @@ class InStoreTable extends React.Component {
             warehouseId: this.props.warehouseId,
             count: 0,
             inputItem: {
-                'code': { type: 'INPUT', rules: [{ required: true, message: 'null' }] },
+                'code': { type: 'INPUT', rules: [{ required: true, validator: this.changeCode }] },
                 'isbn': { type: 'INPUT', rules: [{ required: true, message: 'null' }] },
-                'rfid': { type: 'INPUT', rules: [{ required: true, validator: this.validateRfid }] },
+                // 'rfid': { type: 'INPUT', rules: [{ required: true, validator: this.validateRfid }] },
+                'rfid': { type: 'INPUT', rules: [{ required: true, message: 'null' }] },
                 'price': { type: 'INPUT' },
                 'locationId': { type: 'SELECT', list: [] },
             },
@@ -83,6 +72,7 @@ class InStoreTable extends React.Component {
         this.type = this.props.type;//只是用于记录type是否发生改变
         this.form = {};//每行数据对应的form
         this.deleteData = [];//被删除的数据，不包括新增后删除的数据
+        this.bookId = [];//每行对应的bookId
     }
 
     //检测rfid,需满足数据库中不存在rfid
@@ -92,6 +82,23 @@ class InStoreTable extends React.Component {
                 result &&//返回值为-1,相应的rfid不存在数据库
                     result === -1 ? callback() : callback("书籍已存在")
             })
+        } else {//输入值为空，提示null
+            callback("null");
+        }
+    }
+
+    //条码输入框发生改变时
+    changeCode = (rule, value, callback) => {
+        if (value) {
+            const { editingKey } = this.state;
+            //通过条码自动填充信息
+            Req.getInfoByCode(value).then(v => {
+                if (v !== -1) {//不存在对应的信息，服务器返回-1
+                    this.form[editingKey].setFieldsValue({ isbn: v.isbn, rfid: v.rfid, price: v.price });
+                    this.bookId[editingKey] = v.bookId;
+                }
+                callback();
+            });
         } else {//输入值为空，提示null
             callback("null");
         }
@@ -208,6 +215,7 @@ class InStoreTable extends React.Component {
                     newData.splice(index, 1, {
                         ...item,
                         ...row,
+                        bookId: this.bookId[key],
                     });
                     this.setState({ data: newData, editingKey: '' }, () => { callback(this.state.data) });
                 } else {
