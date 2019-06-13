@@ -35,6 +35,21 @@ export default {
             })
     },
     /**
+     * 所有柜子信息获取
+     */
+    getAllCaseInfos() {
+        return fetch(`${Url}/warehouse/bookcaseinfos`, { credentials: 'include' })
+            .then((res) => res.json()).then(result => {
+                if (result.code !== 1) {
+                    return Promise.resolve(result);
+                } else {
+                    message.error(result.message)
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+    },
+    /**
      * 仓库货位获取
      * @param {*} warehouseId 仓库id
      */
@@ -230,5 +245,231 @@ export default {
         }).catch((err) => {
             console.log(err)
         })
-    }
+    },
+    /**
+     * 移库单查询
+     */
+    getTransferRecords(params) {
+        return fetch(`${Url}/warehouse/transferrecords?${parseParams(params)}`, { credentials: 'include' })
+            .then((res) => res.json()).then(result => {
+                if (!result.code) {
+                    return Promise.resolve(result);
+                } else {
+                    message.error(result.message)
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+    },
+    /**
+     * 根据transferId获取移库单
+     * @param {*} transferId 
+     */
+    getTransferRecordsById(transferId) {
+        return fetch(`${Url}/warehouse/transferrecords/${transferId}`, { credentials: 'include' })
+            .then((res) => res.json()).then(result => {
+                if (result.code !== 1) {
+                    return Promise.resolve(result);
+                } else {
+                    message.error(result.message)
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+    },
+    /**
+     * 增加移库单
+     * @param {*} reqBody 请求Body(Json格式)
+     */
+    postTransferRecords(reqBody) {
+        return fetch(`${Url}/warehouse/transferrecords`, {
+            method: 'POST',
+            mode: 'cors',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(reqBody),
+        }).then((res) => res.json()).then(result => {
+            if (result.code === 0) {
+                return Promise.resolve(result);
+            } else {
+                message.error(result.message)
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
+    },
+    /**
+     * 更新移库单
+     * @param {*} reqBody 请求Body(Json格式)
+     */
+    putTransferRecords(reqBody) {
+        return fetch(`${Url}/warehouse/transferrecords`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(reqBody)
+        }).then((res) => res.json()).then(result => {
+            if (result.code === 0) {
+                return Promise.resolve(result);
+            } else {
+                message.error(result.message)
+                return Promise.reject(result.message);
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
+    },
+    /**
+     *  删除移库单
+     * @param {*} transferId 移库单Id
+     */
+    deleteTransferRecords(transferId) {
+        return fetch(`${Url}/warehouse/transferrecords/${transferId}`, {
+            method: 'DELETE',
+            credentials: 'include',
+            mode: "cors",
+            headers: { 'Content-Type': 'application/json' }
+        }).then((res) => res.json()).then(result => {
+            if (result.code === 0) {
+                return Promise.resolve(result);
+            } else {
+                message.error(result.message)
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
+    },
+    /**
+     * 修改移库单状态
+     * @param {*} transferId 移库单Id
+     * @param {*} status 状态
+     */
+    putTransferRecordsStatus(transferId, status) {
+        return fetch(`${Url}/warehouse/transferrecords/${transferId}/${status}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+        }).then((res) => res.json()).then(result => {
+            if (result.code === 0) {
+                return Promise.resolve(result);
+            } else {
+                message.error(result.message)
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
+    },
+    /**
+     * 调拨单查询
+     */
+    getBookcaseRecords(params) {
+        return fetch(`${Url}/warehouse/bookcaserecords?${parseParams(params)}`, { credentials: 'include' })
+            .then((res) => res.json()).then(result => {
+                if (!result.code) {
+                    return Promise.resolve(result);
+                } else {
+                    message.error(result.message)
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+    },
+    /**
+     * 根据bookcaseId获取调拨单
+     * @param {*} bookcaseId 
+     */
+    getTransferRecordsById(bookcaseId) {
+        return fetch(`${Url}/warehouse/transferrecords/${bookcaseId}`, { credentials: 'include' })
+            .then((res) => res.json()).then(result => {
+                if (result.code !== 1) {
+                    return Promise.resolve(result);
+                } else {
+                    message.error(result.message)
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+    },
+    /**
+     * 增加调拨
+     * @param {*} reqBody 请求Body(Json格式)
+     */
+    postBookcaseRecords(reqBody) {
+        return fetch(`${Url}/warehouse/bookcaserecords`, {
+            method: 'POST',
+            mode: 'cors',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(reqBody),
+        }).then((res) => res.json()).then(result => {
+            if (result.code === 0) {
+                return Promise.resolve(result);
+            } else {
+                message.error(result.message)
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
+    },
+    /**
+     * 更新调拨单
+     * @param {*} reqBody 请求Body(Json格式)
+     */
+    putBookcaseRecords(reqBody) {
+        return fetch(`${Url}/warehouse/bookcaserecords`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(reqBody)
+        }).then((res) => res.json()).then(result => {
+            if (result.code === 0) {
+                return Promise.resolve(result);
+            } else {
+                message.error(result.message)
+                return Promise.reject(result.message);
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
+    },
+    /**
+     *  删除调拨单
+     * @param {*} bookcaseId 调拨单Id
+     */
+    deleteBookcaseRecords(bookcaseId) {
+        return fetch(`${Url}/warehouse/bookcaserecords/${bookcaseId}`, {
+            method: 'DELETE',
+            credentials: 'include',
+            mode: "cors",
+            headers: { 'Content-Type': 'application/json' }
+        }).then((res) => res.json()).then(result => {
+            if (result.code === 0) {
+                return Promise.resolve(result);
+            } else {
+                message.error(result.message)
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
+    },
+    /**
+     * 修改调拨单状态
+     * @param {*} bookcaseId 调拨单Id
+     * @param {*} status 状态
+     */
+    putBookcaseRecordsStatus(bookcaseId, status) {
+        return fetch(`${Url}/warehouse/bookcaserecords/${bookcaseId}/${status}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+        }).then((res) => res.json()).then(result => {
+            if (result.code === 0) {
+                return Promise.resolve(result);
+            } else {
+                message.error(result.message)
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
+    },
 }

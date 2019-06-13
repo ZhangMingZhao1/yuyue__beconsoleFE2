@@ -2,8 +2,12 @@ import React from 'react';
 import { Card, Form, Button, Table } from 'antd';
 import BreadcrumbCustom from '../../BreadcrumbCustom';
 import { getFormItem } from '../../baseFormItem';
+import pagination from '../../pagination';
 import "./index.less"
 import Link from 'react-router-dom/Link';
+import Req from '../request';
+import { statusConfig } from '../config/warehouseRConfig';
+import moment from 'moment';
 
 const MvStoreSearch = Form.create()(
     class extends React.Component {
@@ -41,41 +45,74 @@ const MvStoreSearch = Form.create()(
 );
 
 class MvStoreData extends React.Component {
+    state = {
+    }
 
+    params = {
+        currentPage: 1,//当前页面
+        pageSize: 10,//每页大小
+        /**搜索参数 */
+        search: {
+        },
+    }
+
+    componentDidMount() {
+        this.requestList();
+    }
+
+    requestList = () => {
+        let params = {
+            start: this.params.currentPage - 1,
+            size: this.params.pageSize,
+            ...this.params.search,
+        };
+        Req.getTransferRecords(params).then(data => {
+            this.setState({
+                pagination: pagination(data, (current) => {//改变页码
+                    this.params.currentPage = current;
+                    this.requestList();
+                }, (size) => {//pageSize 变化的回调
+                    this.params.pageSize = size;
+                    this.requestList();
+                }),
+                dataSource: data.content.map(i => ({
+                    ...i,
+                    key: i.transferId,
+                    beWarehouse1Name: i.beWarehouse1.contacts,
+                    beWarehouse2Name: i.beWarehouse2.contacts,
+                    user1Name: i.user1 && i.user1.userName,
+                    user2Name: i.user2 && i.user2.userName,
+                    createTime: moment(i.createTime),
+                    reviewTime: moment(i.reviewTime),
+                }))
+            })
+        })
+    }
+ 
     handleSubmit = (params) => {
         console.log(params);
     }
 
     render() {
         const columns = [
-            { title: '订单编号', dataIndex: 'orderCode' },
-            { title: '出库仓库', dataIndex: 'outStore' },
-            { title: '制单人', dataIndex: 'creator' },
-            { title: '制单时间', dataIndex: 'createTime' },
-            { title: '入库仓库', dataIndex: 'inStore' },
-            { title: '审核人', dataIndex: 'checkMan' },
-            { title: '审核时间', dataIndex: 'checkTime' },
-            { title: '运费', dataIndex: 'freight' },
-            {
-                title: '订单状态', dataIndex: 'orderState',
-                render: (state) => {
-                    let config = {
-                        '1': '草稿',
-                        '2': '待审核',
-                        '3': '已审核',
-                    }
-                    return config[state];
-                }
-            },
+            { title: '订单编号', dataIndex: 'orderNo' },
+            { title: '出库仓库', dataIndex: 'beWarehouse2Name' },
+            { title: '制单人', dataIndex: 'user1Name' },
+            { title: '制单时间', dataIndex: 'createTime', render: (createTime) => createTime && createTime.format("YYYY-MM-DD HH:mm:ss") },
+            { title: '入库仓库', dataIndex: 'beWarehouse1Name' },
+            { title: '审核人', dataIndex: 'user2Name' },
+            { title: '审核时间', dataIndex: 'reviewTime', render: (reviewTime) => reviewTime && reviewTime.format("YYYY-MM-DD HH:mm:ss") },
+            { title: '运费', dataIndex: 'fee' },
+            { title: '订单状态', dataIndex: 'status', render: (status) => statusConfig[status] },
             {
                 title: '操作', dataIndex: 'action',
                 render: (text, record) => {
                     let config = {
-                        '1': <Link to={`${this.props.match.url}/add`}>编辑</Link>,
-                        '2': <Link to={`${this.props.match.url}/check`}>审核</Link>,
-                        '3': <Link to={`${this.props.match.url}/detail`}>查看</Link>,
+                        '1': <Link to={{ pathname: `${this.props.match.url}/add`, search: `?id=${record.transferId}` }}>编辑</Link>,
+                        '2': <Link to={{ pathname: `${this.props.match.url}/check`, search: `?id=${record.transferId}` }}>审核</Link>,
+                        '3': <Link to={{ pathname: `${this.props.match.url}/detail`, search: `?id=${record.transferId}` }}>查看</Link>,
                     }
-                    return config[record.orderState];
+                    return config[record.status];
                 }
             }
         ];
@@ -94,12 +131,8 @@ class MvStoreData extends React.Component {
                     <Table
                         className="mvStoreData-table"
                         columns={columns}
-                        dataSource={[{ key: 1, orderState: 1 }, { key: 2, orderState: 2 }, { key: 3, orderState: 3 },]}
-                        pagination={{
-                            showTotal: (total, range) => `第 ${range[0]} 条到第 ${range[1]} 条，共 ${total} 条`,
-                            showSizeChanger: true,
-                            pageSizeOptions: ['10', '20', '50']
-                        }}
+                        dataSource={this.state.dataSource}
+                        pagination={this.state.pagination}
                         bordered
                     />
                 </Card>
