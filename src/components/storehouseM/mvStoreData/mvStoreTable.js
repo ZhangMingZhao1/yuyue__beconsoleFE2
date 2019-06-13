@@ -1,7 +1,9 @@
 import React from 'react';
 import { Form, Button, Table, Popconfirm, Input, Select } from 'antd';
 import { getOptionList } from '../../baseFormItem';
-import "./index.less"
+import Req from '../request';
+import "./index.less";
+import moment from "moment";
 
 const FormItem = Form.Item;
 const EditableContext = React.createContext();
@@ -24,17 +26,11 @@ class EditableCell extends React.Component {
     };
 
     render() {
-        const {
-            editing,
-            dataIndex,
-            inputItem,
-            record,
-            index,
-            ...restProps
-        } = this.props;
+        const { editing, dataIndex, inputItem, record, index, ...restProps } = this.props;
         return (
             <EditableContext.Consumer>
                 {(form) => {
+                    this.form = form;
                     const { getFieldDecorator } = form;
                     return (
                         <td {...restProps}>
@@ -43,7 +39,10 @@ class EditableCell extends React.Component {
                                     initialValue: record[dataIndex],
                                     rules: inputItem.rules || [],
                                 })(this.getInput(inputItem, dataIndex))}
-                            </FormItem> : restProps.children}
+                            </FormItem> :
+                                // 货位特殊处理：显示名称而非id值
+                                // 不存在id值对应的下拉框选项则显示""(空字符串)
+                                ((dataIndex === 'inLocationId' || dataIndex === 'outLocationId') && (inputItem.list[record[dataIndex]] || "")) || restProps.children}
                         </td>
                     );
                 }}
@@ -55,15 +54,53 @@ class EditableCell extends React.Component {
 class MvStoreTable extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { editingKey: '', type: this.props.type, data: this.props.dataSource, count: 0 };
+        this.setColumns(props.type);
+        this.state = {
+            editingKey: '',
+            data: this.props.dataSource,
+            warehouseId: this.props.warehouseId,
+            count: 0,
+            inputItem: {
+                'code': { type: 'INPUT', rules: [{ required: true, validator: this.changeCode }] },
+                'isbn': { type: 'INPUT', rules: [{ required: true, message: 'null' }] },
+                'rfid': { type: 'INPUT', rules: [{ required: true }] },
+                'price': { type: 'INPUT' },
+                'outLocationId': { type: 'SELECT', list: [] },
+                'inLocationId': { type: 'SELECT', list: [] },
+            },
+        };
+        this.type = this.props.type;//只是用于记录type是否发生改变
         this.form = {};//每行数据对应的form
+        this.deleteData = [];//被删除的数据，不包括新增后删除的数据
+        this.bookId = [];//每行对应的bookId
+    }
+
+    //条码输入框发生改变时
+    changeCode = (rule, value, callback) => {
+        if (value) {
+            const { editingKey } = this.state;
+            //通过条码自动填充信息
+            Req.getInfoByCode(value).then(v => {
+                if (v !== -1) {//不存在对应的信息，服务器返回-1
+                    this.form[editingKey].setFieldsValue({ isbn: v.isbn, rfid: v.rfid });
+                    this.bookId[editingKey] = v.bookId;
+                }
+                callback();
+            });
+        } else {//输入值为空，提示null
+            callback("null");
+        }
+    }
+
+    //配置Table columns
+    setColumns = (type) => {
         this.columns = [
-            { title: '序号', dataIndex: 'index', width: '14.3%', render: (text, record, index) => index },//key!=index
-            { title: '条码', dataIndex: 'barCode', width: '14.3%', editable: true },
-            { title: 'ISBN', dataIndex: 'isbn', width: '14.3%', editable: true },
-            { title: '电子标签', dataIndex: 'eLabel', width: '14.3%', editable: true },
-            { title: '出库货位', dataIndex: 'outLocation', width: '14.3%', editable: true },
-            { title: '入库货位', dataIndex: 'inLocation', width: '14.3%', editable: true },
+            { title: '序号', dataIndex: 'index', width: '16.5%', render: (text, record, index) => index },//key!=index
+            { title: '条码', dataIndex: 'code', width: '16.5%', editable: true },
+            { title: 'ISBN', dataIndex: 'isbn', width: '16.5%', editable: true },
+            { title: '电子标签', dataIndex: 'rfid', width: '16.5%', editable: true },
+            { title: '出库货位', dataIndex: 'outLocationId', width: '16.5%', editable: true },
+            { title: '入库货位', dataIndex: 'inLocationId', width: '16.5%', editable: true },
             {
                 title: '操作',
                 dataIndex: 'operation',
@@ -71,7 +108,7 @@ class MvStoreTable extends React.Component {
                     return (
                         <EditableContext.Consumer>
                             {(form) => {
-                                this.form[record.key] = form;//获取每行form
+                                this.form[record.key] = form;//获取每行form  
                                 return <Popconfirm title="Sure to delete?" onConfirm={() => { this.handleDelete(record.key) }}>
                                     <a href="javascript:;">删除</a>
                                 </Popconfirm>
@@ -81,24 +118,88 @@ class MvStoreTable extends React.Component {
                 },
             },
         ];
-        if (this.state.type !== 'add') {
-            this.columns.splice(-1, 1);//去掉'操作'项
-            this.columns.forEach(i => { i.editable = false });//表格不可编辑
-        }
-        this.inputItem = {
-            'barCode': { type: 'INPUT', rules: [{ required: true, message: 'null' }] },
-            'isbn': { type: 'INPUT', rules: [{ required: true, message: 'null' }] },
-            'eLabel': { type: 'INPUT', rules: [{ required: true, message: 'null' }] },
-            'outLocation': { type: 'SELECT', list: [] },
-            'inLocation': { type: 'SELECT', list: [] },
+        if (type !== 'add') {
+            //删除'操作'栏
+            this.columns = this.columns.filter(i => i.dataIndex !== "operation")
+            //置为不可编辑
+            this.columns.forEach(i => { i.editable = false });
         }
     }
+
+    componentWillReceiveProps(v) {
+        let data = this.state.data;
+        //订单状态发生变化时，重新配置table columns
+        if (v.type != this.type) {
+            this.type = v.type;
+            this.setColumns(v.type);
+        }
+        //入库仓库改变时
+        if (v.warehouseInId !== this.state.warehouseInId) {
+            //所有书籍选项的货位清空
+            data.map(i => { i.inLocationId = "" })
+            this.form[this.state.editingKey] && this.form[this.state.editingKey].setFieldsValue({ "inLocationId": "" })
+            //改变下拉框选项
+            Req.getLocations(v.warehouseInId).then((list) => {
+                this.setState({
+                    warehouseInId: v.warehouseInId,
+                    inputItem: {
+                        ...this.state.inputItem,
+                        'inLocationId': { type: 'SELECT', list: list }
+                    },
+                })
+            })
+        }
+        //出库仓库改变时
+        if (v.warehouseOutId !== this.state.warehouseOutId) {
+            //所有书籍选项的货位清空
+            data.map(i => { i.outLocationId = "" })
+            this.form[this.state.editingKey] && this.form[this.state.editingKey].setFieldsValue({ "outLocationId": "" })
+            //改变下拉框选项
+            Req.getLocations(v.warehouseOutId).then((list) => {
+                this.setState({
+                    warehouseOutId: v.warehouseOutId,
+                    inputItem: {
+                        ...this.state.inputItem,
+                        'outLocationId': { type: 'SELECT', list: list }
+                    },
+                })
+            })
+        }
+        this.setState({
+            //书籍信息列表
+            //自身data长度不为0,则不接受父级传递的更新
+            data: this.state.data.length === 0 ? v.dataSource : data,
+            count: this.state.data.length === 0 ? v.dataSource.length : this.state.count,
+        })
+    }
+
+    //重置表格
+    resetTable = (callback) => {
+        this.setState({ data: [] }, () => { if (callback) { callback() } })
+    }
+
     isEditing = record => record.key == this.state.editingKey;
 
     //获得表格的值
     getTableValues = (call) => {
         const { editingKey } = this.state;
-        this.save(editingKey, (v) => { call(v) });
+        this.save(editingKey, (v) => {
+            if (v !== 'error') {
+                let inList = this.state.inputItem.inLocationId.list;
+                let outList = this.state.inputItem.outLocationId.list;
+                let data = v.concat(this.deleteData).map(i => {
+                    if (inList[i.inLocationId]) {
+                        i.locationId = i.inLocationId;
+                    }
+                    if (outList[i.outLocationId]) {
+                        i.locationId2 = i.outLocationId;
+                    }
+                    return i;
+                })
+
+                call(data)
+            }
+        });
     }
 
     //编辑行
@@ -124,6 +225,7 @@ class MvStoreTable extends React.Component {
                     newData.splice(index, 1, {
                         ...item,
                         ...row,
+                        bookId: this.bookId[key],
                     });
                     this.setState({ data: newData, editingKey: '' }, () => { callback(this.state.data) });
                 } else {
@@ -159,6 +261,11 @@ class MvStoreTable extends React.Component {
     //"删除"按钮
     handleDelete = (key) => {
         const data = [...this.state.data];
+        let deleteItem = data.find(i => i.key === key);
+        //删除的项存在服务器连接的数据库中，则将这一项记录在this.deleteData中，并且isDelete标记为1
+        if (deleteItem.bookId) {
+            this.deleteData.push({ ...deleteItem, isDelete: 1 })
+        }
         //更新data数据,并删除对应的form
         this.setState({ data: data.filter(item => item.key !== key), editingKey: '' }, () => { delete this.form[key]; });
     }
@@ -172,14 +279,14 @@ class MvStoreTable extends React.Component {
         };
 
         const columns = this.columns.map((col) => {
-            if (!col.editable) {
+            if (!col.editable) {//不可编辑，直接按照dataSource显示
                 return col;
             }
             return {
                 ...col,
                 onCell: record => ({
                     record,
-                    inputItem: this.inputItem[col.dataIndex],
+                    inputItem: this.state.inputItem[col.dataIndex],
                     dataIndex: col.dataIndex,
                     editing: this.isEditing(record),
                 }),
@@ -188,7 +295,7 @@ class MvStoreTable extends React.Component {
 
         return (
             <div style={{ position: 'relative' }}>
-                <div style={{ display: `${this.state.type == 'add' ? 'inline' : 'none'}` }}>
+                <div style={{ display: `${this.props.type == 'add' ? 'inline' : 'none'}` }}>
                     <Button type="primary" onClick={() => this.handleAdd()}>新增一条记录</Button>
                     <Button type="primary" >批量导入</Button>
                 </div><br />
@@ -201,7 +308,9 @@ class MvStoreTable extends React.Component {
                     onRow={(record) => {
                         return {
                             onClick: () => {
-                                this.edit(record.key);
+                                if (this.props.type === 'add') {//“草稿”状态的库单，才可编辑
+                                    this.edit(record.key);
+                                }
                             }
                         };
                     }}
@@ -212,12 +321,12 @@ class MvStoreTable extends React.Component {
                     }}
                 />
                 {
-                    this.state.type == 'add' ?
+                    this.props.type == 'add' ?
                         <p style={{ position: 'absolute', bottom: 0, marginBottom: 28 }}>合计：{this.state.data.length} 本书</p> :
                         <p style={{ textAlign: 'justify' }}>
                             <font style={{ float: 'left' }}>合计：{this.state.data.length} 本书</font>
-                            {this.state.type == 'detail' ? <font style={{ float: 'right' }}>审核时间：2018-12-11  08:12:24</font> : ''}
-                            <font style={{ float: 'right', marginRight: 20 }}>审核人：李四</font>
+                            {this.props.type == 'detail' ? <font style={{ float: 'right' }}>审核时间：{this.props.reviewTime && moment(this.props.reviewTime).format("YYYY-MM-DD HH:mm:ss")}</font> : ''}
+                            <font style={{ float: 'right', marginRight: 20 }}>审核人：{this.props.user2Name}</font>
                         </p>
                 }
             </div>
